@@ -1,9 +1,9 @@
-package com.example.cab302_project_pomodora;
+package com.qut.cab302_project_pomodora.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class HomeController {
     @FXML
     private Label welcomeText;
 

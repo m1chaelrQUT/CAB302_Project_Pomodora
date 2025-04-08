@@ -3,6 +3,8 @@ module com.example.cab302_project_pomodora {
     requires javafx.fxml;
 
 
-    opens com.example.cab302_project_pomodora to javafx.fxml;
-    exports com.example.cab302_project_pomodora;
+    opens com.qut.cab302_project_pomodora to javafx.fxml;
+    exports com.qut.cab302_project_pomodora;
+    exports com.qut.cab302_project_pomodora.controller;
+    opens com.qut.cab302_project_pomodora.controller to javafx.fxml;
 }
