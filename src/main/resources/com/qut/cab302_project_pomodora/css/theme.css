@@ -1,0 +1,88 @@
+/* theme.css */
+.theme {
+/* === PRIMITIVES === */
+    /* Grey Scale */
+    -fx-grey-0: #ffffff;
+    -fx-grey-50: #d9d9d9;
+    -fx-grey-75: #b0b0b0;
+    -fx-grey-100: #b1b1b1;
+    -fx-grey-150: #b2afaf;
+    -fx-grey-200: #9f9f9f;
+    -fx-grey-350: #717070;
+    -fx-grey-400: #625e5e;
+    -fx-grey-700: #252525;
+    -fx-grey-800: #1c1c1c;
+    -fx-grey-900: #1a1a1a;
+    -fx-grey-950: #171717;
+
+    /* Accent Colors */
+    -fx-red-fail-red: #ff4d4d;
+    -fx-red-negative-red: #d93434;
+    -fx-green-affirm-green: #4caf50;
+    -fx-orange-hesitate-orange: #ffae00;
+    -fx-orange-cadmium-orange: #f2842d;
+    -fx-purple-artificial-grape: #7338dd;
+
+/* === TOKENS === */
+    /* Text */
+    -fx-text-primary: #9f9f9f;         /*grey 200 */
+    -fx-text-secondary: #9f9f9f;       /*grey 200 */
+    -fx-text-tertiary: #171717;        /*grey 950 */
+    -fx-text-invert: #d9d9d9;               /*grey 50 */
+    -fx-text-brand: #252525;           /*grey 700 */
+    -fx-text-brand-invert: #d9d9d9;         /*grey 50 */
+    /* Surfaces */
+    -fx-surface-primary: #d9d9d9;           /*grey 50 */
+    -fx-surface-secondary: #625e5e;    /*grey 200 */
+    -fx-surface-invert: #252525;
+    -fx-surface-brand: #b1b1b1;             /*grey 100 */
+    -fx-surface-brand-invert: #625e5e; /*grey 400 */
+    -fx-surface-nav: #b1b1b1;               /*grey 100 */
+    -fx-surface-tertiary: #171717;
+    -fx-surface-clock: #b1b1b1;             /*grey 100 */
+    -fx-surface-tasks: #b2afaf;             /*grey 150 */
+
+    /* Fields */
+    -fx-field-primary: #b1b1b1;             /*grey 100 */
+    -fx-field-secondary: #d9d9d9;           /*grey 50 */
+    -fx-field-invert: #625e5e;         /*grey 400 */
+    /* Buttons */
+    -fx-button-primary: #b1b1b1;            /*grey 100 */
+    -fx-button-secondary: #252525;     /*grey 700 */
+    -fx-button-invert: #d9d9d9;             /*grey 50 */
+    /* Progress */
+    -fx-progress-completed-green: #4caf50;       /*green affirm green */
+    -fx-progress-in-prog-orange: #ffae00;    /*orange-hesitate-orange*/
+    -fx-progress-not-begun-red: #d93434;           /*red negative red */
+    /* Level Indication */
+    -fx-level-xp-indication: #4caf50;            /*green affirm green*/
+    /* Borders */
+    -fx-border-primary: #171717;       /*grey 950  */
+    -fx-border-secondary: #9f9f9f;     /*grey 200  */
+    -fx-border-invert: #d9d9d9;             /*grey 50   */
+}
+
+.button-primary {
+    -fx-background-color: #b1b1b1; /* button primary*/
+}
+
+.window-background {
+    -fx-background-color: #d9d9d9;
+}
+
+.surface-secondary {
+    -fx-background-color: #625e5e;
+}
+
+.brand-box {
+    -fx-background-color: #b1b1b1;
+    -fx-background-radius: 20;
+    -fx-border-radius: 0;
+    -fx-padding: 10;
+}
+
+.signin-box {
+    -fx-background-color: #625e5e;
+    -fx-background-radius: 20;
+    -fx-padding: 10;
+}
