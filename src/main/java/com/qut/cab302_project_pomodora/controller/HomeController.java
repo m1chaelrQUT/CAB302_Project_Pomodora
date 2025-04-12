@@ -60,4 +60,16 @@ public class HomeController extends ControllerSkeleton {
         // TEMP - TODO : Real Signin Logic
     }
 
+    @FXML
+    private void handleForgotPassword() {
+        System.out.println("HomeController handleForgotPassword");
+        // TEMP - TODO: Open password reset popup
+    }
+
+    @FXML
+    private void handleSignUp() {
+        System.out.println("HomeController handleSignUp");
+        // TEMP - TODO: Change to sign up page
+    }
+
 }

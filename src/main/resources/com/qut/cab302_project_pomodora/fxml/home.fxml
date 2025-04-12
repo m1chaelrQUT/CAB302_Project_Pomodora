@@ -66,7 +66,7 @@
                               <CheckBox fx:id="rememberMeCheckBox" layoutX="14.0" mnemonicParsing="false"
                                         prefHeight="60.0" prefWidth="108.0" text="Remember me"
                                         AnchorPane.leftAnchor="14.0"/>
-                              <Hyperlink layoutX="517.0" prefHeight="60.0" prefWidth="108.0" text="Forgot Password?"
+                              <Hyperlink layoutX="517.0" prefHeight="60.0" prefWidth="108.0" text="Forgot Password?" onAction="#handleForgotPassword"
                                          underline="true" AnchorPane.rightAnchor="0.0"/>
 
                         </AnchorPane>
@@ -81,7 +81,7 @@
 
                               <Label alignment="CENTER" contentDisplay="CENTER" text="Don't have an account?"
                                      textFill="#bfbfbf"/>
-                              <Hyperlink text="Sign Up" underline="true"/>
+                              <Hyperlink text="Sign Up" underline="true" onAction="#handleSignUp"/>
 
                         </HBox>
 
