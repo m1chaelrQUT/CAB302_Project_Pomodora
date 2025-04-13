@@ -1,6 +1,7 @@
 module com.example.cab302_project_pomodora {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.logging;
 
 
     opens com.qut.cab302_project_pomodora to javafx.fxml;

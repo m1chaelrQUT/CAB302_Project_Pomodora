@@ -1,5 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.config.Theme;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
@@ -13,6 +14,7 @@ public class HomeController extends ControllerSkeleton {
     @FXML private StackPane rootPane;
     @FXML private VBox contentPane;
 
+
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private CheckBox rememberMeCheckBox;
@@ -23,6 +25,7 @@ public class HomeController extends ControllerSkeleton {
     @FXML private Label ctaLabel;
     @FXML private Label ctaLogo;
 
+    private Theme currentTheme = Theme.LIGHT;
 
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
@@ -58,6 +61,13 @@ public class HomeController extends ControllerSkeleton {
         System.out.println("Password Entered: " + passwordField.getText());
         System.out.println("Remember Me? " + rememberMeCheckBox.isSelected());
         // TEMP - TODO : Real Signin Logic
+        // Hijacked to demo ThemeManager util
+        if (currentTheme == Theme.LIGHT) {
+            currentTheme = Theme.DARK;
+        } else if (currentTheme == Theme.DARK) {
+            currentTheme = Theme.VOIDLIGHT;
+        } else {currentTheme = Theme.LIGHT;}
+        changeTheme(currentTheme);
     }
 
     @FXML
