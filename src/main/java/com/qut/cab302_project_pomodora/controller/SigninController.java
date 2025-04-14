@@ -1,18 +1,28 @@
 package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.Main;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+
 // Extend the abstract skeleton
-public class HomeController extends ControllerSkeleton {
+public class SigninController extends ControllerSkeleton {
 
     // FXML ids specific to the Home Controller
     @FXML private StackPane rootPane;
-    @FXML private VBox contentPane;
+    @FXML private StackPane contentPane;
 
 
     @FXML private TextField usernameField;
@@ -24,6 +34,9 @@ public class HomeController extends ControllerSkeleton {
     @FXML private VBox signinPane;
     @FXML private Label ctaLabel;
     @FXML private Label ctaLogo;
+    @FXML private StackPane resetPane;
+    @FXML private StackPane resetSuccessPane;
+    @FXML private TextField usernameFieldReset;
 
     private Theme currentTheme = Theme.LIGHT;
 
@@ -71,15 +84,61 @@ public class HomeController extends ControllerSkeleton {
     }
 
     @FXML
-    private void handleForgotPassword() {
-        System.out.println("HomeController handleForgotPassword");
+    private void showResetDialog() {
+        System.out.println("HomeController showResetDialog");
         // TEMP - TODO: Open password reset popup
+        resetPane.setVisible(true);
+    }
+    private void showSuccessfulResetDialog() {
+        System.out.println("HomeController showResetDialog");
+        // TEMP - TODO: Open password reset popup
+        resetSuccessPane.setVisible(true);
     }
 
     @FXML
-    private void handleSignUp() {
+    private void handleSignUp() throws IOException {
         System.out.println("HomeController handleSignUp");
         // TEMP - TODO: Change to sign up page
+        Scene currentScene = (Scene) signinPane.getScene();
+        Stage stage = (Stage) currentScene.getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/qut/cab302_project_pomodora/fxml/signup.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), currentScene.getWidth(), currentScene.getHeight());
+        stage.setScene(scene);
+    }
+
+    @FXML
+    private void handleResetPassword() {
+        System.out.println("HomeController handleResetPassword");
+        System.out.println("Username Entered: " + usernameFieldReset.getText());
+        Boolean validEmail = true;
+        if (validEmail) {
+            closeForgotPasswordDialog();
+            showSuccessfulResetDialog();
+        }
+    }
+
+    @FXML
+    private void closeForgotPasswordDialog() {
+        System.out.println("HomeController closeForgotPasswordDialog");
+
+        resetPane.setVisible(false);
+        usernameFieldReset.setText("");
+
+    }
+
+    @FXML
+    private void closeSuccessDialog() {
+        System.out.println("HomeController closeSuccessDialog");
+        resetSuccessPane.setVisible(false);
+    }
+
+    @FXML
+    private void getSupport() {
+        try {
+            Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=xvFZjo5PgG0"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

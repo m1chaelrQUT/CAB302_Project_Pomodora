@@ -128,3 +128,28 @@
     -fx-text-fill: -fx-text-invert;
 }
 
+.overlay-shadow {
+    -fx-background-color: -fx-surface-tertiary;
+    -fx-opacity: 0.9;
+}
+
+.password-reset-box {
+    -fx-background-color: -fx-surface-secondary;
+    -fx-background-radius: 20;
+}
+
+.close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-primary;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.close-button:hover {
+    -fx-text-fill: -fx-text-invert;
+}
+
+.close-button:pressed {
+    -fx-text-fill: -fx-text-tertiary;
+}
+

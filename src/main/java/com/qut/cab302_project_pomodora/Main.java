@@ -18,7 +18,7 @@ public class Main extends Application {
         int MIN_WIDTH = 1067;
         int MIN_HEIGHT = 600;
         String TITLE = "CAB302: Project Pomodora";
-        String LAUNCH_PAGE_ADDRESS = "fxml/home.fxml";
+        String LAUNCH_PAGE_ADDRESS = "fxml/signin.fxml";
         String APP_ICON_ADDRESS = "images/logo.png";
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(LAUNCH_PAGE_ADDRESS));
