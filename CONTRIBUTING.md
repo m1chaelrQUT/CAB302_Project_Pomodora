@@ -17,6 +17,7 @@ See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for m
 - Open PR against `master` branch when your feature is ready, describing the feature and what you've done
 - Request a review from atleast one other team member
 - Don't merge your own PRs without feedback, unless it's urgent and communicated
+- If a pull-request is ***ONLY*** non-breaking documentation/chore work (i.e., doesn't touch `/src/`), then a fast-tracked merge is acceptable
 
 ## Why /docs/ exists
 - Docs explain how the app works and how to contribute without guesswork
