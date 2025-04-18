@@ -1,6 +1,9 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.IUserDAO;
 import com.qut.cab302_project_pomodora.Main;
+import com.qut.cab302_project_pomodora.MockUserDAO;
+import com.qut.cab302_project_pomodora.User;
 import com.qut.cab302_project_pomodora.config.Theme;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,8 +42,15 @@ public class SignupController extends ControllerSkeleton {
     @FXML private StackPane resetSuccessPane;
     @FXML private TextField usernameFieldReset;
 
+    private IUserDAO userDAO;
+
     private Theme currentTheme = Theme.LIGHT;
 
+    public SignupController() {
+        // Load mock users for testing
+        userDAO = new MockUserDAO();
+        // TODO: Swap out Mock for DB implementation SQLiteUserDAO
+    }
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
     @Override
@@ -67,21 +77,47 @@ public class SignupController extends ControllerSkeleton {
         System.out.println("HomeController Initialization completed.");
     }
 
-    // Signin
+    // Sign-Up
+    // TODO: Clean up commented code
     @FXML
     private void handleSignUp() {
-        System.out.println("HomeController handleSignIn");
-        System.out.println("Username Entered: " + usernameField.getText());
-        System.out.println("Password Entered: " + passwordField.getText());
-        System.out.println("Remember Me? " + rememberMeCheckBox.isSelected());
-        // TEMP - TODO : Real Signin Logic
+        // Get sign in inputs
+        String userNameInput = usernameField.getText();
+        String passwordInput = passwordField.getText();
+
+        // Check if existing user is input
+        User user = userDAO.getUser(userNameInput);
+        if(user != null) {
+            System.out.println("There already exists a user with that username, please try a different one.");
+            // TODO: Output error message to user through the GUI.
+        } else {
+            // Default Values for new User - Starting Level
+            final int DEFAULT_PLAYER_LEVEL = 1;
+            final int DEFAULT_LEVEL_EXPERIENCE = 0;
+
+            // Add the new user
+            User newUser = new User(userNameInput, passwordInput, DEFAULT_PLAYER_LEVEL, DEFAULT_LEVEL_EXPERIENCE);
+            userDAO.addUser(newUser);
+
+            // TODO: Navigate through to Home Screen.
+        }
+
+        //Debugging
+        // Check that new user was correctly stored
+        //System.out.println(MockUserDAO.users);
+
+//        System.out.println("HomeController handleSignIn");
+//        System.out.println("Username Entered: " + usernameField.getText());
+//        System.out.println("Password Entered: " + passwordField.getText());
+//        System.out.println("Remember Me? " + rememberMeCheckBox.isSelected());
+
         // Hijacked to demo ThemeManager util
-        if (currentTheme == Theme.LIGHT) {
-            currentTheme = Theme.DARK;
-        } else if (currentTheme == Theme.DARK) {
-            currentTheme = Theme.VOIDLIGHT;
-        } else {currentTheme = Theme.LIGHT;}
-        changeTheme(currentTheme);
+//        if (currentTheme == Theme.LIGHT) {
+//            currentTheme = Theme.DARK;
+//        } else if (currentTheme == Theme.DARK) {
+//            currentTheme = Theme.VOIDLIGHT;
+//        } else {currentTheme = Theme.LIGHT;}
+//        changeTheme(currentTheme);
     }
 
     @FXML

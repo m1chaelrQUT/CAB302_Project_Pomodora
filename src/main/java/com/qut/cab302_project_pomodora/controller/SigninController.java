@@ -1,5 +1,8 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.IUserDAO;
+import com.qut.cab302_project_pomodora.MockUserDAO;
+import com.qut.cab302_project_pomodora.User;
 import com.qut.cab302_project_pomodora.config.Theme;
 import com.qut.cab302_project_pomodora.Main;
 import javafx.fxml.FXML;
@@ -38,8 +41,16 @@ public class SigninController extends ControllerSkeleton {
     @FXML private StackPane resetSuccessPane;
     @FXML private TextField usernameFieldReset;
 
+    // User DAO interface
+    private IUserDAO userDAO;
+
     private Theme currentTheme = Theme.LIGHT;
 
+    public SigninController() {
+        // Load mock users for testing
+        userDAO = new MockUserDAO();
+        // TODO: Swap out Mock for DB implementation SQLiteUserDAO
+    }
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
     @Override
@@ -66,21 +77,44 @@ public class SigninController extends ControllerSkeleton {
         System.out.println("HomeController Initialization completed.");
     }
 
-    // Signin
+    // Sign-In
+    // TODO: Clean up commented code
     @FXML
     private void handleSignIn() {
-        System.out.println("HomeController handleSignIn");
-        System.out.println("Username Entered: " + usernameField.getText());
-        System.out.println("Password Entered: " + passwordField.getText());
-        System.out.println("Remember Me? " + rememberMeCheckBox.isSelected());
-        // TEMP - TODO : Real Signin Logic
+        // Get sign in inputs
+        String userNameInput = usernameField.getText();
+        String passwordInput = passwordField.getText();
+
+        // Check if user exists
+        User user = userDAO.getUser(userNameInput);
+
+        // Check if password is correct
+        if (user != null) {
+            if (user.getPassword().equals(passwordInput)) {
+                System.out.println("Sign-in successful! User: " + userNameInput + " logged in.");
+                // TODO: Navigate through to Home Screen.
+            } else {
+                System.out.println("Incorrect Password Entered");
+                // TODO: Output error message to the user through the GUI.
+            }
+        } else {
+            System.out.println("Username not found");
+            // TODO: Output error message to user through GUI.
+        }
+
+        // Debugging
+//        System.out.println("HomeController handleSignIn");
+//        System.out.println("Username Entered: " + usernameField.getText());
+//        System.out.println("Password Entered: " + passwordField.getText());
+//        System.out.println("Remember Me? " + rememberMeCheckBox.isSelected());
+
         // Hijacked to demo ThemeManager util
-        if (currentTheme == Theme.LIGHT) {
-            currentTheme = Theme.DARK;
-        } else if (currentTheme == Theme.DARK) {
-            currentTheme = Theme.VOIDLIGHT;
-        } else {currentTheme = Theme.LIGHT;}
-        changeTheme(currentTheme);
+//        if (currentTheme == Theme.LIGHT) {
+//            currentTheme = Theme.DARK;
+//        } else if (currentTheme == Theme.DARK) {
+//            currentTheme = Theme.VOIDLIGHT;
+//        } else {currentTheme = Theme.LIGHT;}
+//        changeTheme(currentTheme);
     }
 
     @FXML
