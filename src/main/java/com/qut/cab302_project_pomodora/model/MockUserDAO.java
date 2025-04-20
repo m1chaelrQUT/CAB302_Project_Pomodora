@@ -1,4 +1,4 @@
-package com.qut.cab302_project_pomodora;
+package com.qut.cab302_project_pomodora.model;
 
 import java.util.ArrayList;
 
@@ -13,11 +13,11 @@ public class MockUserDAO implements IUserDAO {
     public MockUserDAO() {
         // Initial Users - only if there are none in the Mock DB
         if(users.isEmpty()) {
-            addUser(new User("MicRob", "Michael", 1, 0));
-            addUser(new User("EthHun", "Ethan", 1, 0));
-            addUser(new User("BriKan", "Brian", 1, 0));
-            addUser(new User("SriKri", "Sriman", 1, 0));
-            addUser(new User("ShaTow", "Shane", 1, 0));
+            addUser(new User("MicRob", "Michael", 1, 0, null));
+            addUser(new User("EthHun", "Ethan", 1, 0, null));
+            addUser(new User("BriKan", "Brian", 1, 0, null));
+            addUser(new User("SriKri", "Sriman", 1, 0, null));
+            addUser(new User("ShaTow", "Shane", 1, 0, null));
         }
     }
 

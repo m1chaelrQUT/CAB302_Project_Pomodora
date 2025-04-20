@@ -1,6 +1,4 @@
-package com.qut.cab302_project_pomodora;
-
-import java.util.List;
+package com.qut.cab302_project_pomodora.model;
 
 /**
  * Interface for the User Data Access Object that handles

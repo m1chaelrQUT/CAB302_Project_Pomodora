@@ -1,8 +1,9 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.IUserDAO;
-import com.qut.cab302_project_pomodora.MockUserDAO;
-import com.qut.cab302_project_pomodora.User;
+import com.qut.cab302_project_pomodora.model.IUserDAO;
+import com.qut.cab302_project_pomodora.model.MockUserDAO;
+import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
+import com.qut.cab302_project_pomodora.model.User;
 import com.qut.cab302_project_pomodora.config.Theme;
 import com.qut.cab302_project_pomodora.Main;
 import javafx.fxml.FXML;
@@ -47,9 +48,7 @@ public class SigninController extends ControllerSkeleton {
     private Theme currentTheme = Theme.LIGHT;
 
     public SigninController() {
-        // Load mock users for testing
-        userDAO = new MockUserDAO();
-        // TODO: Swap out Mock for DB implementation SQLiteUserDAO
+        userDAO = new SqliteUserDAO();
     }
 
     // Implement the abstract methods to provide the required containers : This is for common scaling

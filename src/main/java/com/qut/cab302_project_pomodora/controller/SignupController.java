@@ -1,9 +1,10 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.IUserDAO;
+import com.qut.cab302_project_pomodora.model.IUserDAO;
 import com.qut.cab302_project_pomodora.Main;
-import com.qut.cab302_project_pomodora.MockUserDAO;
-import com.qut.cab302_project_pomodora.User;
+import com.qut.cab302_project_pomodora.model.MockUserDAO;
+import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
+import com.qut.cab302_project_pomodora.model.User;
 import com.qut.cab302_project_pomodora.config.Theme;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,9 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
-import java.net.URI;
 
 // Extend the abstract skeleton
 public class SignupController extends ControllerSkeleton {
@@ -47,9 +46,7 @@ public class SignupController extends ControllerSkeleton {
     private Theme currentTheme = Theme.LIGHT;
 
     public SignupController() {
-        // Load mock users for testing
-        userDAO = new MockUserDAO();
-        // TODO: Swap out Mock for DB implementation SQLiteUserDAO
+        userDAO = new SqliteUserDAO();
     }
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
@@ -94,9 +91,10 @@ public class SignupController extends ControllerSkeleton {
             // Default Values for new User - Starting Level
             final int DEFAULT_PLAYER_LEVEL = 1;
             final int DEFAULT_LEVEL_EXPERIENCE = 0;
+            final String DEFAULT_EMAIL = null;
 
             // Add the new user
-            User newUser = new User(userNameInput, passwordInput, DEFAULT_PLAYER_LEVEL, DEFAULT_LEVEL_EXPERIENCE);
+            User newUser = new User(userNameInput, passwordInput, DEFAULT_PLAYER_LEVEL, DEFAULT_LEVEL_EXPERIENCE, DEFAULT_EMAIL);
             userDAO.addUser(newUser);
 
             // TODO: Navigate through to Home Screen.
