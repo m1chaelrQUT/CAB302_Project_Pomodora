@@ -19,7 +19,7 @@ public class Main extends Application {
         int MIN_HEIGHT = 600;
         String TITLE = "CAB302: Project Pomodora";
         String LAUNCH_PAGE_ADDRESS = "fxml/signin.fxml";
-        String APP_ICON_ADDRESS = "images/logo.png";
+        String APP_ICON_ADDRESS = "images/logocolor.png";
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(LAUNCH_PAGE_ADDRESS));
         Scene scene = new Scene(fxmlLoader.load(), START_WIDTH, START_HEIGHT);

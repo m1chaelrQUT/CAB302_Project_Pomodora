@@ -1,5 +1,5 @@
 # CAB302 Project Pomodora
-![Logo](src/main/resources/com/qut/cab302_project_pomodora/images/logo.png)
+![Logo](src/main/resources/com/qut/cab302_project_pomodora/images/logocolor.png)
 ## AI-Powered Time Management Tool
 **Aim:**  Develop a time management application based on the Pomodoro Technique, designed to help students manage their study sessions effectively. The AI will assist in creating personalized study plans, breaking tasks into manageable intervals, and providing reminders and motivational messages. This tool aims to enhance productivity and focus by encouraging regular breaks and structured study periods.
 <br><br>
