@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<StackPane fx:id="rootPane" styleClass="primitives" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SigninController">
+<StackPane fx:id="rootPane" styleClass="primitives" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SigninController">
     <StackPane styleClass="theme">
       <StackPane fx:id="contentPane" styleClass="window-background">
           <VBox alignment="CENTER" fillWidth="false" prefHeight="1080.0" prefWidth="1920.0" spacing="30.0">
@@ -34,21 +24,55 @@
                   </Label>
                   <HBox prefHeight="565.0" prefWidth="1075.0" VBox.vgrow="ALWAYS">
                       <VBox prefHeight="604.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
-                          <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="59.0" prefWidth="701.0" styleClass="header-small-primary" text="Email / Username">
-                              <font>
-                                  <Font size="30.0" />
-                              </font>
-                          </Label>
+                     <HBox>
+                        <children>
+                                <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="255.0" styleClass="header-small-primary" text="Email / Username">
+                                    <font>
+                                        <Font size="30.0" />
+                                    </font>
+                                </Label>
+                           <AnchorPane fx:id="usernameFailPrompt" prefHeight="58.0" prefWidth="362.0" visible="false" HBox.hgrow="NEVER">
+                              <children>
+                                 <Label alignment="BOTTOM_LEFT" layoutX="3.0" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="124.0" styleClass="invalid-text" text="*">
+                                    <font>
+                                       <Font size="30.0" />
+                                    </font>
+                                 </Label>
+                                  <Label fx:id="failText" alignment="BOTTOM_RIGHT" layoutX="76.0" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="286.0" styleClass="invalid-text" text="Please fill any fields marked with *" textAlignment="CENTER">
+                                      <font>
+                                          <Font size="15.0" />
+                                      </font>
+                                  </Label>
+                              </children>
+                           </AnchorPane>
+                        </children>
+                        <VBox.margin>
+                           <Insets right="-1.0" />
+                        </VBox.margin>
+                     </HBox>
                           <TextField fx:id="usernameField" prefHeight="100" prefWidth="625.0" promptText="example@email-service.com" styleClass="signin-field">
                               <font>
                                   <Font size="30.0" />
                               </font>
                           </TextField>
-                          <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="59.0" prefWidth="701.0" styleClass="header-small-primary" text="Password">
-                              <font>
-                                  <Font size="30.0" />
-                              </font>
-                          </Label>
+                     <HBox prefHeight="59.0" prefWidth="214.0">
+                        <children>
+                                <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="59.0" prefWidth="135.0" styleClass="header-small-primary" text="Password">
+                                    <font>
+                                        <Font size="30.0" />
+                                    </font>
+                                </Label>
+                           <AnchorPane fx:id="passwordFailPrompt" visible="false">
+                              <children>
+                                 <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="22.0" styleClass="invalid-text" text="*">
+                                    <font>
+                                       <Font size="30.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </AnchorPane>
+                        </children>
+                     </HBox>
                           <PasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="625.0" promptText="password" styleClass="signin-field">
                               <font>
                                   <Font size="30.0" />
@@ -65,7 +89,7 @@
                           </Button>
                           <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="623.0">
                               <Label alignment="CENTER" contentDisplay="CENTER" styleClass="text-invert" text="Don't have an account?" textFill="#bfbfbf" />
-                              <Hyperlink onAction="#handleSignUp" styleClass="text-button" text="Sign Up" underline="true" />
+                              <Hyperlink onAction="#goToSignUp" styleClass="text-button" text="Sign Up" underline="true" />
                           </HBox>
                       </VBox>
                       <VBox prefHeight="200.0" prefWidth="400.0">
@@ -115,11 +139,23 @@
                           <Font size="20.0" />
                       </font>
                   </Button>
-                  <Label layoutX="113.0" layoutY="172.0" prefHeight="32.0" prefWidth="605.0" styleClass="header-small-primary" text="Email / Username">
-                      <font>
-                         <Font size="20.0" />
-                      </font>
-                  </Label>
+               <HBox layoutX="113.0" layoutY="172.0">
+                  <children>
+                        <Label prefHeight="32.0" prefWidth="76.0" styleClass="header-small-primary" text="Email">
+                            <font>
+                               <Font size="20.0" />
+                            </font>
+                        </Label>
+                     <AnchorPane fx:id="emailResetFail" prefHeight="32.0" prefWidth="532.0" visible="false">
+                        <children>
+                           <Label layoutX="362.0" layoutY="-2.0" prefHeight="32.0" prefWidth="170.0" styleClass="invalid-text" text="Please enter a valid email">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </Label>
+                        </children></AnchorPane>
+                  </children>
+               </HBox>
                   <Label layoutX="354.0" layoutY="448.0" styleClass="text-invert" text="Need help?">
                   </Label>
                   <Hyperlink layoutX="418.0" layoutY="445.0" onAction="#getSupport" styleClass="text-button" text="Contact Support" />

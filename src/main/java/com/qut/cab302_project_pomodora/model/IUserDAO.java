@@ -16,5 +16,13 @@ public interface IUserDAO {
      * @param userName The userName of the user to retrieve.
      * @return The user with the given userName
      */
-    public User getUser(String userName);
+    public User getUserByName(String userName);
+
+    /**
+     * Retrieves a user from the database.
+     * @param email The email of the user to retrieve
+     * @return The user with the given email
+     */
+    public User getUserByEmail(String email);
+
 }

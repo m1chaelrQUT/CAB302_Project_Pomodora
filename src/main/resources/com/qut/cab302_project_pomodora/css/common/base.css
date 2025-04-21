@@ -153,3 +153,7 @@
     -fx-text-fill: -fx-text-tertiary;
 }
 
+.invalid-text {
+    -fx-text-fill: -fx-red-fail-red;
+}
+

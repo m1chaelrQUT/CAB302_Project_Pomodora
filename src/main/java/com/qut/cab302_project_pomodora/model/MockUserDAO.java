@@ -13,11 +13,11 @@ public class MockUserDAO implements IUserDAO {
     public MockUserDAO() {
         // Initial Users - only if there are none in the Mock DB
         if(users.isEmpty()) {
-            addUser(new User("MicRob", "Michael", 1, 0, null));
-            addUser(new User("EthHun", "Ethan", 1, 0, null));
-            addUser(new User("BriKan", "Brian", 1, 0, null));
-            addUser(new User("SriKri", "Sriman", 1, 0, null));
-            addUser(new User("ShaTow", "Shane", 1, 0, null));
+            addUser(new User("MicRob", "Michael", 1, 0, "MicRob123@example.com"));
+            addUser(new User("EthHun", "Ethan", 1, 0, "EthHun123@example.com"));
+            addUser(new User("BriKan", "Brian", 1, 0, "BriKan123@example.com"));
+            addUser(new User("SriKri", "Sriman", 1, 0, "SriKri123@example.com"));
+            addUser(new User("ShaTow", "Shane", 1, 0, "ShaTow123@example.com"));
         }
     }
 
@@ -38,13 +38,23 @@ public class MockUserDAO implements IUserDAO {
      * @return the user if they exist, else error
      */
     @Override
-    public User getUser(String userName) {
+    public User getUserByName(String userName) {
         for (User user : users) {
             if(user.getUserName().equals(userName)){
                 return user;
             }
         }
         System.out.println("Username Entered: " + userName + " does not exist");
+        return null;
+    }
+    @Override
+    public User getUserByEmail(String userEmail) {
+        for (User user : users) {
+            if(user.getEmail().equals(userEmail)){
+                return user;
+            }
+        }
+        System.out.println("Email Entered: " + userEmail + " does not exist");
         return null;
     }
 }

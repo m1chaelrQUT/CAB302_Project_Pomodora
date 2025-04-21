@@ -5,10 +5,12 @@ import com.qut.cab302_project_pomodora.model.MockUserDAO;
 import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
 import com.qut.cab302_project_pomodora.model.User;
 import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.util.ThemeManager;
 import com.qut.cab302_project_pomodora.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -24,7 +26,7 @@ import java.net.URI;
 // Extend the abstract skeleton
 public class SigninController extends ControllerSkeleton {
 
-    // FXML ids specific to the Home Controller
+    // FXML ids specific to the Signin Controller
     @FXML private StackPane rootPane;
     @FXML private StackPane contentPane;
 
@@ -41,11 +43,15 @@ public class SigninController extends ControllerSkeleton {
     @FXML private StackPane resetPane;
     @FXML private StackPane resetSuccessPane;
     @FXML private TextField usernameFieldReset;
+    @FXML private AnchorPane usernameFailPrompt;
+    @FXML private AnchorPane passwordFailPrompt;
+    @FXML private Label failText;
+    @FXML private AnchorPane emailResetFail;
 
     // User DAO interface
     private IUserDAO userDAO;
 
-    private Theme currentTheme = Theme.LIGHT;
+    private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
 
     public SigninController() {
         userDAO = new SqliteUserDAO();
@@ -73,7 +79,7 @@ public class SigninController extends ControllerSkeleton {
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        System.out.println("HomeController Initialization completed.");
+        System.out.println("SigninController Initialization completed.");
     }
 
     // Sign-In
@@ -84,21 +90,30 @@ public class SigninController extends ControllerSkeleton {
         String userNameInput = usernameField.getText();
         String passwordInput = passwordField.getText();
 
-        // Check if user exists
-        User user = userDAO.getUser(userNameInput);
+        boolean credentialsFilled = (userNameInput != null && passwordInput != null && !userNameInput.isEmpty() && !passwordInput.isEmpty());
+        if (credentialsFilled) {
+            // Check if user exists
+            User user = userDAO.getUserByName(userNameInput);
+            if (user == null){
+                user = userDAO.getUserByEmail(userNameInput);
+            }
 
-        // Check if password is correct
-        if (user != null) {
-            if (user.getPassword().equals(passwordInput)) {
+            // Check if password is correct
+            if ((user != null) && (user.getPassword().equals(passwordInput))) {
                 System.out.println("Sign-in successful! User: " + userNameInput + " logged in.");
                 // TODO: Navigate through to Home Screen.
+                usernameFailPrompt.setVisible(false);
+                passwordFailPrompt.setVisible(false);
             } else {
-                System.out.println("Incorrect Password Entered");
-                // TODO: Output error message to the user through the GUI.
+                System.out.println("Username not found");
+                failText.setText("The username or password is incorrect.");
+                usernameFailPrompt.setVisible(true);
+                passwordFailPrompt.setVisible(true);
             }
         } else {
-            System.out.println("Username not found");
-            // TODO: Output error message to user through GUI.
+            failText.setText("Please fill any fields marked with *");
+            usernameFailPrompt.setVisible(true);
+            passwordFailPrompt.setVisible(true);
         }
 
         // Debugging
@@ -118,20 +133,17 @@ public class SigninController extends ControllerSkeleton {
 
     @FXML
     private void showResetDialog() {
-        System.out.println("HomeController showResetDialog");
-        // TEMP - TODO: Open password reset popup
+        System.out.println("SigninController showResetDialog");
         resetPane.setVisible(true);
     }
     private void showSuccessfulResetDialog() {
-        System.out.println("HomeController showResetDialog");
-        // TEMP - TODO: Open password reset popup
+        System.out.println("SigninController showResetDialog");
         resetSuccessPane.setVisible(true);
     }
 
     @FXML
-    private void handleSignUp() throws IOException {
-        System.out.println("HomeController handleSignUp");
-        // TEMP - TODO: Change to sign up page
+    private void goToSignUp() throws IOException {
+        System.out.println("SigninController handleSignUp");
         Scene currentScene = (Scene) signinPane.getScene();
         Stage stage = (Stage) currentScene.getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/qut/cab302_project_pomodora/fxml/signup.fxml"));
@@ -141,27 +153,33 @@ public class SigninController extends ControllerSkeleton {
 
     @FXML
     private void handleResetPassword() {
-        System.out.println("HomeController handleResetPassword");
-        System.out.println("Username Entered: " + usernameFieldReset.getText());
-        Boolean validEmail = true;
+        String enteredEmail = usernameFieldReset.getText();
+        boolean validEmail = enteredEmail.contains("@");
+        System.out.println("SigninController handleResetPassword");
+        System.out.println("Username Entered: " + enteredEmail);
         if (validEmail) {
+            emailResetFail.setVisible(false);
             closeForgotPasswordDialog();
             showSuccessfulResetDialog();
+        }else {
+            failText.setText("Please enter a valid email address.");
+            emailResetFail.setVisible(true);
         }
     }
 
     @FXML
     private void closeForgotPasswordDialog() {
-        System.out.println("HomeController closeForgotPasswordDialog");
+        System.out.println("SigninController closeForgotPasswordDialog");
 
         resetPane.setVisible(false);
         usernameFieldReset.setText("");
+        emailResetFail.setVisible(false);
 
     }
 
     @FXML
     private void closeSuccessDialog() {
-        System.out.println("HomeController closeSuccessDialog");
+        System.out.println("SigninController closeSuccessDialog");
         resetSuccessPane.setVisible(false);
     }
 

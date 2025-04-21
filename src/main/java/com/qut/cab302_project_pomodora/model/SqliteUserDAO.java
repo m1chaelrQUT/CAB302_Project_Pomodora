@@ -24,7 +24,7 @@ public class SqliteUserDAO implements IUserDAO {
                     + "password VARCHAR NOT NULL,"
                     + "playerLevel INTEGER NOT NULL,"
                     + "levelExp INTEGER NOT NULL,"
-                    + "email VARCHAR,"
+                    + "email VARCHAR NOT NULL,"
                     + "createdAt DATE NOT NULL,"
                     + "updatedAt DATE NOT NULL"
                     + ")";
@@ -71,7 +71,7 @@ public class SqliteUserDAO implements IUserDAO {
      * @return the user's username, level, exp
      */
     @Override
-    public User getUser(String userName) {
+    public User getUserByName(String userName) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE userName = ?");
             statement.setString(1, userName);
@@ -93,4 +93,27 @@ public class SqliteUserDAO implements IUserDAO {
         return null;
     }
 
+    @Override
+    public User getUserByEmail(String userEmail) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
+            statement.setString(1, userEmail);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String userName = resultSet.getString("userName");
+                String password = resultSet.getString("password");
+                int playerLevel = resultSet.getInt("playerLevel");
+                int levelExp = resultSet.getInt("levelExp");
+                userEmail = resultSet.getString("email");
+                User user = new User(userName, password, playerLevel, levelExp, userEmail);
+                user.setId(id);
+                return user;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
 }

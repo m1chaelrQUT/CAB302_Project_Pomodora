@@ -19,7 +19,7 @@ public class User {
         this.password = password;
         this.playerLevel = playerLevel;
         this.levelExp = levelExp;
-        this.email = null;
+        this.email = email;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -101,6 +101,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", playerLevel=" + playerLevel +
                 ", levelExp=" + levelExp +
+                ", email='" + email + '\'' +
                 '}';
     }
 
