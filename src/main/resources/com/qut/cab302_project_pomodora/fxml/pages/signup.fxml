@@ -117,7 +117,7 @@
                       <VBox prefHeight="200.0" prefWidth="400.0">
                           <ImageView fitHeight="344.0" fitWidth="401.0" pickOnBounds="true" preserveRatio="true">
                               <image>
-                                  <Image url="@../images/logo.png" />
+                                  <Image url="@../../images/logo.png" />
                               </image>
                           </ImageView>
                           <Label fx:id="ctaLogo" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="99.0" prefWidth="385.0" styleClass="brand-slogan-primary" text="Work Harder, Smarter">
