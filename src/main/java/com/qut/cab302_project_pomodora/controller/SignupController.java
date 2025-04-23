@@ -85,7 +85,6 @@ public class SignupController extends ControllerSkeleton {
     }
 
     // Sign-Up
-    // TODO: Clean up commented code
     @FXML
     private void handleSignUp() {
         // Get sign in inputs
@@ -127,23 +126,6 @@ public class SignupController extends ControllerSkeleton {
 
                 // TODO: Navigate through to Home Screen.
             }
-
-            //Debugging
-            // Check that new user was correctly stored
-            //System.out.println(MockUserDAO.users);
-
-            //        System.out.println("HomeController handleSignIn");
-            //        System.out.println("Username Entered: " + usernameField.getText());
-            //        System.out.println("Password Entered: " + passwordField.getText());
-            //        System.out.println("Remember Me? " + rememberMeCheckBox.isSelected());
-
-            // Hijacked to demo ThemeManager util
-    //        if (currentTheme == Theme.LIGHT) {
-    //            currentTheme = Theme.DARK;
-    //        } else if (currentTheme == Theme.DARK) {
-    //            currentTheme = Theme.VOIDLIGHT;
-    //        } else {currentTheme = Theme.LIGHT;}
-    //        changeTheme(currentTheme);
         } else {
             failText.setText("Please fill any fields marked with *");
             usernameFailPrompt.setVisible(true);

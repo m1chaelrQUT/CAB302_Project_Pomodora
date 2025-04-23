@@ -83,7 +83,6 @@ public class SigninController extends ControllerSkeleton {
     }
 
     // Sign-In
-    // TODO: Clean up commented code
     @FXML
     private void handleSignIn() {
         // Get sign in inputs
@@ -115,20 +114,6 @@ public class SigninController extends ControllerSkeleton {
             usernameFailPrompt.setVisible(true);
             passwordFailPrompt.setVisible(true);
         }
-
-        // Debugging
-//        System.out.println("HomeController handleSignIn");
-//        System.out.println("Username Entered: " + usernameField.getText());
-//        System.out.println("Password Entered: " + passwordField.getText());
-//        System.out.println("Remember Me? " + rememberMeCheckBox.isSelected());
-
-        // Hijacked to demo ThemeManager util
-//        if (currentTheme == Theme.LIGHT) {
-//            currentTheme = Theme.DARK;
-//        } else if (currentTheme == Theme.DARK) {
-//            currentTheme = Theme.VOIDLIGHT;
-//        } else {currentTheme = Theme.LIGHT;}
-//        changeTheme(currentTheme);
     }
 
     @FXML
