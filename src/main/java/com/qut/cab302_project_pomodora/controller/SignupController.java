@@ -137,11 +137,7 @@ public class SignupController extends ControllerSkeleton {
     @FXML
     private void goToSignIn() throws IOException {
         System.out.println("SignupController goToSignup");
-        Scene currentScene = (Scene) signupPane.getScene();
-        Stage stage = (Stage) currentScene.getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/com/qut/cab302_project_pomodora/fxml/signin.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), currentScene.getWidth(), currentScene.getHeight());
-        stage.setScene(scene);
+        navigateTo("signin");
     }
 
     @FXML

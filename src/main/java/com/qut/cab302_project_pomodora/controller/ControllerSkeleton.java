@@ -1,6 +1,7 @@
 // src/main/java/com/qut/cab302_project_pomodora/controller/ControllerSkeleton.java
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.config.Theme;
 import com.qut.cab302_project_pomodora.util.ThemeManager; // <-- Import ThemeManager
 // Potentially import Theme enum if needed directly, though usually managed by ThemeManager
@@ -9,9 +10,13 @@ import com.qut.cab302_project_pomodora.util.ThemeManager; // <-- Import ThemeMan
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 /**
  * Abstract parent controller for shared logic such as proper scaling and theme application.
@@ -206,5 +211,15 @@ public abstract class ControllerSkeleton {
     protected Scene getCurrentScene() {
         StackPane root = getRootPane(); // Use the getter method
         return (root != null) ? root.getScene() : null;
+    }
+
+    protected void navigateTo(String toSceneName) throws IOException {
+        Scene currentScene = getCurrentScene();
+        Stage stage = (Stage) currentScene.getWindow();
+        String toScenePath = "/com/qut/cab302_project_pomodora/fxml/" + toSceneName + ".fxml";
+        System.out.println("Navigating to: " + toScenePath);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(toScenePath));
+        Scene scene = new Scene(fxmlLoader.load(), currentScene.getWidth(), currentScene.getHeight());
+        stage.setScene(scene);
     }
 }
