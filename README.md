@@ -27,7 +27,9 @@
             └── com.qut.cab302_project_pomodora 
                                         ├── css/ 
                                         ├── fonts/ 
-                                        └── fxml/
+                                        ├── fxml/
+                                        │     ├── pages/
+                                        │     └── components/
                                         └── images/
             
 ```
