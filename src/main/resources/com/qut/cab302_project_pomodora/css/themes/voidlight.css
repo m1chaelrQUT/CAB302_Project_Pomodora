@@ -44,10 +44,7 @@
 }
 
 .button-primary {
-    -fx-border-color: -fx-purple-artificial-grape;
-    -fx-border-radius: 15;
-    -fx-border-width: 15;
-    -fx-background-radius: 30;
+    -fx-background-color: -fx-purple-artificial-grape;
 }
 
 .brand-box {
