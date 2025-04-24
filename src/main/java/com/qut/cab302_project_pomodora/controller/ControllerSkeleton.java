@@ -216,7 +216,7 @@ public abstract class ControllerSkeleton {
     protected void navigateTo(String toSceneName) throws IOException {
         Scene currentScene = getCurrentScene();
         Stage stage = (Stage) currentScene.getWindow();
-        String toScenePath = "/com/qut/cab302_project_pomodora/fxml/" + toSceneName + ".fxml";
+        String toScenePath = "/com/qut/cab302_project_pomodora/fxml/pages/" + toSceneName + ".fxml";
         System.out.println("Navigating to: " + toScenePath);
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(toScenePath));
         Scene scene = new Scene(fxmlLoader.load(), currentScene.getWidth(), currentScene.getHeight());
