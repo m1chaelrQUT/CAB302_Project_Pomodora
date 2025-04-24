@@ -1,0 +1,159 @@
+/* light.css */
+.primitives {
+    /* === PRIMITIVES === */
+    /* Grey Scale */
+    -fx-grey-0: #ffffff;
+    -fx-grey-50: #d9d9d9;
+    -fx-grey-75: #b0b0b0;
+    -fx-grey-100: #b1b1b1;
+    -fx-grey-150: #b2afaf;
+    -fx-grey-200: #9f9f9f;
+    -fx-grey-350: #717070;
+    -fx-grey-400: #625e5e;
+    -fx-grey-500: #3c3c3c;
+    -fx-grey-700: #252525;
+    -fx-grey-800: #1c1c1c;
+    -fx-grey-900: #1a1a1a;
+    -fx-grey-950: #171717;
+
+    /* Accent Colors */
+    -fx-red-fail-red: #ff4d4d;
+    -fx-red-negative-red: #d93434;
+    -fx-green-affirm-green: #4caf50;
+    -fx-orange-hesitate-orange: #ffae00;
+    -fx-orange-cadmium-orange: #f2842d;
+    -fx-purple-artificial-grape: #7338dd;
+}
+.theme {
+    /* === TOKENS === */
+    /* Text */
+    -fx-text-primary: -fx-grey-700;         /*grey 200 */
+    -fx-text-secondary: -fx-grey-200;       /*grey 200 */
+    -fx-text-tertiary: -fx-grey-950;        /*grey 950 */
+    -fx-text-invert: -fx-grey-50;               /*grey 50 */
+    -fx-text-brand: -fx-grey-700;           /*grey 700 */
+    -fx-text-brand-invert: -fx-grey-50;         /*grey 50 */
+    /* Surfaces */
+    -fx-surface-primary: -fx-grey-50;           /*grey 50 */
+    -fx-surface-secondary: -fx-grey-400;    /*grey 200 */
+    -fx-surface-invert: -fx-grey-700;
+    -fx-surface-brand: -fx-grey-100;             /*grey 100 */
+    -fx-surface-brand-invert: -fx-grey-400; /*grey 400 */
+    -fx-surface-nav: -fx-grey-100;               /*grey 100 */
+    -fx-surface-tertiary: -fx-grey-950;
+    -fx-surface-clock: -fx-grey-100;             /*grey 100 */
+    -fx-surface-tasks: -fx-grey-150;             /*grey 150 */
+
+    /* Fields */
+    -fx-field-primary: -fx-grey-100;             /*grey 100 */
+    -fx-field-secondary: -fx-grey-50;           /*grey 50 */
+    -fx-field-invert: -fx-grey-400;         /*grey 400 */
+    /* Buttons */
+    -fx-button-primary: -fx-grey-100;            /*grey 100 */
+    -fx-button-secondary: -fx-grey-700;     /*grey 700 */
+    -fx-button-invert: -fx-grey-50;             /*grey 50 */
+    /* Progress */
+    -fx-progress-completed-green: -fx-green-affirm-green;       /*green affirm green */
+    -fx-progress-in-prog-orange: -fx-orange-hesitate-orange;    /*orange-hesitate-orange*/
+    -fx-progress-not-begun-red: -fx-red-negative-red;           /*red negative red */
+    /* Level Indication */
+    -fx-level-xp-indication: -fx-green-affirm-green;            /*green affirm green*/
+    /* Borders */
+    -fx-border-primary: -fx-grey-950;       /*grey 950  */
+    -fx-border-secondary: -fx-grey-200;     /*grey 200  */
+    -fx-border-invert: -fx-grey-50;             /*grey 50   */
+
+    -fx-border-thickness: 0;
+}
+
+/* --- General StyleClasses --- */
+.window-background {
+    -fx-background-color: -fx-surface-primary;
+}
+
+
+.button-primary {
+    -fx-background-color: -fx-button-primary;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.button-secondary {
+    -fx-background-color: -fx-button-secondary;
+}
+
+.text-button {
+    -fx-text-fill: -fx-text-tertiary;
+    -fx-underline: true;
+}
+
+.text-invert {
+    -fx-text-fill: -fx-text-invert;
+}
+
+/* --- Signin Page specific --- */
+.brand-box {
+    -fx-background-color: -fx-surface-brand;
+    -fx-background-radius: 20;
+    -fx-border-radius: 0;
+    -fx-padding: 10;
+    -fx-text-fill: -fx-text-brand;
+}
+
+.signin-box {
+    -fx-background-color: -fx-surface-secondary;
+    -fx-background-radius: 20;
+    -fx-padding: 10;
+}
+
+.header-medium-primary {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.header-small-primary {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.brand-slogan-primary {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.signin-field {
+    -fx-background-color: -fx-field-secondary;
+    -fx-background-radius: 20;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.remember-checkbox {
+    /*-fx-background-color: -fx-field-secondary;*/
+    -fx-text-fill: -fx-text-invert;
+}
+
+.overlay-shadow {
+    -fx-background-color: -fx-surface-tertiary;
+    -fx-opacity: 0.9;
+}
+
+.password-reset-box {
+    -fx-background-color: -fx-surface-secondary;
+    -fx-background-radius: 20;
+}
+
+.close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-primary;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.close-button:hover {
+    -fx-text-fill: -fx-text-invert;
+}
+
+.close-button:pressed {
+    -fx-text-fill: -fx-text-tertiary;
+}
+
+.invalid-text {
+    -fx-text-fill: -fx-red-fail-red;
+}
+

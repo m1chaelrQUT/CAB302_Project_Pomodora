@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="App" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.qut.cab302_project_pomodora.Main" />
+    <module name="CAB302_Project_Pomodora" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
