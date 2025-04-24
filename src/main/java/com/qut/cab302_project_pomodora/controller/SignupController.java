@@ -28,7 +28,7 @@ import java.net.URI;
 public class SignupController extends ControllerSkeleton {
 
     // FXML ids specific to the Signup Controller
-    @FXML private StackPane rootPane;
+    @FXML private StackPane signUp;
     @FXML private StackPane contentPane;
 
 
@@ -62,7 +62,7 @@ public class SignupController extends ControllerSkeleton {
     // Implement the abstract methods to provide the required containers : This is for common scaling
     @Override
     protected StackPane getRootPane() {
-        return rootPane;
+        return signUp;
     }
 
     @Override

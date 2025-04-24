@@ -27,7 +27,7 @@ import java.net.URI;
 public class SigninController extends ControllerSkeleton {
 
     // FXML ids specific to the Signin Controller
-    @FXML private StackPane rootPane;
+    @FXML private StackPane signIn;
     @FXML private StackPane contentPane;
 
 
@@ -60,7 +60,7 @@ public class SigninController extends ControllerSkeleton {
     // Implement the abstract methods to provide the required containers : This is for common scaling
     @Override
     protected StackPane getRootPane() {
-        return rootPane;
+        return signIn;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SigninController extends ControllerSkeleton {
 
     // Sign-In
     @FXML
-    private void handleSignIn() {
+    private void handleSignIn() throws IOException {
         // Get sign in inputs
         String userNameInput = usernameField.getText();
         String passwordInput = passwordField.getText();
@@ -103,6 +103,7 @@ public class SigninController extends ControllerSkeleton {
                 // TODO: Navigate through to Home Screen.
                 usernameFailPrompt.setVisible(false);
                 passwordFailPrompt.setVisible(false);
+                navigateTo("homeexample");
             } else {
                 System.out.println("Username not found");
                 failText.setText("The username or password is incorrect.");

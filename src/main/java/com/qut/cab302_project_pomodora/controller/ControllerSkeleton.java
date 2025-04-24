@@ -1,11 +1,8 @@
-// src/main/java/com/qut/cab302_project_pomodora/controller/ControllerSkeleton.java
 package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.config.Theme;
-import com.qut.cab302_project_pomodora.util.ThemeManager; // <-- Import ThemeManager
-// Potentially import Theme enum if needed directly, though usually managed by ThemeManager
-// import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.util.ThemeManager;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;

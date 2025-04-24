@@ -71,6 +71,9 @@
     -fx-background-color: -fx-surface-primary;
 }
 
+.pomodora-box {
+    -fx-background-color: -fx-surface-secondary;
+}
 
 .button-primary {
     -fx-background-color: -fx-button-primary;
@@ -157,3 +160,12 @@
     -fx-text-fill: -fx-red-fail-red;
 }
 
+.nav-bar {
+    -fx-background-color: -fx-surface-nav;
+}
+
+.toggle-nav-button {
+    -fx-background-color: -fx-surface-secondary;
+    -fx-border-color: -fx-surface-secondary;
+    -fx-border-width: 0;
+}

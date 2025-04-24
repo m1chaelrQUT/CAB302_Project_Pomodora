@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootPane" styleClass="primitives" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SignupController">
+<StackPane fx:id="signUp" styleClass="primitives" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SignupController">
     <StackPane styleClass="theme">
       <StackPane fx:id="contentPane" styleClass="window-background">
           <VBox alignment="CENTER" fillWidth="false" prefHeight="1080.0" prefWidth="1920.0" spacing="30.0">
