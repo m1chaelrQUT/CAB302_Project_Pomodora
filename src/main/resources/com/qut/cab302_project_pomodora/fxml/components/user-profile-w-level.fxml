@@ -9,18 +9,22 @@
 <?import javafx.scene.text.Font?>
 
 <!-- The Pane here is necessary for Scene Builder to properly render the AnchorPane (Since it is so small apparently) -->
+
 <Pane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-      <AnchorPane fx:id="userProfilePane" prefHeight="60.0" prefWidth="130.0" styleClass="pomodora-box">
-          <Label fx:id="usernameLabel" layoutX="59.0" layoutY="7.0" text="User _" textFill="WHITE">
+      <AnchorPane fx:id="userProfilePane" prefHeight="100.0" prefWidth="296.0" styleClass="pomodora-box">
+          <Label fx:id="usernameLabel" layoutX="157.0" layoutY="10.0" text="User _" textFill="WHITE">
               <font>
-                  <Font size="15.0" />
+                  <Font size="28.0" />
               </font>
           </Label>
-          <ImageView fx:id="rankShieldIcon" fitHeight="37.0" fitWidth="34.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+          <ImageView fx:id="rankShieldIcon" fitHeight="66.0" fitWidth="75.0" layoutX="8.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
               <Image url="@../../images/user-level-shield.png" />
           </ImageView>
-          <Label fx:id="userRankLabel" layoutX="14.0" layoutY="17.0" text="?" />
-          <Rectangle fx:id="totalProgressBar" arcHeight="5.0" arcWidth="5.0" fill="#dcdcdc" height="13.0" layoutX="36.0" layoutY="35.0" stroke="BLACK" strokeType="INSIDE" width="86.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="0.0" />
-          <Rectangle fx:id="userProgressBar" arcHeight="5.0" arcWidth="5.0" fill="#52e148" height="13.0" layoutX="36.0" layoutY="35.0" stroke="BLACK" strokeType="INSIDE" width="52.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="0.0" />
+          <Label fx:id="userRankLabel" alignment="CENTER" layoutX="28.0" layoutY="33.0" prefHeight="40.0" prefWidth="32.0" text="?">
+         <font>
+            <Font size="27.0" />
+         </font></Label>
+          <Rectangle fx:id="totalProgressBar" arcHeight="5.0" arcWidth="5.0" fill="#dcdcdc" height="19.0" layoutX="105.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" width="175.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="16.0" />
+          <Rectangle fx:id="userProgressBar" arcHeight="5.0" arcWidth="5.0" fill="#52e148" height="19.0" layoutX="105.0" layoutY="65.0" stroke="BLACK" strokeType="INSIDE" width="98.0" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="93.0" />
       </AnchorPane>
 </Pane>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="1080.0" minWidth="1920.0" prefHeight="400.0" prefWidth="0.0" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.fxml.pages.Settings">
+   <children>
+      <StackPane styleClass="primitives">
+         <children>
+            <StackPane styleClass="theme">
+               <children>
+                  <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
+                     <children>
+                        <BorderPane>
+                           <left>
+                              <fx:include source="../components/side-navbar.fxml" />
+                           </left>
+                           <right>
+                              <fx:include source="../components/user-profile-w-level.fxml" />
+                           </right>
+                           <center>
+                              <AnchorPane prefHeight="1080.0" prefWidth="1388.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="settingsPageLabel" layoutX="56.0" layoutY="73.0" prefHeight="77.0" prefWidth="306.0" text="Settings" underline="true">
+                                       <font>
+                                          <Font size="50.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="themeSettingsButton" alignment="CENTER" layoutX="307.0" layoutY="180.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Theme &amp; Appearance ">
+                                       <font>
+                                          <Font size="37.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="timerSettingsButton" layoutX="308.0" layoutY="383.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Timer Settings">
+                                       <font>
+                                          <Font size="37.0" />
+                                       </font>
+                                    </Button>
+                                    <ImageView fitHeight="57.0" fitWidth="57.0" layoutX="1332.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../docs/images/theme_icon.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="71.0" fitWidth="60.0" layoutX="1333.0" layoutY="405.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../docs/images/Clock.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="notificationSettingsButton" layoutX="312.0" layoutY="591.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Notification">
+                                       <font>
+                                          <Font size="37.0" />
+                                       </font>
+                                    </Button>
+                                    <ImageView fitHeight="65.0" fitWidth="80.0" layoutX="1324.0" layoutY="610.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../docs/images/Bell.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="accountSettingsButton" layoutX="312.0" layoutY="788.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Account">
+                                       <font>
+                                          <Font size="37.0" />
+                                       </font>
+                                    </Button>
+                                    <ImageView fitHeight="73.0" fitWidth="107.0" layoutX="1318.0" layoutY="807.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../../docs/images/User-indicator.png" />
+                                       </image>
+                                    </ImageView>
+                                    <!-- Overlays -->
+                                    <StackPane fx:id="timerSettingsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" styleClass="window-background" visible="true">
+                                       <children>
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="brand-box">
+                                             <children>
+                                                <Button fx:id="timerSettingsCloseButton" layoutX="801.0" layoutY="1.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0">
+                                                   <graphic>
+                                                      <ImageView fitHeight="56.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" styleClass="button-primary">
+                                                         <image>
+                                                            <Image url="@../../../../../../../../docs/images/close_icon.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
+                                                <Label layoutX="335.0" layoutY="30.0" text="Timer Settings">
+                                                   <font>
+                                                      <Font size="38.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="pomodoroDurationLabel" layoutX="72.0" layoutY="209.0" text="Pomodoro Duration">
+                                                   <font>
+                                                      <Font size="28.0" />
+                                                   </font>
+                                                </Label>
+                                                <Spinner fx:id="pomodoroMinutesSpinner" layoutX="383.0" layoutY="202.0" prefHeight="60.0" prefWidth="100.0" />
+                                                <Spinner fx:id="pomodoroSecondsSpinner" layoutX="625.0" layoutY="204.0" prefHeight="60.0" prefWidth="100.0" />
+                                                <Label fx:id="pomodoroMinutesLabel" layoutX="500.0" layoutY="216.0" text="Minutes">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="pomodoroSecondsLabel" layoutX="741.0" layoutY="217.0" text="Seconds">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="shortBreakDurationLabel" layoutX="73.0" layoutY="350.0" text="Short Break Duration">
+                                                   <font>
+                                                      <Font size="28.0" />
+                                                   </font>
+                                                </Label>
+                                                <Spinner fx:id="shortBreakMinutesSpinner" layoutX="383.0" layoutY="342.0" prefHeight="60.0" prefWidth="100.0" />
+                                                <Label fx:id="shortBreakMinutesLabel" layoutX="502.0" layoutY="354.0" text="Minutes">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Spinner fx:id="shortBreakSecondsSpinner" layoutX="625.0" layoutY="343.0" prefHeight="60.0" prefWidth="100.0" />
+                                                <Label fx:id="shortBreakSecondsLabel" layoutX="741.0" layoutY="356.0" text="Seconds">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="longBreakDurationLabel" layoutX="74.0" layoutY="493.0" text="Long Break Duration">
+                                                   <font>
+                                                      <Font size="28.0" />
+                                                   </font>
+                                                </Label>
+                                                <Spinner fx:id="longBreakMinutesSpinner" layoutX="383.0" layoutY="484.0" prefHeight="60.0" prefWidth="100.0" />
+                                                <Label fx:id="longBreakMinutesLabel" layoutX="504.0" layoutY="497.0" text="Minutes">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Spinner fx:id="longBreakSecondsSpinner" layoutX="625.0" layoutY="484.0" prefHeight="60.0" prefWidth="100.0" />
+                                                <Label fx:id="longBreakSecondsLabel" layoutX="741.0" layoutY="497.0" text="Seconds">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="longBreakAfterLabel" layoutX="74.0" layoutY="633.0" text="Long Break After">
+                                                   <font>
+                                                      <Font size="28.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="longBreakEveryLabel" layoutX="505.0" layoutY="638.0" text="Every">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Spinner fx:id="longBreakCyclesSpinner" layoutX="625.0" layoutY="624.0" prefHeight="60.0" prefWidth="100.0" />
+                                                <Label fx:id="longBreakCyclesLabel" layoutX="741.0" layoutY="637.0" prefHeight="35.0" prefWidth="102.0" text="Cycles">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button fx:id="timerSettingsSaveButton" layoutX="412.0" layoutY="779.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" text="Save">
+                                                   <font>
+                                                      <Font size="24.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                          </AnchorPane>
+                                       </children></StackPane>
+                                 </children>
+                              </AnchorPane>
+                           </center>
+                        </BorderPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </StackPane>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
