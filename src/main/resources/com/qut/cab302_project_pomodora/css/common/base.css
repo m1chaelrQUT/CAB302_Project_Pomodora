@@ -169,3 +169,20 @@
     -fx-border-color: -fx-surface-secondary;
     -fx-border-width: 0;
 }
+
+
+.add-new-study-button {
+    -fx-background-radius: 20;
+    -fx-background-color: -fx-surface-primary;
+    -fx-border-radius: 20;
+    -fx-border-style: dashed;
+    -fx-border-width: 5;
+}
+
+.existing-study-button {
+    -fx-background-radius: 20;
+    -fx-background-color: -fx-surface-primary;
+    -fx-border-radius: 20;
+    -fx-border-style: solid;
+    -fx-border-width: 5;
+}
