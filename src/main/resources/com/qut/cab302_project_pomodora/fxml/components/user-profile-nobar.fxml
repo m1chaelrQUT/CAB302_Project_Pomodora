@@ -10,7 +10,7 @@
 
 <!-- The Pane here is necessary for Scene Builder to properly render the AnchorPane (Since it is so small apparently) -->
 
-<Pane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
       <AnchorPane fx:id="userProfilePane" prefHeight="60.0" prefWidth="130.0" styleClass="pomodora-box">
           <Label fx:id="usernameLabel" layoutX="59.0" layoutY="7.0" text="User _" textFill="WHITE">
               <font>

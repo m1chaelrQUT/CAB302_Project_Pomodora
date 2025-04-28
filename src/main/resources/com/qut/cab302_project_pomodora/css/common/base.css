@@ -186,3 +186,8 @@
     -fx-border-style: solid;
     -fx-border-width: 5;
 }
+
+.current-page-nav-button {
+    -fx-background-color: -fx-surface-primary;
+    -fx-border-width: 1;
+}
