@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
+import java.sql.SQLException;
 
 // Extend the abstract skeleton
 public class SignupController extends ControllerSkeleton {
@@ -73,7 +74,7 @@ public class SignupController extends ControllerSkeleton {
     // Init
     @Override
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);

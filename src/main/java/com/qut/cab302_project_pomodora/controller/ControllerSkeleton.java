@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Abstract parent controller for shared logic such as proper scaling and theme application.
@@ -52,7 +53,7 @@ public abstract class ControllerSkeleton {
      * See the home controller as example
      */
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         // Defer scene-dependent setup until the scene is guaranteed to be available.
         Platform.runLater(() -> {
             // Check if root pane itself is available first

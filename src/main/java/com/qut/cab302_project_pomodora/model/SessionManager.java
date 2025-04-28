@@ -13,7 +13,9 @@ public class SessionManager {
     private static final String SESSION_FILE = "session.txt"; // Path to the session file
     private static User currentUser = null;
 
-    private static void startSession(User user) throws SQLException, IOException {
+    public static void startSession(User user) throws SQLException, IOException {
+        System.out.println("Starting session for user: " + user.getUserName());
+
         // Generate a new session token
         String sessionToken = UUID.randomUUID().toString();
 
@@ -34,7 +36,10 @@ public class SessionManager {
 
     public static void loadSession() throws SQLException, IOException{
         // Check if the session file exists
+        System.out.println("Checking if session file exists...");
         if (Files.exists(Paths.get(SESSION_FILE))) {
+            // Example logic to load session
+            System.out.println("Session file exists! Loading session...");
             // Read the session token from the file
             String sessionToken = new String(Files.readAllBytes(Paths.get(SESSION_FILE)));
 
@@ -50,13 +55,19 @@ public class SessionManager {
             if (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String userName = resultSet.getString("userName");
-                //String password = resultSet.getString("password");
                 int playerLevel = resultSet.getInt("playerLevel");
                 int levelExp = resultSet.getInt("levelExp");
-                //String email = resultSet.getString("email");
                 currentUser = new User(id, userName, playerLevel, levelExp);
                 currentUser.setSessionToken(sessionToken);
+            } else {
+                System.out.println("No user found with the session token.");
+
+                // If no user is found, delete the session file
+                Files.deleteIfExists(Paths.get(SESSION_FILE));
             }
+        } else {
+            System.out.println("Session file does not exist.");
+            currentUser = null; // No session to load
         }
     }
 
@@ -78,7 +89,15 @@ public class SessionManager {
 
     // Getters and Setters
     public static User getCurrentUser() {
-        return currentUser;
+        // Check if the current user is not null
+        if (currentUser == null) {
+            System.out.println("No user is currently logged in.");
+            return null;
+        // If the user is logged in, return the current user
+        } else {
+            System.out.println("Returning current user: " + currentUser.getUserName());
+            return currentUser;
+        }
     }
 
     public static void setCurrentUser(User user) {

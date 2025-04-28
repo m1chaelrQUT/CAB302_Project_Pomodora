@@ -25,6 +25,10 @@ public class User {
 
     // Constructor for loading user from database, without password for use in SessionManager
     public User(int id, String userName, int playerLevel, int levelExp) {
+        this.id = id;
+        this.userName = userName;
+        this.playerLevel = playerLevel;
+        this.levelExp = levelExp;
     }
 
     /**
