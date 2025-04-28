@@ -27,7 +27,8 @@ public class SqliteUserDAO implements IUserDAO {
                     + "levelExp INTEGER NOT NULL,"
                     + "email VARCHAR NOT NULL,"
                     + "createdAt DATE NOT NULL,"
-                    + "updatedAt DATE NOT NULL"
+                    + "updatedAt DATE NOT NULL,"
+                    + "sessionToken VARCHAR"
                     + ")";
             statement.execute(query);
         } catch (Exception e) {
@@ -39,8 +40,8 @@ public class SqliteUserDAO implements IUserDAO {
     public void addUser(User user) {
         try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO users " +
-                    "(userName, password, playerLevel, levelExp, email, createdAt, updatedAt) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    "(userName, password, playerLevel, levelExp, email, createdAt, updatedAt, sessionToken) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setString(1, user.getUserName());
             statement.setString(2, user.getPassword());
             statement.setInt(3, user.getPlayerLevel());
@@ -48,6 +49,7 @@ public class SqliteUserDAO implements IUserDAO {
             statement.setString(5, user.getEmail());
             statement.setString(6, user.getCreatedAt().toString());
             statement.setString(7, user.getUpdatedAt().toString());
+            statement.setString(8, user.getSessionToken());
 
             // Execute Insert Query
             int rowsAffected = statement.executeUpdate();

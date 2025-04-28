@@ -1,6 +1,4 @@
 package com.qut.cab302_project_pomodora.model;
-
-
 import java.time.LocalDateTime;
 
 public class User {
@@ -12,6 +10,7 @@ public class User {
     private String email;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String sessionToken;
 
 
     public User(String userName, String password, int playerLevel, int levelExp, String email){
@@ -24,9 +23,9 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Todo: Do we really need the following fields?
-//    private String rememberMeToken;
-
+    // Constructor for loading user from database, without password for use in SessionManager
+    public User(int id, String userName, int playerLevel, int levelExp) {
+    }
 
     /**
      * Getters and Setters of Variables
@@ -90,6 +89,14 @@ public class User {
 
     public void setLevelExp(int levelExp) {
         this.levelExp = levelExp;
+    }
+
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
     }
 
     // String conversion for debugging
