@@ -2,14 +2,16 @@ package com.qut.cab302_project_pomodora.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
-public class SettingsController {
+public class SettingsController extends ControllerSkeleton {
     @FXML
-    private AnchorPane settings;
+    private StackPane settings;
     @FXML
     private StackPane contentPane;
     @FXML
@@ -45,8 +47,28 @@ public class SettingsController {
     }
 
 
+    @Override
+    protected StackPane getRootPane() {
+        return settings;
+    }
 
+    @Override
+    protected Region getContentPane() {
+        return contentPane;
+    }
 
+    @Override
+    @FXML
+    public void initialize() {
+        super.initialize();
+
+        contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+
+        contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
+        System.out.println("SettingsController Initialization completed.");
+    }
 
     /* Account Settings Pop Up Methods*/
     @FXML
@@ -125,4 +147,10 @@ public class SettingsController {
     public String getConfirmPassword() {
         return isConfirmPasswordVisible ? confirmNewPasswordTextField.getText() : confirmNewPasswordEntryField.getText();
     }
+
+    @FXML
+    private void confirmPasswordChange() {
+        System.out.println("Confirm password change.");
+    }
+
 }
