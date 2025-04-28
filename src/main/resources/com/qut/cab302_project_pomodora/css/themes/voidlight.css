@@ -1,0 +1,54 @@
+.theme {
+    /* === TOKENS for VOIDLIGHT Mode === */
+
+    -fx-text-primary: -fx-grey-50;
+    -fx-text-secondary: -fx-grey-75;
+    -fx-text-tertiary: -fx-grey-100;
+    -fx-text-invert: -fx-grey-950;
+    -fx-text-brand: -fx-grey-50;
+    -fx-text-brand-invert: -fx-grey-950;
+
+    /* Surfaces */
+    -fx-surface-primary: -fx-grey-950;
+    -fx-surface-secondary: -fx-grey-400;
+    -fx-surface-invert: -fx-grey-50;
+    -fx-surface-brand: -fx-grey-800;
+    -fx-surface-brand-invert: -fx-grey-200;
+    -fx-surface-nav: -fx-grey-900;
+    -fx-surface-tertiary: -fx-grey-800;
+    -fx-surface-clock: -fx-grey-900;
+    -fx-surface-tasks: -fx-grey-700;
+
+    /* Fields  */
+    -fx-field-primary: -fx-grey-800;
+    -fx-field-secondary: -fx-grey-900;
+    -fx-field-invert: -fx-grey-50;
+
+    /* Buttons */
+    -fx-button-primary: -fx-grey-800;
+    -fx-button-secondary: -fx-grey-700;
+    -fx-button-invert: -fx-grey-50;
+
+    /* Progress */
+    -fx-progress-completed-green: -fx-green-affirm-green;
+    -fx-progress-in-prog-orange: -fx-orange-hesitate-orange;
+    -fx-progress-not-begun-red: -fx-red-negative-red;
+
+    /* Level Indication */
+    -fx-level-xp-indication: -fx-green-affirm-green;
+
+    /* Borders */
+    -fx-border-primary: -fx-grey-50;
+    -fx-border-secondary: -fx-grey-75;
+    -fx-border-invert: -fx-grey-950;
+}
+
+.button-primary {
+    -fx-background-color: -fx-purple-artificial-grape;
+}
+
+.brand-box {
+    -fx-border-color: -fx-purple-artificial-grape;
+    -fx-border-width: 5;
+    -fx-border-radius: 20;
+}

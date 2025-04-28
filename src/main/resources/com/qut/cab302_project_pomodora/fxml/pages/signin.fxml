@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane fx:id="signIn" styleClass="primitives" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SigninController">
+    <StackPane styleClass="theme">
+      <StackPane fx:id="contentPane" styleClass="window-background">
+          <VBox alignment="CENTER" fillWidth="false" prefHeight="1080.0" prefWidth="1920.0" spacing="30.0">
+              <Region fx:id="topSpacer" minHeight="0" minWidth="0" prefHeight="176.0" prefWidth="33.0" />
+              <Label fx:id="brandLabel" alignment="CENTER" prefHeight="295.0" prefWidth="706.0" styleClass="brand-box" text="Pomodora" textAlignment="CENTER">
+                  <font>
+                      <Font name="Inter" size="120.0" />
+                  </font>
+              </Label>
+              <VBox fx:id="signinPane" prefWidth="1095.0" styleClass="signin-box" VBox.vgrow="ALWAYS">
+                  <Label fx:id="ctaLabel" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="99.0" prefWidth="1075.0" styleClass="header-medium-primary" text="Sign in to access the smartest planner out!">
+                      <font>
+                          <Font size="55.0" />
+                      </font>
+                  </Label>
+                  <HBox prefHeight="565.0" prefWidth="1075.0" VBox.vgrow="ALWAYS">
+                      <VBox prefHeight="604.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
+                     <HBox>
+                        <children>
+                                <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="255.0" styleClass="header-small-primary" text="Email / Username">
+                                    <font>
+                                        <Font size="30.0" />
+                                    </font>
+                                </Label>
+                           <AnchorPane fx:id="usernameFailPrompt" prefHeight="58.0" prefWidth="362.0" visible="false" HBox.hgrow="NEVER">
+                              <children>
+                                 <Label alignment="BOTTOM_LEFT" layoutX="3.0" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="124.0" styleClass="invalid-text" text="*">
+                                    <font>
+                                       <Font size="30.0" />
+                                    </font>
+                                 </Label>
+                                  <Label fx:id="failText" alignment="BOTTOM_RIGHT" layoutX="76.0" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="286.0" styleClass="invalid-text" text="Please fill any fields marked with *" textAlignment="CENTER">
+                                      <font>
+                                          <Font size="15.0" />
+                                      </font>
+                                  </Label>
+                              </children>
+                           </AnchorPane>
+                        </children>
+                        <VBox.margin>
+                           <Insets right="-1.0" />
+                        </VBox.margin>
+                     </HBox>
+                          <TextField fx:id="usernameField" prefHeight="100" prefWidth="625.0" promptText="example@email-service.com" styleClass="signin-field">
+                              <font>
+                                  <Font size="30.0" />
+                              </font>
+                          </TextField>
+                     <HBox prefHeight="59.0" prefWidth="214.0">
+                        <children>
+                                <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="59.0" prefWidth="135.0" styleClass="header-small-primary" text="Password">
+                                    <font>
+                                        <Font size="30.0" />
+                                    </font>
+                                </Label>
+                           <AnchorPane fx:id="passwordFailPrompt" visible="false">
+                              <children>
+                                 <Label alignment="BOTTOM_LEFT" maxHeight="Infinity" maxWidth="Infinity" prefHeight="58.0" prefWidth="22.0" styleClass="invalid-text" text="*">
+                                    <font>
+                                       <Font size="30.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </AnchorPane>
+                        </children>
+                     </HBox>
+                          <PasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="625.0" promptText="password" styleClass="signin-field">
+                              <font>
+                                  <Font size="30.0" />
+                              </font>
+                          </PasswordField>
+                          <AnchorPane prefHeight="60.0" prefWidth="200.0">
+                              <CheckBox fx:id="rememberMeCheckBox" layoutX="14.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="108.0" styleClass="remember-checkbox" text="Remember me" AnchorPane.leftAnchor="14.0" />
+                              <Hyperlink layoutX="517.0" onAction="#showResetDialog" prefHeight="60.0" prefWidth="108.0" styleClass="text-button" text="Forgot Password?" underline="true" AnchorPane.rightAnchor="0.0" />
+                          </AnchorPane>
+                          <Button maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#handleSignIn" prefHeight="110.0" prefWidth="625.0" styleClass="button-primary" text="Login" VBox.vgrow="ALWAYS">
+                              <font>
+                                  <Font size="40.0" />
+                              </font>
+                          </Button>
+                          <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="38.0" prefWidth="623.0">
+                              <Label alignment="CENTER" contentDisplay="CENTER" styleClass="text-invert" text="Don't have an account?" textFill="#bfbfbf" />
+                              <Hyperlink onAction="#goToSignUp" styleClass="text-button" text="Sign Up" underline="true" />
+                          </HBox>
+                      </VBox>
+                      <VBox prefHeight="200.0" prefWidth="400.0">
+                          <ImageView fitHeight="344.0" fitWidth="401.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                  <Image url="@../../images/logo.png" />
+                              </image>
+                          </ImageView>
+                          <Label fx:id="ctaLogo" alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity" prefHeight="99.0" prefWidth="385.0" styleClass="brand-slogan-primary" text="Work Harder, Smarter">
+                              <font>
+                                  <Font name="System Italic" size="30.0" />
+                              </font>
+                          </Label>
+                      </VBox>
+                      <padding>
+                          <Insets left="50.0" />
+                      </padding>
+                  </HBox>
+              </VBox>
+              <Region fx:id="bottomSpacer" minHeight="0" minWidth="0" prefHeight="91.0" prefWidth="33.0" />
+          </VBox>
+          <!-- Overlays -->
+          <StackPane fx:id="resetPane" visible="false">
+              <StackPane styleClass="overlay-shadow" />
+              <AnchorPane maxHeight="500" maxWidth="830.0" prefHeight="500.0" prefWidth="822.0" styleClass="password-reset-box" StackPane.alignment="CENTER">
+                  <Label alignment="TOP_CENTER" layoutX="115.0" layoutY="30.0" prefHeight="48.0" prefWidth="605.0" styleClass="header-medium-primary" text="Reset Password">
+                      <font>
+                         <Font size="45.0" />
+                      </font></Label>
+                  <Label layoutX="140.0" layoutY="96.0" prefHeight="45.0" prefWidth="556.0" styleClass="header-small-primary" text="You will be emailed with reset instructions">
+                      <font>
+                         <Font size="30.0" />
+                      </font>
+                  </Label>
+                  <TextField fx:id="usernameFieldReset" layoutX="115.0" layoutY="204.0" prefHeight="81.0" prefWidth="605.0" promptText="example@email-service.com" styleClass="signin-field">
+                      <font>
+                         <Font size="40.0" />
+                      </font>
+                  </TextField>
+                  <Button layoutX="113.0" layoutY="327.0" onAction="#handleResetPassword" prefHeight="99.0" prefWidth="605.0" styleClass="button-primary" text="Send">
+                      <font>
+                         <Font size="40.0" />
+                      </font>
+                  </Button>
+                  <Button layoutX="755.0" layoutY="14.0" onAction="#closeForgotPasswordDialog" prefHeight="45.0" prefWidth="61.0" styleClass="close-button" text="✕">
+                      <font>
+                          <Font size="20.0" />
+                      </font>
+                  </Button>
+               <HBox layoutX="113.0" layoutY="172.0">
+                  <children>
+                        <Label prefHeight="32.0" prefWidth="76.0" styleClass="header-small-primary" text="Email">
+                            <font>
+                               <Font size="20.0" />
+                            </font>
+                        </Label>
+                     <AnchorPane fx:id="emailResetFail" prefHeight="32.0" prefWidth="532.0" visible="false">
+                        <children>
+                           <Label layoutX="362.0" layoutY="-2.0" prefHeight="32.0" prefWidth="170.0" styleClass="invalid-text" text="Please enter a valid email">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </Label>
+                        </children></AnchorPane>
+                  </children>
+               </HBox>
+                  <Label layoutX="354.0" layoutY="448.0" styleClass="text-invert" text="Need help?">
+                  </Label>
+                  <Hyperlink layoutX="418.0" layoutY="445.0" onAction="#getSupport" styleClass="text-button" text="Contact Support" />
+              </AnchorPane>
+          </StackPane>
+          <StackPane fx:id="resetSuccessPane" visible="false">
+              <StackPane styleClass="overlay-shadow" />
+              <AnchorPane maxHeight="500" maxWidth="830.0" prefHeight="500.0" prefWidth="822.0" styleClass="password-reset-box" StackPane.alignment="CENTER">
+                  <Label alignment="TOP_CENTER" layoutX="115.0" layoutY="30.0" prefHeight="48.0" prefWidth="605.0" styleClass="header-medium-primary" text="Reset Password">
+                      <font>
+                          <Font size="45.0" />
+                      </font></Label>
+                  <Label layoutX="340.0" layoutY="162.0" prefHeight="58.0" prefWidth="150.0" styleClass="header-small-primary" text="Success!">
+                      <font>
+                          <Font size="40.0" />
+                      </font>
+                  </Label>
+
+                  <Button layoutX="113.0" layoutY="327.0" onAction="#closeSuccessDialog" prefHeight="99.0" prefWidth="605.0" styleClass="button-primary" text="Dismiss">
+                      <font>
+                          <Font size="40.0" />
+                      </font>
+                  </Button>
+                  <Button layoutX="755.0" layoutY="14.0" onAction="#closeSuccessDialog" prefHeight="45.0" prefWidth="61.0" styleClass="close-button" text="✕">
+                      <font>
+                          <Font size="20.0" />
+                      </font>
+                  </Button>
+                  <Label layoutX="133.0" layoutY="210.0" prefHeight="40.0" prefWidth="571.0" styleClass="header-small-primary" text="You have been emailed with reset instructions.">
+                      <font>
+                          <Font size="27.5" />
+                      </font>
+                  </Label>
+                  <Label layoutX="354.0" layoutY="448.0" styleClass="text-invert" text="Need help?">
+                  </Label>
+                  <Hyperlink layoutX="418.0" layoutY="445.0" onAction="#getSupport" styleClass="text-button" text="Contact Support" />
+              </AnchorPane>
+          </StackPane>
+      </StackPane>
+    </StackPane>
+</StackPane>
