@@ -79,7 +79,7 @@ public class SessionManager {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE users SET sessionToken = NULL WHERE userName = ?"
             );
-            statement.setString(1, currentUser.getSessionToken());
+            statement.setString(1, currentUser.getUserName());
             statement.executeUpdate();
 
             Files.deleteIfExists(Paths.get(SESSION_FILE)); // Delete the session file

@@ -1,10 +1,7 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.IUserDAO;
+import com.qut.cab302_project_pomodora.model.*;
 import com.qut.cab302_project_pomodora.Main;
-import com.qut.cab302_project_pomodora.model.MockUserDAO;
-import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
-import com.qut.cab302_project_pomodora.model.User;
 import com.qut.cab302_project_pomodora.config.Theme;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.fxml.FXML;
@@ -125,7 +122,6 @@ public class SignupController extends ControllerSkeleton {
                 userDAO.addUser(newUser);
                 showSuccessDialog();
 
-                // TODO: Navigate through to Home Screen.
             }
         } else {
             failText.setText("Please fill any fields marked with *");
@@ -152,9 +148,16 @@ public class SignupController extends ControllerSkeleton {
     }
 
     @FXML
-    private void handleSignIn() {
+    private void handleSignIn() throws SQLException, IOException {
         String userNameInput = usernameField.getText();
+
+        // Start session for the newly created user, then navigate to home page
+        SessionManager.startSession(userDAO.getUserByName(userNameInput));
+        navigateTo("homeexample");
+
+
         //This should ideally be the exact same logic as regular signin. TODO: Create parent controller class specific to sign-in-up
+        // [MR] Hey @yetterko, I added some simple login logic above, please change if required.
     }
 
     @FXML
