@@ -7,6 +7,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -27,10 +30,11 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private BorderPane contentPane;
     @FXML private GridPane activeStudyPlansGrid;
     @FXML private GridPane pastStudyPlansGrid;
+    @FXML private ScrollPane scrollPane;
 
     private static final int MAX_COLUMNS = 3;
-    private static final double PREF_VBOX_HEIGHT = 350.0;
-    private static final double PREF_VBOX_WIDTH = 550.0;
+    private static final double PREF_VBOX_HEIGHT = 340;
+    private static final double PREF_VBOX_WIDTH = 517;
 
     // Mock Data Structure
     private record StudyPlan(String id, String title, boolean isActive, int tasksRemaining) {}
@@ -63,6 +67,13 @@ public class StudyPlannersController extends ControllerSkeleton {
         populateStudyPlanGrids();
         Platform.runLater(() -> {
                     navbarController.setNavButtonStyles(studyPlanners.getScene());
+
+                    // Need this here for preventing side scrolling entirely.
+                    scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                        if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
+                            event.consume();
+                        }
+                    });
                 });
         System.out.println("StudyPlannersController Initialization completed.");
     }

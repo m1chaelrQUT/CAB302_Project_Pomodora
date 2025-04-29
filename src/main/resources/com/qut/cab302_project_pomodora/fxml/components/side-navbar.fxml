@@ -35,7 +35,7 @@
             </font>
         </Button>
      <Line endX="115.0" startX="-100.0" />
-        <Button fx:id="defaultTimer" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="68.0" prefWidth="277.0" styleClass="button-primary" text="Default Timer">
+        <Button fx:id="defaultTimer" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="277.0" styleClass="button-primary" text="Default Timer">
             <font>
                 <Font size="28.0" />
             </font>

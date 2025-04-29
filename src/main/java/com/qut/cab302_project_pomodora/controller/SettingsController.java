@@ -1,5 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
@@ -18,6 +19,9 @@ public class SettingsController extends ControllerSkeleton {
     private StackPane timerSettingsPopUp;
     @FXML
     private StackPane accountSettingsPopUp;
+
+    @FXML private Region navbar;
+    @FXML private NavbarController navbarController;
 
 
     // Open/Show function for the pop-ups/overlays (Stackpanes)
@@ -66,6 +70,10 @@ public class SettingsController extends ControllerSkeleton {
 
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
+        Platform.runLater(() -> {
+            navbarController.setNavButtonStyles(settings.getScene());
+        });
 
         System.out.println("SettingsController Initialization completed.");
     }

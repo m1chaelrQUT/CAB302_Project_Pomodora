@@ -30,7 +30,7 @@ public class NavbarController {
     }
 
     @FXML
-    private void navigateToAction(ActionEvent event) {
+    private void navigateToAction(ActionEvent event) throws IOException {
 
         // ALL TEMP DEBUGGING LOGIC
         Object buttonClicked = event.getSource();
@@ -39,16 +39,7 @@ public class NavbarController {
             buttonID = (String) ((Button) buttonClicked).getId();
         }
         System.out.println("navigateTo: " + buttonID + ", From: " + navBarPane.getScene().getRoot().getId());
-        ThemeManager themeManager = ThemeManager.getInstance();
-        if (themeManager.getCurrentTheme() == Theme.DARK) {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.VOIDLIGHT);
-        } else if (themeManager.getCurrentTheme() == Theme.LIGHT) {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.DARK);
-        } else if (themeManager.getCurrentTheme() == Theme.VOIDLIGHT) {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.LIGHT);
-        } else {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.DARK);
-        }
+        navigateTo(buttonID);
     }
 
     private void navigateTo(String toSceneName) throws IOException {
