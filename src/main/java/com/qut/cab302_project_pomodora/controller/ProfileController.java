@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 public class ProfileController extends ControllerSkeleton{
 
     @FXML private StackPane profile;
@@ -24,7 +27,7 @@ public class ProfileController extends ControllerSkeleton{
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         Platform.runLater(() -> {

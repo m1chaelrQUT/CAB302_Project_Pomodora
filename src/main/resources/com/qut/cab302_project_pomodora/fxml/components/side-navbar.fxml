@@ -17,7 +17,7 @@
                 <Font size="34.0" />
             </font>
         </Label>
-        <Button fx:id="hideSidebarsButton" mnemonicParsing="false" onAction="#toggleNavbar" styleClass="toggle-nav-button" AnchorPane.rightAnchor="-8" AnchorPane.topAnchor="-4">
+        <Button fx:id="hideSidebarsButton" mnemonicParsing="false" onAction="#toggleNavbar" styleClass="toggle-nav-button" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
          <graphic>
                 <ImageView fx:id="hideSidebarsIcon" pickOnBounds="true" preserveRatio="true">
                     <viewport>

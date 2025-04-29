@@ -16,6 +16,9 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.scene.shape.Circle;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 public class DefaultTimerController extends ControllerSkeleton {
 
     @FXML private StackPane defaultTimer;
@@ -53,7 +56,7 @@ public class DefaultTimerController extends ControllerSkeleton {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         Platform.runLater(() -> {

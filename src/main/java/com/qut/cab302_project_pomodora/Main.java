@@ -23,7 +23,7 @@ public class Main extends Application {
         int MIN_HEIGHT = 600;
         String TITLE = "CAB302: Project Pomodora";
         String LAUNCH_PAGE_ADDRESS = "fxml/pages/signin.fxml";
-        String MAIN_PAGE_ADDRESS = "fxml/pages/homeexample.fxml"; //TODO: Change to the main page address
+        String MAIN_PAGE_ADDRESS = "fxml/pages/studyplanners.fxml";
         String APP_ICON_ADDRESS = "images/logocolor.png";
 
         // Load session to check if the user is already logged in

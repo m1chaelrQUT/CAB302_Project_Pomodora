@@ -10,6 +10,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 public class SettingsController extends ControllerSkeleton {
     @FXML
     private StackPane settings;
@@ -63,7 +66,7 @@ public class SettingsController extends ControllerSkeleton {
 
     @Override
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);

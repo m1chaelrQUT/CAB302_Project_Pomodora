@@ -1,5 +1,7 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.model.User;
+import com.qut.cab302_project_pomodora.model.SessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +19,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +58,7 @@ public class StudyPlannersController extends ControllerSkeleton {
     // Init
     @Override
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -75,6 +79,8 @@ public class StudyPlannersController extends ControllerSkeleton {
                         }
                     });
                 });
+
+        iniSession();
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
@@ -241,4 +247,18 @@ public class StudyPlannersController extends ControllerSkeleton {
         // TODO: Open create plan overlay
     }
 
+    /**
+     * Initializes the session by loading the current user from the session manager.
+     * This method is called during the initialization of the controller.
+     *
+     * @throws SQLException if there is an error loading the session from the database
+     * @throws IOException  if there is an error loading the session from the file
+     */
+    public void iniSession() throws SQLException, IOException {
+        // Load the session to check if the user is already logged in
+        SessionManager.loadSession();
+
+        User currentUser = SessionManager.getCurrentUser();
+        System.out.println("Session loaded!");
+    }
 }
