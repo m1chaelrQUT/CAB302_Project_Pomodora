@@ -51,11 +51,12 @@ public class SigninController extends ControllerSkeleton {
     // User DAO interface
     private IUserDAO userDAO;
 
-    private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
-
     public SigninController() {
         userDAO = new SqliteUserDAO();
     }
+
+    private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
+
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
     @Override
@@ -103,7 +104,7 @@ public class SigninController extends ControllerSkeleton {
                 // TODO: Navigate through to Home Screen.
                 usernameFailPrompt.setVisible(false);
                 passwordFailPrompt.setVisible(false);
-                navigateTo("homeexample");
+                navigateTo("settings"); //TODO: Change to home
             } else {
                 System.out.println("Username not found");
                 failText.setText("The username or password is incorrect.");

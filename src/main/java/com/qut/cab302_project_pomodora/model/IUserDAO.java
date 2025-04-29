@@ -25,4 +25,10 @@ public interface IUserDAO {
      */
     public User getUserByEmail(String email);
 
+    /**
+     * Updates an existing user's details in the database.
+     * @param user
+     */
+    public void updateUser(User user);
+
 }

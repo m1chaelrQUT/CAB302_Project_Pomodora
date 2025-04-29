@@ -57,4 +57,14 @@ public class MockUserDAO implements IUserDAO {
         System.out.println("Email Entered: " + userEmail + " does not exist");
         return null;
     }
+    @Override
+    public void updateUser(User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId() == user.getId()) {
+                users.set(i, user);
+                return;
+            }
+        }
+        System.out.println("User with ID: " + user.getId() + " does not exist");
+    }
 }

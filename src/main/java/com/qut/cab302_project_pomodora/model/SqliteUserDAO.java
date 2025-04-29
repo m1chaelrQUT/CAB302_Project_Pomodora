@@ -66,7 +66,27 @@ public class SqliteUserDAO implements IUserDAO {
     }
 
     /**
-     * Method for just getting the user's public profile information
+     * Method updating user information
+     * @param user - the user to be deleted
+     */
+    @Override
+    public void updateUser(User user) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET email = ?, password = ? WHERE userName = ?");
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getUserName());
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User updated successfully: " + user.getUserName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Method for getting users info using username
      * @param - the userName of the user
      * @return the user's username, level, exp
      */
@@ -93,6 +113,11 @@ public class SqliteUserDAO implements IUserDAO {
         return null;
     }
 
+    /**
+     * Method for getting user by the email
+     * @param userEmail The email of the user to retrieve
+     * @return
+     */
     @Override
     public User getUserByEmail(String userEmail) {
         try {
