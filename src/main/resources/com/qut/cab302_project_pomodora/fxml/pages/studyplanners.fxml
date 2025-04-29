@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="studyPlanners" styleClass="primitives" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.StudyPlannersController">
+<StackPane fx:id="studyPlanners" styleClass="primitives" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.StudyPlannersController">
    <StackPane styleClass="theme">
       <BorderPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
          <left>

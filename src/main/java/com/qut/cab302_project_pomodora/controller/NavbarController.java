@@ -59,11 +59,9 @@ public class NavbarController {
     }
 
     public void setNavButtonStyles(Scene scene) {
-        System.out.println("setNavButtonStyles" + navButtonList);
-        System.out.println(navButtonList.getChildren());
+        System.out.println("setNavButtonStyles");
         for (Node button : navButtonList.getChildren()) {
             if (button.getClass() == Button.class) {
-                System.out.println(button.getId());
                 if (Objects.equals(((Button) button).getId(), scene.getRoot().getId())) {
                     button.getStyleClass().clear();
                     button.getStyleClass().add("current-page-nav-button");
