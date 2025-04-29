@@ -2,6 +2,8 @@ package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.model.SessionManager;
+import com.qut.cab302_project_pomodora.model.User;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 
 import javafx.application.Platform;
@@ -14,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Abstract parent controller for shared logic such as proper scaling and theme application.
@@ -52,7 +55,7 @@ public abstract class ControllerSkeleton {
      * See the home controller as example
      */
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         // Defer scene-dependent setup until the scene is guaranteed to be available.
         Platform.runLater(() -> {
             // Check if root pane itself is available first

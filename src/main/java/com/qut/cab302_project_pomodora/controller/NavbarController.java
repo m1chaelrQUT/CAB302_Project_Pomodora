@@ -2,6 +2,7 @@ package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.model.SessionManager;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +15,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+
 
 public class NavbarController {
 
@@ -53,8 +57,10 @@ public class NavbarController {
     }
 
     @FXML
-    private void logOut(ActionEvent event) throws IOException {
-        System.out.println("logOut");
+    private void logOut(ActionEvent event) throws IOException, SQLException {
+        // Log out the user and end the session
+        System.out.println("Logging out user: " + SessionManager.getCurrentUser().getUserName() + ", closing session...");
+        SessionManager.endSession();
         navigateTo("signin");
     }
 }
