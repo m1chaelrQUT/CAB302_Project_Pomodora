@@ -9,10 +9,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+/**
+ * SessionManager is responsible for managing user sessions.
+ * It handles starting, loading, and ending sessions, as well as storing session tokens.
+ */
 public class SessionManager {
     private static final String SESSION_FILE = "session.txt"; // Path to the session file
     private static User currentUser = null;
 
+    /**
+     * Starts a session for the given user.
+     * @param user The user to start a session for.
+     * @throws SQLException  // SQL exception if there is an error with the database
+     * @throws IOException // IO exception if there is an error with the file system
+     */
     public static void startSession(User user) throws SQLException, IOException {
         System.out.println("Starting session for user: " + user.getUserName());
 
@@ -34,6 +44,11 @@ public class SessionManager {
         currentUser.setSessionToken(sessionToken);
     }
 
+    /**
+     * Loads the session from the session file and sets the current user.
+     * @throws SQLException // SQL exception if there is an error with the database
+     * @throws IOException // IO exception if there is an error with the file system
+     */
     public static void loadSession() throws SQLException, IOException{
         // Check if the session file exists
         System.out.println("Checking if session file exists...");
@@ -71,6 +86,11 @@ public class SessionManager {
         }
     }
 
+    /**
+     * Ends the current session and clears the session token from the database.
+     * @throws SQLException // SQL exception if there is an error with the database
+     * @throws IOException // IO exception if there is an error with the file system
+     */
     public static void endSession() throws SQLException, IOException {
         // Check if the current user is not null
         if (currentUser != null) {
@@ -87,9 +107,12 @@ public class SessionManager {
         }
     }
 
-    // Getters and Setters
+    /**
+     * Getters & Setters
+     */
+
     public static User getCurrentUser() {
-        // Check if the current user is not null
+        // Check if the current user is not null and return null, returning currentUser = null causes an error in the controller
         if (currentUser == null) {
             System.out.println("No user is currently logged in.");
             return null;

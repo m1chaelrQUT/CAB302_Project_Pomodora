@@ -99,7 +99,6 @@ public class SigninController extends ControllerSkeleton {
             if ((user != null) && (user.getPassword().equals(passwordInput))) {
                 // Start session
                 SessionManager.startSession(user);
-                String tempToken = user.getSessionToken();
                 System.out.println("Sign-in successful! User: " + userNameInput + ".");
 
                 // TODO: Navigate through to Home Screen.

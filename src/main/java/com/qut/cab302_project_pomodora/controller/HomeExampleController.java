@@ -42,7 +42,15 @@ public class HomeExampleController extends  ControllerSkeleton {
 
     }
 
+    /**
+     * Initializes the session by loading the current user from the session manager.
+     * This method is called during the initialization of the controller.
+     *
+     * @throws SQLException if there is an error loading the session from the database
+     * @throws IOException  if there is an error loading the session from the file
+     */
     public void iniSession() throws SQLException, IOException {
+        // Load the session to check if the user is already logged in
         SessionManager.loadSession();
 
         User currentUser = SessionManager.getCurrentUser();
