@@ -157,7 +157,6 @@ public class SigninController extends ControllerSkeleton {
         resetPane.setVisible(false);
         usernameFieldReset.setText("");
         emailResetFail.setVisible(false);
-
     }
 
     @FXML
