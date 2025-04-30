@@ -214,6 +214,8 @@ public class SettingsController extends ControllerSkeleton {
         // Update the user in the database
         userDAO.updateUser(currentUser);
 
+        //TODO: [BackEnd] Update updatedAt field for user
+
         //TODO: [FrontEnd] Display success message to user
     }
 
