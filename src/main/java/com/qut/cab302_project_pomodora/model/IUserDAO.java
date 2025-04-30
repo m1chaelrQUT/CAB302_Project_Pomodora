@@ -9,26 +9,26 @@ public interface IUserDAO {
      * Adds a new user to the database.
      * @param user The user to add.
      */
-    public void addUser(User user);
+    void addUser(User user);
 
     /**
      * Retrieves a user from the database.
      * @param userName The userName of the user to retrieve.
      * @return The user with the given userName
      */
-    public User getUserByName(String userName);
+    User getUserByName(String userName);
 
     /**
      * Retrieves a user from the database.
      * @param email The email of the user to retrieve
      * @return The user with the given email
      */
-    public User getUserByEmail(String email);
+    User getUserByEmail(String email);
 
     /**
      * Updates an existing user's details in the database.
      * @param user
      */
-    public void updateUser(User user);
+    void updateUser(User user);
 
 }
