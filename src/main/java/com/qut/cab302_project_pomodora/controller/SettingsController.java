@@ -1,11 +1,14 @@
 package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.model.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
@@ -22,6 +25,8 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private StackPane accountSettingsPopUp;
 
+    @FXML private Region navbar;
+    @FXML private NavbarController navbarController;
     // Input fields for Timer Settings
     @FXML
     private Spinner pomodoroMinutesSpinner;
@@ -100,6 +105,10 @@ public class SettingsController extends ControllerSkeleton {
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
+        Platform.runLater(() -> {
+            navbarController.setNavButtonStyles(settings.getScene());
+        });
+
         System.out.println("SettingsController Initialization completed.");
     }
 
@@ -120,17 +129,24 @@ public class SettingsController extends ControllerSkeleton {
     }
 
     /* Account Settings Pop Up Methods*/
+    @FXML
+    private PasswordField newPasswordEntryField;
 
     @FXML
     private TextField newPasswordTextField;
 
     @FXML Button showNewPasswordButton;
 
+
+    @FXML
+    private PasswordField confirmNewPasswordEntryField;
+
     @FXML
     private TextField confirmNewPasswordTextField;
 
     @FXML
     private Button showConfirmNewPasswordButton;
+
 
     private boolean isSetPasswordVisible = false;
     private boolean isConfirmPasswordVisible = false;

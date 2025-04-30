@@ -11,43 +11,42 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="navBarPane" prefHeight="1080.0" prefWidth="288.0" styleClass="nav-bar" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.NavbarController">
-    <AnchorPane fx:id="headingPane" layoutX="1.0" prefHeight="109.0" prefWidth="288.0" styleClass="pomodora-box">
+    <AnchorPane fx:id="headingPane" prefHeight="109.0" prefWidth="288.0" styleClass="pomodora-box" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label fx:id="pomodoraLabel" layoutX="3.0" layoutY="42.0" prefHeight="51.0" prefWidth="183.0" styleClass="pomodora-box" text="Pomodora" textFill="WHITE">
             <font>
                 <Font size="34.0" />
             </font>
         </Label>
-        <Button fx:id="hideSidebarsButton" layoutX="219.0" mnemonicParsing="false" onAction="#toggleNavbar" prefHeight="16.0" prefWidth="0.0" styleClass="toggle-nav-button">
+        <Button fx:id="hideSidebarsButton" mnemonicParsing="false" onAction="#toggleNavbar" styleClass="toggle-nav-button" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
          <graphic>
-                <ImageView fx:id="hideSidebarsIcon" fitHeight="50.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="hideSidebarsIcon" pickOnBounds="true" preserveRatio="true">
                     <viewport>
                         <Rectangle2D />
                     </viewport>
                     <Image url="@../../images/navbar-icon.png" />
                 </ImageView>
-         </graphic>
-      </Button>
+         </graphic></Button>
     </AnchorPane>
-    <VBox layoutX="3.0" layoutY="121.0" prefHeight="344.0" prefWidth="282.0" spacing="15.0">
-        <Button fx:id="studyButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="274.0" styleClass="button-primary" text="Study Plans">
+    <VBox fx:id="navButtonList" layoutX="3.0" layoutY="121.0" prefHeight="344.0" prefWidth="282.0" spacing="15.0">
+        <Button fx:id="studyPlanners" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="274.0" styleClass="button-primary" text="Study Plans">
             <font>
                 <Font size="28.0" />
             </font>
         </Button>
      <Line endX="115.0" startX="-100.0" />
-        <Button fx:id="defaultTimerTabButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="68.0" prefWidth="277.0" styleClass="button-primary" text="Default Timer">
+        <Button fx:id="defaultTimer" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="277.0" styleClass="button-primary" text="Default Timer">
             <font>
                 <Font size="28.0" />
             </font>
         </Button>
      <Line endX="115.0" startX="-100.0" />
-        <Button fx:id="preferencesTabButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="273.0" styleClass="button-primary" text="Preferences">
+        <Button fx:id="settings" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="273.0" styleClass="button-primary" text="Preferences">
             <font>
                 <Font size="28.0" />
             </font>
         </Button>
      <Line endX="115.0" startX="-100.0" />
-        <Button fx:id="profileTabButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="272.0" styleClass="button-primary" text="Profile">
+        <Button fx:id="profile" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="272.0" styleClass="button-primary" text="Profile">
             <font>
                 <Font size="28.0" />
             </font>

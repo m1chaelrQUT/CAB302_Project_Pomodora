@@ -145,6 +145,9 @@ public class SignupController extends ControllerSkeleton {
     @FXML
     private void closeSuccessDialog() {
         successDialog.setVisible(false);
+        usernameField.clear();
+        emailField.clear();
+        passwordField.clear();
     }
 
     @FXML

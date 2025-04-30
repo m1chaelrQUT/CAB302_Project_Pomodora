@@ -104,9 +104,9 @@ public class SigninController extends ControllerSkeleton {
                 // TODO: Navigate through to Home Screen.
                 usernameFailPrompt.setVisible(false);
                 passwordFailPrompt.setVisible(false);
-                navigateTo("settings");
+                navigateTo("studyplanners");
             } else {
-                System.out.println("Username not found");
+                System.out.println("The username or password is incorrect.");
                 failText.setText("The username or password is incorrect.");
                 usernameFailPrompt.setVisible(true);
                 passwordFailPrompt.setVisible(true);

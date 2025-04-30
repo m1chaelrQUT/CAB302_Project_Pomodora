@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="profile" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.ProfileController">
+    <StackPane styleClass="primitives">
+        <StackPane styleClass="theme">
+            <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
+                <BorderPane>
+                    <left>
+                        <fx:include fx:id="navbar" source="../components/side-navbar.fxml" />
+                    </left>
+                    <center>
+                        <AnchorPane prefHeight="1080.0" prefWidth="796.0" BorderPane.alignment="CENTER">
+                            <Label layoutX="56.0" layoutY="73.0" prefHeight="77.0" prefWidth="640.0" text="Page under construction 🚧" underline="true">
+                                <font>
+                                    <Font size="50.0" />
+                                </font>
+                            </Label>
+                            <Pane layoutX="1324.0" prefWidth="295.0" AnchorPane.rightAnchor="0.0">
+                                <fx:include source="../components/user-profile-w-level.fxml" />
+                            </Pane>
+                        </AnchorPane>
+                    </center>
+                </BorderPane>
+            </StackPane>
+        </StackPane>
+    </StackPane>
+</StackPane>
