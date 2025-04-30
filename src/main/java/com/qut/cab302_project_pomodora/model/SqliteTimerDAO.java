@@ -86,6 +86,7 @@ public class SqliteTimerDAO  implements ITimerDAO {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 int id = resultSet.getInt("timersId");
+                int userId = resultSet.getInt("userId");
                 int workDuration = resultSet.getInt("workDuration");
                 int shortBreakDuration = resultSet.getInt("shortBreakDuration");
                 int longBreakDuration = resultSet.getInt("longBreakDuration");
