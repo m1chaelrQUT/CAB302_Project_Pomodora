@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<!-- The Pane here is necessary for Scene Builder to properly render the AnchorPane (Since it is so small apparently) -->
+
+<Pane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+      <AnchorPane fx:id="userProfilePane" prefHeight="100" prefWidth="296" styleClass="pomodora-box">
+          <Label fx:id="usernameLabel" layoutX="157" layoutY="18" text="User _" textFill="WHITE">
+              <font>
+                  <Font size="28" />
+              </font>
+          </Label>
+      <StackPane layoutX="166.0" layoutY="50.0" prefHeight="26.0" prefWidth="22.0">
+         <children>
+                <ImageView fx:id="rankShieldIcon" fitHeight="40.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../../images/user-level-shield.png" />
+                </ImageView>
+                <Label fx:id="userRankLabel" prefHeight="27.0" prefWidth="7.0" text="?">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+         </children>
+      </StackPane>
+      <ImageView fx:id="rankShieldIcon1" fitHeight="66" fitWidth="75" layoutX="28.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/User-indicator.png" />
+         </image>
+      </ImageView>
+      </AnchorPane>
+</Pane>

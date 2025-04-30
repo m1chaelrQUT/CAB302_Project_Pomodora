@@ -73,7 +73,7 @@
                            </AnchorPane>
                         </children>
                      </HBox>
-                          <PasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="625.0" promptText="password" styleClass="signin-field">
+                          <PasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="625.0" promptText="password" styleClass="signin-field" onAction="#handleSignIn">
                               <font>
                                   <Font size="30.0" />
                               </font>
