@@ -264,7 +264,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button layoutX="335.0" layoutY="784.0" onAction="#confirmPasswordChange" prefHeight="65.0" prefWidth="241.0" styleClass="button-secondary" text="Confirm" textFill="WHITE">
+                              <Button layoutX="335.0" layoutY="784.0" onAction="#confirmAccountUpdate" prefHeight="65.0" prefWidth="241.0" styleClass="button-secondary" text="Confirm" textFill="WHITE">
                               <font>
                                  <Font size="30.0" />
                               </font></Button>

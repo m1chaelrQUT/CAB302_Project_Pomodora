@@ -129,8 +129,8 @@ public class SettingsController extends ControllerSkeleton {
     }
 
     /* Account Settings Pop Up Methods*/
-    @FXML
-    private PasswordField newPasswordEntryField;
+    //@FXML
+//    private PasswordField newPasswordEntryField;
 
     @FXML
     private TextField newPasswordTextField;
@@ -138,8 +138,8 @@ public class SettingsController extends ControllerSkeleton {
     @FXML Button showNewPasswordButton;
 
 
-    @FXML
-    private PasswordField confirmNewPasswordEntryField;
+//    @FXML
+//    private PasswordField confirmNewPasswordEntryField;
 
     @FXML
     private TextField confirmNewPasswordTextField;
