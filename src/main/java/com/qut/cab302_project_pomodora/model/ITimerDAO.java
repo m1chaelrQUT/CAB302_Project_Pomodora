@@ -15,4 +15,6 @@ public interface ITimerDAO {
     public void updateUserTimers(User user, Timer timer);
 
     public Timer getUserTimer(User user);
+
+    void createUserTimer(User currentUser);
 }

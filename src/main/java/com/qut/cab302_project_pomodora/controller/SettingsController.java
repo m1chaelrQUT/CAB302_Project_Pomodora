@@ -254,9 +254,13 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private void saveTimerSettings() {
 
-        //TODO: Check if no timer settings are set, if so then initialize them
+        // Check that the current user has timer settings
+        timerDAO.createUserTimer(currentUser);
+
+        // Get the current user's timer settings
         Timer currentUserTimer = timerDAO.getUserTimer(currentUser);
 
+        // Get the input values from the spinners
         int pomodoroMinutesInput = Integer.parseInt(pomodoroMinutesSpinner.getValue().toString());
         int pomodoroSecondsInput = Integer.parseInt(pomodoroSecondsSpinner.getValue().toString());
         int shortBreakMinutesInput = Integer.parseInt(shortBreakMinutesSpinner.getValue().toString());
@@ -265,6 +269,7 @@ public class SettingsController extends ControllerSkeleton {
         int longBreakSecondsInput = Integer.parseInt(longBreakSecondsSpinner.getValue().toString());
         int longBreakCyclesInput = Integer.parseInt(longBreakCyclesSpinner.getValue().toString());
 
+        // Set the timer settings for the current user
         currentUserTimer.setWorkDuration((pomodoroMinutesInput * 60) + pomodoroSecondsInput);
         currentUserTimer.setShortBreakDuration((shortBreakMinutesInput * 60) + shortBreakSecondsInput);
         currentUserTimer.setLongBreakDuration((longBreakMinutesInput * 60) + longBreakSecondsInput);

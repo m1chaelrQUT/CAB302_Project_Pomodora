@@ -7,6 +7,10 @@ import java.sql.Statement;
 
 public class SqliteTimerDAO  implements ITimerDAO {
     private Connection connection;
+    final int DEFAULT_WORK_DURATION = 25;
+    final int DEFAULT_SHORT_BREAK_DURATION = 5;
+    final int DEFAULT_LONG_BREAK_DURATION = 15;
+    final int DEFAULT_LONG_BREAK_AFTER = 4;
 
     public SqliteTimerDAO() {
         connection = SqliteConnection.getInstance();
@@ -38,10 +42,6 @@ public class SqliteTimerDAO  implements ITimerDAO {
      */
     @Override
     public void initializeUserTimers(User user) {
-        final int DEFAULT_WORK_DURATION = 25;
-        final int DEFAULT_SHORT_BREAK_DURATION = 5;
-        final int DEFAULT_LONG_BREAK_DURATION = 15;
-        final int DEFAULT_LONG_BREAK_AFTER = 4;
         try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO timers " +
                     "(userId, workDuration, shortBreakDuration, longBreakDuration, longBreakAfter) " +
@@ -114,5 +114,33 @@ public class SqliteTimerDAO  implements ITimerDAO {
             e.printStackTrace();
         }
         return null; // Return null if no timer is found for the user
+    }
+
+    @Override
+    public void createUserTimer(User user){
+        // Check if the user already has a timer
+        if (getUserTimer(user) != null) {
+            System.out.println("User already has a timer.");
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO timers " +
+                        "(userId, workDuration, shortBreakDuration, longBreakDuration, longBreakAfter) " +
+                        "VALUES (?, ?, ?, ?, ?)");
+                statement.setInt(1, user.getId());
+                statement.setInt(2, DEFAULT_WORK_DURATION);
+                statement.setInt(3, DEFAULT_SHORT_BREAK_DURATION);
+                statement.setInt(4, DEFAULT_LONG_BREAK_DURATION);
+                statement.setInt(5, DEFAULT_LONG_BREAK_AFTER);
+                // Execute Insert Query
+                int rowsAffected = statement.executeUpdate();
+                // If the insert was successful, assign the AI id to the user
+                if (rowsAffected > 0) {
+                    System.out.println("User timer created successfully.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

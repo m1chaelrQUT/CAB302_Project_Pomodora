@@ -156,7 +156,7 @@ public class SignupController extends ControllerSkeleton {
 
         // Start session for the newly created user, then navigate to home page
         SessionManager.startSession(userDAO.getUserByName(userNameInput));
-        navigateTo("homeexample");
+        navigateTo("studyplanners");
 
         //This should ideally be the exact same logic as regular signin. TODO: Create parent controller class specific to sign-in-up
         // [MR] Hey @yetterko, I added some simple login logic above, please change if required.
