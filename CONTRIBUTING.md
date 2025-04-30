@@ -1,4 +1,4 @@
-# On contributing to the repo
+-m # On contributing to the repo
 
 ## Why this exists
  To ensure clean, consistent, collaborative work. We're all working together, and having outlined standards will make it easier for markers to breakdown.

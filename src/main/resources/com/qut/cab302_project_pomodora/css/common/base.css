@@ -168,4 +168,41 @@
     -fx-background-color: -fx-surface-secondary;
     -fx-border-color: -fx-surface-secondary;
     -fx-border-width: 0;
+    -fx-padding: 0;
 }
+
+
+.add-new-study-button {
+    -fx-background-radius: 20;
+    -fx-background-color: -fx-surface-primary;
+    -fx-border-radius: 20;
+    -fx-border-style: dashed;
+    -fx-border-width: 5;
+}
+
+.existing-study-button {
+    -fx-background-radius: 20;
+    -fx-background-color: -fx-surface-primary;
+    -fx-border-radius: 20;
+    -fx-border-style: solid;
+    -fx-border-width: 5;
+}
+
+.current-page-nav-button {
+    -fx-background-color: -fx-surface-primary;
+    -fx-border-width: 1;
+}
+
+.circle-timer {
+    -fx-background-color: -fx-surface-clock;
+    -fx-background-radius: 150px; /* Keeps the timer circular */
+    -fx-alignment: center;
+}
+
+.circle-button {
+    -fx-background-color: -fx-surface-clock;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px 20px;
+}
+
+

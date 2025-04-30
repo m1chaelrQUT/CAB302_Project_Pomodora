@@ -15,6 +15,7 @@ public class SqliteUserDAO implements IUserDAO {
         // If table doesn't exist
         createTable();
     }
+
     private void createTable() {
         try {
             Statement statement = connection.createStatement();
@@ -26,7 +27,8 @@ public class SqliteUserDAO implements IUserDAO {
                     + "levelExp INTEGER NOT NULL,"
                     + "email VARCHAR NOT NULL,"
                     + "createdAt DATE NOT NULL,"
-                    + "updatedAt DATE NOT NULL"
+                    + "updatedAt DATE NOT NULL,"
+                    + "sessionToken VARCHAR"
                     + ")";
             statement.execute(query);
         } catch (Exception e) {
@@ -38,8 +40,8 @@ public class SqliteUserDAO implements IUserDAO {
     public void addUser(User user) {
         try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO users " +
-                    "(userName, password, playerLevel, levelExp, email, createdAt, updatedAt) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    "(userName, password, playerLevel, levelExp, email, createdAt, updatedAt, sessionToken) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setString(1, user.getUserName());
             statement.setString(2, user.getPassword());
             statement.setInt(3, user.getPlayerLevel());
@@ -47,6 +49,7 @@ public class SqliteUserDAO implements IUserDAO {
             statement.setString(5, user.getEmail());
             statement.setString(6, user.getCreatedAt().toString());
             statement.setString(7, user.getUpdatedAt().toString());
+            statement.setString(8, user.getSessionToken());
 
             // Execute Insert Query
             int rowsAffected = statement.executeUpdate();
@@ -66,7 +69,27 @@ public class SqliteUserDAO implements IUserDAO {
     }
 
     /**
-     * Method for just getting the user's public profile information
+     * Method updating user information
+     * @param user - the user to be deleted
+     */
+    @Override
+    public void updateUser(User user) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE users SET email = ?, password = ? WHERE userName = ?");
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getUserName());
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User updated successfully: " + user.getUserName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Method for getting users info using username
      * @param - the userName of the user
      * @return the user's username, level, exp
      */
@@ -93,6 +116,11 @@ public class SqliteUserDAO implements IUserDAO {
         return null;
     }
 
+    /**
+     * Method for getting user by the email
+     * @param userEmail The email of the user to retrieve
+     * @return
+     */
     @Override
     public User getUserByEmail(String userEmail) {
         try {

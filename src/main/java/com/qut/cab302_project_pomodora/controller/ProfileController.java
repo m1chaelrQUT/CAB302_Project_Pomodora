@@ -1,18 +1,24 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
-public class HomeExampleController extends  ControllerSkeleton {
+import java.io.IOException;
+import java.sql.SQLException;
 
-    @FXML private StackPane homeExample;
-    @FXML private AnchorPane contentPane;
+public class ProfileController extends ControllerSkeleton{
+
+    @FXML private StackPane profile;
+    @FXML private Region contentPane;
+
+    @FXML private Region navbar;
+    @FXML private NavbarController navbarController;
 
     @Override
     protected StackPane getRootPane() {
-        return homeExample;
+        return profile;
     }
 
     @Override
@@ -20,10 +26,8 @@ public class HomeExampleController extends  ControllerSkeleton {
         return contentPane;
     }
 
-    // Init
     @Override
-    @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -31,7 +35,8 @@ public class HomeExampleController extends  ControllerSkeleton {
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        System.out.println("SigninController Initialization completed.");
+        Platform.runLater(() -> {
+            navbarController.setNavButtonStyles(profile.getScene());
+        });
     }
-
 }
