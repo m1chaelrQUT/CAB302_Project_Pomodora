@@ -1,9 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.IUserDAO;
-import com.qut.cab302_project_pomodora.model.MockUserDAO;
-import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
-import com.qut.cab302_project_pomodora.model.User;
+import com.qut.cab302_project_pomodora.model.*;
 import com.qut.cab302_project_pomodora.config.Theme;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import com.qut.cab302_project_pomodora.Main;
@@ -52,12 +49,11 @@ public class SigninController extends ControllerSkeleton {
     // User DAO interface
     private IUserDAO userDAO;
 
+    private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
+
     public SigninController() {
         userDAO = new SqliteUserDAO();
     }
-
-    private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
-
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
     @Override
@@ -86,7 +82,7 @@ public class SigninController extends ControllerSkeleton {
 
     // Sign-In
     @FXML
-    private void handleSignIn() throws IOException {
+    private void handleSignIn() throws IOException, SQLException {
         // Get sign in inputs
         String userNameInput = usernameField.getText();
         String passwordInput = passwordField.getText();
@@ -101,11 +97,14 @@ public class SigninController extends ControllerSkeleton {
 
             // Check if password is correct
             if ((user != null) && (user.getPassword().equals(passwordInput))) {
-                System.out.println("Sign-in successful! User: " + userNameInput + " logged in.");
+                // Start session
+                SessionManager.startSession(user);
+                System.out.println("Sign-in successful! User: " + userNameInput + ".");
+
                 // TODO: Navigate through to Home Screen.
                 usernameFailPrompt.setVisible(false);
                 passwordFailPrompt.setVisible(false);
-                navigateTo("settings"); //TODO: Change to home
+                navigateTo("settings");
             } else {
                 System.out.println("Username not found");
                 failText.setText("The username or password is incorrect.");
@@ -158,6 +157,7 @@ public class SigninController extends ControllerSkeleton {
         resetPane.setVisible(false);
         usernameFieldReset.setText("");
         emailResetFail.setVisible(false);
+
     }
 
     @FXML

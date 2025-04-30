@@ -14,6 +14,7 @@ public class HomeExampleController extends  ControllerSkeleton {
 
     @FXML private StackPane homeExample;
     @FXML private AnchorPane contentPane;
+    private User currentUser;
 
     @Override
     protected StackPane getRootPane() {
@@ -53,7 +54,7 @@ public class HomeExampleController extends  ControllerSkeleton {
         // Load the session to check if the user is already logged in
         SessionManager.loadSession();
 
-        User currentUser = SessionManager.getCurrentUser();
+        currentUser = SessionManager.getCurrentUser();
         System.out.println("Session loaded!");
     }
 

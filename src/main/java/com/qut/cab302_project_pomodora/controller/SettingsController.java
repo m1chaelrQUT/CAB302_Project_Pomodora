@@ -1,6 +1,7 @@
 package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.model.IUserDAO;
+import com.qut.cab302_project_pomodora.model.SessionManager;
 import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
 import com.qut.cab302_project_pomodora.model.User;
 import javafx.fxml.FXML;
@@ -9,6 +10,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class SettingsController extends ControllerSkeleton {
     @FXML
@@ -28,11 +32,11 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private PasswordField confirmNewPasswordEntryField;
 
-    // Mock user for testing TODO: Remove this and load the user from the session
-    private User currentUser = new User("MicRob", "Michael", 1, 0, "MichaelEmail");
-
     // User DAO interface
     private IUserDAO userDAO;
+
+    // Current user object
+    private User currentUser;
 
     public SettingsController() {
         userDAO = new SqliteUserDAO();
@@ -77,9 +81,9 @@ public class SettingsController extends ControllerSkeleton {
 
     @Override
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
-        //TODO: Load the Session and get the user
+        iniSession();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
@@ -90,6 +94,20 @@ public class SettingsController extends ControllerSkeleton {
     }
 
     // TODO: Add the iniSession() method to load the session and get the user
+    /**
+     * Initializes the session by loading the current user from the session manager.
+     * This method is called during the initialization of the controller.
+     *
+     * @throws SQLException if there is an error loading the session from the database
+     * @throws IOException  if there is an error loading the session from the file
+     */
+    public void iniSession() throws SQLException, IOException {
+        // Load the session to check if the user is already logged in
+        SessionManager.loadSession();
+
+        currentUser = SessionManager.getCurrentUser();
+        System.out.println("Session loaded!");
+    }
 
     /* Account Settings Pop Up Methods*/
 
@@ -103,7 +121,6 @@ public class SettingsController extends ControllerSkeleton {
 
     @FXML
     private Button showConfirmNewPasswordButton;
-
 
     private boolean isSetPasswordVisible = false;
     private boolean isConfirmPasswordVisible = false;
@@ -196,6 +213,8 @@ public class SettingsController extends ControllerSkeleton {
 
         // Update the user in the database
         userDAO.updateUser(currentUser);
+
+        //TODO: [FrontEnd] Display success message to user
     }
 
 }
