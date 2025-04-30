@@ -52,9 +52,11 @@ public class SignupController extends ControllerSkeleton {
     private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
 
     private IUserDAO userDAO;
+    private ITimerDAO timerDAO;
 
     public SignupController() {
         userDAO = new SqliteUserDAO();
+        timerDAO = new SqliteTimerDAO();
     }
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
@@ -120,6 +122,9 @@ public class SignupController extends ControllerSkeleton {
                 User newUser = new User(userNameInput, passwordInput, DEFAULT_PLAYER_LEVEL, DEFAULT_LEVEL_EXPERIENCE, emailInput);
                 System.out.println("New user: " + newUser);
                 userDAO.addUser(newUser);
+
+                // Initialize the User's timer
+                timerDAO.createUserTimer(newUser);
                 showSuccessDialog();
 
             }
@@ -157,9 +162,6 @@ public class SignupController extends ControllerSkeleton {
         // Start session for the newly created user, then navigate to home page
         SessionManager.startSession(userDAO.getUserByName(userNameInput));
         navigateTo("studyplanners");
-
-        //This should ideally be the exact same logic as regular signin. TODO: Create parent controller class specific to sign-in-up
-        // [MR] Hey @yetterko, I added some simple login logic above, please change if required.
     }
 
     @FXML
