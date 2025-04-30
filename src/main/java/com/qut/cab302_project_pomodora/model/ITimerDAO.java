@@ -8,12 +8,11 @@ public interface ITimerDAO {
     public void initializeUserTimers(User user);
 
     /**
-     * Updates the user timers with the given values.
+     * Updates the user timers with the given timer values.
      * @param user
-     * @param workDuration
-     * @param shortBreakDuration
-     * @param longBreakDuration
-     * @param longBreakAfter
+     * @param timer
      */
-    public void updateUserTimers(User user, int workDuration, int shortBreakDuration, int longBreakDuration, int longBreakAfter);
+    public void updateUserTimers(User user, Timer timer);
+
+    public Timer getUserTimer(User user);
 }

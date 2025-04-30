@@ -2,6 +2,7 @@ package com.qut.cab302_project_pomodora.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SqliteTimerDAO  implements ITimerDAO {
@@ -19,7 +20,7 @@ public class SqliteTimerDAO  implements ITimerDAO {
             Statement statement = connection.createStatement();
             String query = "CREATE TABLE IF NOT EXISTS timers ("
                     + "timersId INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + "userId INTEGER FOREIGN KEY NOT NULL,"
+                    + "userId INTEGER NOT NULL,"
                     + "workDuration INTEGER NOT NULL,"
                     + "shortBreakDuration INTEGER NOT NULL,"
                     + "longBreakDuration INTEGER NOT NULL,"
@@ -65,23 +66,20 @@ public class SqliteTimerDAO  implements ITimerDAO {
     }
 
     /**
-     * updates the user timers with the given values.
-     * @param user The user to update timers for.
-     * @param workDuration the work duration
-     * @param shortBreakDuration the short break duration
-     * @param longBreakDuration the long break duration
-     * @param longBreakAfter the amount of work sessions before a long break
+     * Updates the user timers with the given values.
+     * @param user
+     * @param timer
      */
     @Override
-    public void updateUserTimers(User user, int workDuration, int shortBreakDuration, int longBreakDuration, int longBreakAfter) {
+    public void updateUserTimers(User user, Timer timer) {
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE timers SET " +
                     "workDuration = ?, shortBreakDuration = ?, longBreakDuration = ?, longBreakAfter = ? " +
                     "WHERE userId = ?");
-            statement.setInt(1, workDuration);
-            statement.setInt(2, shortBreakDuration);
-            statement.setInt(3, longBreakDuration);
-            statement.setInt(4, longBreakAfter);
+            statement.setInt(1, timer.getWorkDuration());
+            statement.setInt(2, timer.getShortBreakDuration());
+            statement.setInt(3, timer.getLongBreakDuration());
+            statement.setInt(4, timer.getLongBreakAfter());
             statement.setInt(5, user.getId());
 
             // Execute Update Query
@@ -94,5 +92,27 @@ public class SqliteTimerDAO  implements ITimerDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Timer getUserTimer(User user) {
+        try{
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM timers WHERE userId = ?");
+            statement.setInt(1, user.getId());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt("timersId");
+                int workDuration = resultSet.getInt("workDuration");
+                int shortBreakDuration = resultSet.getInt("shortBreakDuration");
+                int longBreakDuration = resultSet.getInt("longBreakDuration");
+                int longBreakAfter = resultSet.getInt("longBreakAfter");
+                Timer timer = new Timer(workDuration, shortBreakDuration, longBreakDuration, longBreakAfter);
+                timer.setId(id);
+                return timer;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if no timer is found for the user
     }
 }

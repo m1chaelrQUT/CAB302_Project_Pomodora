@@ -31,9 +31,15 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private Spinner pomodoroMinutesSpinner;
     @FXML
+    private Spinner pomodoroSecondsSpinner;
+    @FXML
     private Spinner shortBreakMinutesSpinner;
     @FXML
+    private Spinner shortBreakSecondsSpinner;
+    @FXML
     private Spinner longBreakMinutesSpinner;
+    @FXML
+    private Spinner longBreakSecondsSpinner;
     @FXML
     private Spinner longBreakCyclesSpinner;
 
@@ -247,12 +253,25 @@ public class SettingsController extends ControllerSkeleton {
 
     @FXML
     private void saveTimerSettings() {
-        int workDurationInput = Integer.parseInt(pomodoroMinutesSpinner.getValue().toString());
-        int shortBreakDurationInput = Integer.parseInt(shortBreakMinutesSpinner.getValue().toString());
-        int longBreakDurationInput = Integer.parseInt(longBreakMinutesSpinner.getValue().toString());
-        int longBreakAfterInput = Integer.parseInt(longBreakCyclesSpinner.getValue().toString());
+
+        //TODO: Check if no timer settings are set, if so then initialize them
+        Timer currentUserTimer = timerDAO.getUserTimer(currentUser);
+
+        int pomodoroMinutesInput = Integer.parseInt(pomodoroMinutesSpinner.getValue().toString());
+        int pomodoroSecondsInput = Integer.parseInt(pomodoroSecondsSpinner.getValue().toString());
+        int shortBreakMinutesInput = Integer.parseInt(shortBreakMinutesSpinner.getValue().toString());
+        int shortBreakSecondsInput = Integer.parseInt(shortBreakSecondsSpinner.getValue().toString());
+        int longBreakMinutesInput = Integer.parseInt(longBreakMinutesSpinner.getValue().toString());
+        int longBreakSecondsInput = Integer.parseInt(longBreakSecondsSpinner.getValue().toString());
+        int longBreakCyclesInput = Integer.parseInt(longBreakCyclesSpinner.getValue().toString());
+
+        currentUserTimer.setWorkDuration((pomodoroMinutesInput * 60) + pomodoroSecondsInput);
+        currentUserTimer.setShortBreakDuration((shortBreakMinutesInput * 60) + shortBreakSecondsInput);
+        currentUserTimer.setLongBreakDuration((longBreakMinutesInput * 60) + longBreakSecondsInput);
+        currentUserTimer.setLongBreakAfter(longBreakCyclesInput);
 
         // Update the user's timer settings
-
+        timerDAO.updateUserTimers(currentUser, currentUserTimer);
     }
 }
+
