@@ -108,9 +108,9 @@
                               </font>
                            </Label>
                            <Spinner fx:id="pomodoroMinutesSpinner" layoutX="383.0" layoutY="202.0" prefHeight="60.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0" min="1" max="1000"/>
                            <Spinner fx:id="pomodoroSecondsSpinner" layoutX="625.0" layoutY="204.0" prefHeight="60.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0" min="1" max="1000"/>
                            <Label fx:id="pomodoroMinutesLabel" layoutX="500.0" layoutY="216.0" text="Minutes">
                               <font>
                                  <Font size="24.0"/>
@@ -128,14 +128,14 @@
                               </font>
                            </Label>
                            <Spinner fx:id="shortBreakMinutesSpinner" layoutX="383.0" layoutY="342.0" prefHeight="60.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0" min="1" max="1000"/>
                            <Label fx:id="shortBreakMinutesLabel" layoutX="502.0" layoutY="354.0" text="Minutes">
                               <font>
                                  <Font size="24.0"/>
                               </font>
                            </Label>
                            <Spinner fx:id="shortBreakSecondsSpinner" layoutX="625.0" layoutY="343.0" prefHeight="60.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0" min="1" max="1000"/>
                            <Label fx:id="shortBreakSecondsLabel" layoutX="741.0" layoutY="356.0" text="Seconds">
                               <font>
                                  <Font size="24.0"/>
@@ -148,14 +148,14 @@
                               </font>
                            </Label>
                            <Spinner fx:id="longBreakMinutesSpinner" layoutX="383.0" layoutY="484.0" prefHeight="60.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0" min="1" max="1000"/>
                            <Label fx:id="longBreakMinutesLabel" layoutX="504.0" layoutY="497.0" text="Minutes">
                               <font>
                                  <Font size="24.0"/>
                               </font>
                            </Label>
                            <Spinner fx:id="longBreakSecondsSpinner" layoutX="625.0" layoutY="484.0" prefHeight="60.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0" min="1" max="1000"/>
                            <Label fx:id="longBreakSecondsLabel" layoutX="741.0" layoutY="497.0" text="Seconds">
                               <font>
                                  <Font size="24.0"/>
@@ -172,7 +172,7 @@
                               </font>
                            </Label>
                            <Spinner fx:id="longBreakCyclesSpinner" layoutX="625.0" layoutY="624.0" prefHeight="60.0"
-                                    prefWidth="100.0"/>
+                                    prefWidth="100.0" min="1" max="1000"/>
                            <Label fx:id="longBreakCyclesLabel" layoutX="741.0" layoutY="637.0" prefHeight="35.0"
                                   prefWidth="102.0" text="Cycles">
                               <font>
