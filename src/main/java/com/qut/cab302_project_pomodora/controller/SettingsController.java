@@ -1,12 +1,10 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.IUserDAO;
-import com.qut.cab302_project_pomodora.model.SessionManager;
-import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
-import com.qut.cab302_project_pomodora.model.User;
+import com.qut.cab302_project_pomodora.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -24,6 +22,16 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private StackPane accountSettingsPopUp;
 
+    // Input fields for Timer Settings
+    @FXML
+    private Spinner pomodoroMinutesSpinner;
+    @FXML
+    private Spinner shortBreakMinutesSpinner;
+    @FXML
+    private Spinner longBreakMinutesSpinner;
+    @FXML
+    private Spinner longBreakCyclesSpinner;
+
     // Input fields for Account Settings
     @FXML
     private TextField emailTextField;
@@ -32,14 +40,16 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private PasswordField confirmNewPasswordEntryField;
 
-    // User DAO interface
+    // DAO interfaces
     private IUserDAO userDAO;
+    private ITimerDAO timerDAO;
 
     // Current user object
     private User currentUser;
 
     public SettingsController() {
         userDAO = new SqliteUserDAO();
+        timerDAO = new SqliteTimerDAO();
     }
 
     // Open/Show function for the pop-ups/overlays (Stackpanes)
@@ -219,4 +229,14 @@ public class SettingsController extends ControllerSkeleton {
         //TODO: [FrontEnd] Display success message to user
     }
 
+    @FXML
+    private void saveTimerSettings() {
+        int workDurationInput = Integer.parseInt(pomodoroMinutesSpinner.getValue().toString());
+        int shortBreakDurationInput = Integer.parseInt(shortBreakMinutesSpinner.getValue().toString());
+        int longBreakDurationInput = Integer.parseInt(longBreakMinutesSpinner.getValue().toString());
+        int longBreakAfterInput = Integer.parseInt(longBreakCyclesSpinner.getValue().toString());
+
+        // Update the user's timer settings
+
+    }
 }
