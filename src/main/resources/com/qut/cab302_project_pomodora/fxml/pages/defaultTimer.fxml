@@ -6,63 +6,61 @@
 <?import javafx.scene.text.*?>
 
 <StackPane fx:id="defaultTimer" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.qut.cab302_project_pomodora.controller.DefaultTimerController">
-    <StackPane styleClass="primitives">
-        <StackPane styleClass="theme">
-            <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0"
-                       styleClass="window-background">
-                <BorderPane>
-                    <left>
-                        <fx:include source="../components/side-navbar.fxml" fx:id="navbar"/>
-                    </left>
-                    <right>
-                        <fx:include source="../components/user-profile-w-level.fxml"/>
-                    </right>
-                    <center>
-                        <AnchorPane BorderPane.alignment="CENTER">
-                            <!-- Circle Timer Area -->
-                            <StackPane layoutX="380.0" layoutY="150.0" prefWidth="300.0"
-                                       prefHeight="300.0">
-                                <Circle fx:id="timerCircle" radius="200"
-                                        fill="#b1b1b1"/> <!-- Gold color -->
-                                <Label fx:id="timerText" text="2 5 : 0 0" textFill="#333333">
-                                    <font>
-                                        <Font size="85"/>
-                                    </font>
-                                </Label>
-                            </StackPane>
+           fx:controller="com.qut.cab302_project_pomodora.controller.DefaultTimerController" styleClass="primitives">
+    <StackPane styleClass="theme">
+        <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0"
+                   styleClass="window-background">
+            <BorderPane>
+                <left>
+                    <fx:include source="../components/side-navbar.fxml" fx:id="navbar"/>
+                </left>
+                <right>
+                    <fx:include source="../components/user-profile-w-level.fxml"/>
+                </right>
+                <center>
+                    <AnchorPane BorderPane.alignment="CENTER">
+                        <!-- Circle Timer Area -->
+                        <StackPane layoutX="380.0" layoutY="150.0" prefWidth="300.0"
+                                   prefHeight="300.0">
+                            <Circle fx:id="timerCircle" radius="200"
+                                    fill="#b1b1b1"/> <!-- Gold color -->
+                            <Label fx:id="timerText" text="2 5 : 0 0" textFill="#333333">
+                                <font>
+                                    <Font size="85"/>
+                                </font>
+                            </Label>
+                        </StackPane>
 
-                            <!-- Stop Button -->
-                            <Button fx:id="stopButton" layoutX="300.0" layoutY="650.0"
-                                    mnemonicParsing="false"
-                                    prefHeight="100.0" prefWidth="100.0"
-                                    text="⏹" textFill="white"
-                                    style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
+                        <!-- Stop Button -->
+                        <Button fx:id="stopButton" layoutX="300.0" layoutY="650.0"
+                                mnemonicParsing="false"
+                                prefHeight="100.0" prefWidth="100.0"
+                                text="⏹" textFill="white"
+                                style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
 
-                            <!-- Start/Pause Button -->
-                            <Button fx:id="startPauseButton" layoutX="450.0" layoutY="650.0"
-                                    mnemonicParsing="false"
-                                    prefHeight="100.0" prefWidth="100.0"
-                                    text="▶" textFill="white"
-                                    style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
+                        <!-- Start/Pause Button -->
+                        <Button fx:id="startPauseButton" layoutX="450.0" layoutY="650.0"
+                                mnemonicParsing="false"
+                                prefHeight="100.0" prefWidth="100.0"
+                                text="▶" textFill="white"
+                                style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
 
-                            <!-- Reset Button -->
-                            <Button fx:id="resetButton" layoutX="600.0" layoutY="650.0"
-                                    mnemonicParsing="false"
-                                    prefHeight="100.0" prefWidth="100.0"
-                                    text="⟳" textFill="white"
-                                    style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
+                        <!-- Reset Button -->
+                        <Button fx:id="resetButton" layoutX="600.0" layoutY="650.0"
+                                mnemonicParsing="false"
+                                prefHeight="100.0" prefWidth="100.0"
+                                text="⟳" textFill="white"
+                                style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
 
-                            <!-- Next Button -->
-                            <Button fx:id="nextButton" layoutX="750.0" layoutY="650.0"
-                                    mnemonicParsing="false"
-                                    prefHeight="100.0" prefWidth="100.0"
-                                    text="⏭" textFill="white"
-                                    style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
-                        </AnchorPane>
-                    </center>
-                </BorderPane>
-            </StackPane>
+                        <!-- Next Button -->
+                        <Button fx:id="nextButton" layoutX="750.0" layoutY="650.0"
+                                mnemonicParsing="false"
+                                prefHeight="100.0" prefWidth="100.0"
+                                text="⏭" textFill="white"
+                                style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;"/>
+                    </AnchorPane>
+                </center>
+            </BorderPane>
         </StackPane>
     </StackPane>
 </StackPane>

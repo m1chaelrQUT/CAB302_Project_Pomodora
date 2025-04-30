@@ -59,6 +59,11 @@ public class DefaultTimerController extends ControllerSkeleton {
     public void initialize() throws SQLException, IOException {
         super.initialize();
 
+        contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+
+        contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
         Platform.runLater(() -> {
             navbarController.setNavButtonStyles(defaultTimer.getScene());
         });
