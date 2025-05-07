@@ -1,3 +1,5 @@
+package com.qut.cab302_project_pomodora;
+
 import com.qut.cab302_project_pomodora.model.SessionManager;
 import com.qut.cab302_project_pomodora.model.SqliteConnection;
 import com.qut.cab302_project_pomodora.model.User;
