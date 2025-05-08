@@ -1,9 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.IUserDAO;
-import com.qut.cab302_project_pomodora.model.MockUserDAO;
-import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
-import com.qut.cab302_project_pomodora.model.User;
+import com.qut.cab302_project_pomodora.model.*;
 import com.qut.cab302_project_pomodora.config.Theme;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import com.qut.cab302_project_pomodora.Main;
@@ -22,6 +19,7 @@ import javafx.scene.layout.VBox;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
+import java.sql.SQLException;
 
 // Extend the abstract skeleton
 public class SigninController extends ControllerSkeleton {
@@ -71,7 +69,7 @@ public class SigninController extends ControllerSkeleton {
     // Init
     @Override
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -84,7 +82,7 @@ public class SigninController extends ControllerSkeleton {
 
     // Sign-In
     @FXML
-    private void handleSignIn() throws IOException {
+    private void handleSignIn() throws IOException, SQLException {
         // Get sign in inputs
         String userNameInput = usernameField.getText();
         String passwordInput = passwordField.getText();
@@ -99,13 +97,16 @@ public class SigninController extends ControllerSkeleton {
 
             // Check if password is correct
             if ((user != null) && (user.getPassword().equals(passwordInput))) {
-                System.out.println("Sign-in successful! User: " + userNameInput + " logged in.");
+                // Start session
+                SessionManager.startSession(user);
+                System.out.println("Sign-in successful! User: " + userNameInput + ".");
+
                 // TODO: Navigate through to Home Screen.
                 usernameFailPrompt.setVisible(false);
                 passwordFailPrompt.setVisible(false);
-                navigateTo("homeexample");
+                navigateTo("studyplanners");
             } else {
-                System.out.println("Username not found");
+                System.out.println("The username or password is incorrect.");
                 failText.setText("The username or password is incorrect.");
                 usernameFailPrompt.setVisible(true);
                 passwordFailPrompt.setVisible(true);
