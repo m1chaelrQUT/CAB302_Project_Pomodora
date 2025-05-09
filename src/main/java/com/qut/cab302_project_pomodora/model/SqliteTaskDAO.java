@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDAO {
+public class SqliteTaskDAO {
     // SQL Queries
     private static final String SELECT_ALL = "SELECT * FROM tasks";
     private static final String SELECT_BY_ID = "SELECT * FROM tasks WHERE id = ?";
