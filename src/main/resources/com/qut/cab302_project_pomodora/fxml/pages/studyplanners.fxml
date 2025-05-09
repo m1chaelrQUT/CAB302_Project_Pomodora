@@ -79,7 +79,7 @@
          </center>
       </BorderPane>
       <!-- Overlays -->
-      <StackPane fx:id="newStudyPlanPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
+      <StackPane fx:id="newStudyPlanPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="true">
          <children>
             <StackPane styleClass="overlay-shadow" />
             <AnchorPane layoutX="586.0" layoutY="72.0">
@@ -116,12 +116,12 @@
                               <Font size="28.0" />
                            </font>
                         </TextField>
-                        <Button fx:id="generateStudyPlanButton" layoutX="65.0" layoutY="736.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Generate" textFill="WHITE">
+                        <Button fx:id="generateStudyPlanButton" layoutX="65.0" layoutY="736.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Generate" textFill="WHITE" onAction="#generateStudyPlan">
                            <font>
                               <Font size="28.0" />
                            </font>
                         </Button>
-                        <Button fx:id="closeCreateStudyPlanPopUpButton" layoutX="625.0" layoutY="736.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Close" textFill="WHITE">
+                        <Button fx:id="closeCreateStudyPlanPopUpButton" layoutX="625.0" layoutY="736.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Close" textFill="WHITE" onAction="#closeCreateStudyPlanPopUp">
                            <font>
                               <Font size="28.0" />
                            </font>
@@ -132,7 +132,7 @@
             </AnchorPane>
          </children>
       </StackPane>
-      <StackPane fx:id="studyPlanDetailsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="true">
+      <StackPane fx:id="studyPlanDetailsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
          <children>
             <StackPane styleClass="overlay-shadow" />
             <AnchorPane layoutX="586.0" layoutY="72.0">
@@ -149,12 +149,12 @@
                               <VBox fx:id="taskListVBox" prefHeight="588.0" prefWidth="760.0" spacing="10.0" styleClass="current-page-nav-button" />
                            </content>
                         </ScrollPane>
-                        <Button fx:id="resumeStudyPlanButton" layoutX="65.0" layoutY="768.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="150.0" text="Resume">
+                        <Button fx:id="resumeStudyPlanButton" layoutX="65.0" layoutY="768.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="150.0" text="Resume" onAction="#resumeStudyPlan">
                            <font>
                               <Font size="28.0" />
                            </font>
                         </Button>
-                        <Button fx:id="closeStudyPlanPopUpButton" layoutX="680.0" layoutY="769.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="150.0" text="Close">
+                        <Button fx:id="closeStudyPlanDetailsPopUpButton" layoutX="680.0" layoutY="769.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="150.0" text="Close" onAction="#closeStudyPlanDetailsPopUp">
                            <font>
                               <Font size="28.0" />
                            </font>

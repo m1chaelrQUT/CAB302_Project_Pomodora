@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -27,6 +29,9 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private BorderPane contentPane;
     @FXML private GridPane activeStudyPlansGrid;
     @FXML private GridPane pastStudyPlansGrid;
+
+    @FXML private StackPane newStudyPlanPopUp;
+    @FXML private StackPane studyPlanDetailsPopUp;
 
     private static final int MAX_COLUMNS = 3;
     private static final double PREF_VBOX_HEIGHT = 350.0;
@@ -208,6 +213,12 @@ public class StudyPlannersController extends ControllerSkeleton {
     }
 
 
+    private void openPopUp(StackPane popUp) {popUp.setVisible(true);}
+    private void closePopUp(StackPane popUp) {popUp.setVisible(false);}
+
+    @FXML private Button resumeStudyPlanButton;
+    @FXML private Button closeStudyPlanDetailsPopUpButton;
+
     @FXML
     private void goToStudyPlan(MouseEvent event) {
         Object source = event.getSource();
@@ -221,13 +232,51 @@ public class StudyPlannersController extends ControllerSkeleton {
         }
         System.out.println("goToStudyPlan triggered for plan ID: " + planId);
         // TODO: Open plan summary overlay
+        openPopUp(studyPlanDetailsPopUp);
         // TODO: Create actual page nav method and refactor this to make sense
     }
 
     @FXML
+    private void resumeStudyPlan() {
+        // TODO: Go to specific study plan's timer page
+    }
+
+    @FXML
+    private void closeStudyPlanDetailsPopUp(){
+        closePopUp(studyPlanDetailsPopUp);
+    }
+
+    @FXML private TextArea promptEntryTextArea;
+    @FXML private TextField studyHoursEntryTextField;
+    @FXML private Button generateStudyPlanButton;
+    @FXML private Button closeCreateStudyPlanPopUpButton;
+
+    @FXML
     private void createNewStudyPlan(ActionEvent event) {
         System.out.println("createNewStudyPlan button clicked");
-        // TODO: Open create plan overlay
+        openPopUp(newStudyPlanPopUp);
     }
+
+    @FXML
+    private void generateStudyPlan(){
+        /* TODO: take input from 'promptEntryTextArea' and 'studyHoursEntryTextField
+            to send to API */
+    }
+
+    @FXML
+    private void closeCreateStudyPlanPopUp(){
+        closePopUp(newStudyPlanPopUp);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 }
