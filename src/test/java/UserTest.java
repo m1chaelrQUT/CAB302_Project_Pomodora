@@ -1,5 +1,3 @@
-package com.qut.cab302_project_pomodora;
-
 import com.qut.cab302_project_pomodora.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
