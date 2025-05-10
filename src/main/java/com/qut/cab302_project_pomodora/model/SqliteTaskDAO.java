@@ -5,102 +5,91 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqliteTaskDAO {
+/**
+ * SqliteTaskDAO is a Data Access Object (DAO) for managing tasks in a SQLite database.
+ * It provides methods to create, read, update, and delete tasks.
+ */
+public class SqliteTaskDAO implements ITaskDAO {
+    // Database connection
+    private Connection connection;
+
+    // Current user
+    User currentUser = SessionManager.getCurrentUser();
+
+    /**
+     * Constructor for SqliteStudyPlanDAO
+     * Initializes the connection to the database and creates the study plans table if it doesn't exist.
+     */
+    public SqliteTaskDAO() {
+        connection = SqliteConnection.getInstance();
+        // If table doesn't exist
+        createTable();
+    }
+
+    /**
+     * Creates the tasks table if it doesn't exist.
+     */
+    private void createTable() {
+        try {
+            Statement statement = connection.createStatement();
+            String query = "CREATE TABLE IF NOT EXISTS tasks ("
+                    + "Id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "studyPlanId INTEGER NOT NULL,"
+                    + "taskNumber INTEGER NOT NULL,"
+                    + "title VARCHAR NOT NULL,"
+                    + "description VARCHAR NOT NULL,"
+                    + "status VARCHAR NOT NULL"
+                    + ")";
+            statement.execute(query);
+        } catch (Exception e) {
+            e.printStackTrace(); //TODO: Replace with a more robust logging system
+        }
+    }
+
     // SQL Queries
-    private static final String SELECT_ALL = "SELECT * FROM tasks";
-    private static final String SELECT_BY_ID = "SELECT * FROM tasks WHERE id = ?";
     private static final String SELECT_BY_STUDY_PLAN = "SELECT * FROM tasks WHERE study_plan_id = ?";
-    private static final String SELECT_BY_USER = "SELECT * FROM tasks WHERE user_id = ?";
-    private static final String INSERT = "INSERT INTO tasks(study_plan_id, user_id, title, description, status, is_sticky) VALUES(?,?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE tasks SET study_plan_id = ?, title = ?, description = ?, status = ?, is_sticky = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+    private static final String INSERT = "INSERT INTO tasks(studyPlanId, taskNumber, title, description, status) VALUES(?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM tasks WHERE id = ?";
-
-    public List<Task> getAllTasks() {
-        List<Task> tasks = new ArrayList<>();
-
-        try (Connection conn = SqliteConnection.getInstance();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(SELECT_ALL)) {
-
-            while (rs.next()) {
-                tasks.add(mapResultSetToTask(rs));
-            }
-        } catch (SQLException e) {
-            handleSQLException("Error fetching all tasks", e);
-        }
-        return tasks;
-    }
-
-    public Task getTaskById(int id) {
-        try (Connection conn = SqliteConnection.getInstance();
-             PreparedStatement pstmt = conn.prepareStatement(SELECT_BY_ID)) {
-
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return mapResultSetToTask(rs);
-            }
-        } catch (SQLException e) {
-            handleSQLException("Error fetching task by ID: " + id, e);
-        }
-        return null;
-    }
 
     public List<Task> getTasksByStudyPlan(int studyPlanId) {
         List<Task> tasks = new ArrayList<>();
 
-        try (Connection conn = SqliteConnection.getInstance();
-             PreparedStatement pstmt = conn.prepareStatement(SELECT_BY_STUDY_PLAN)) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_STUDY_PLAN);
 
-            pstmt.setInt(1, studyPlanId);
-            ResultSet rs = pstmt.executeQuery();
+            preparedStatement.setInt(1, studyPlanId);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-                tasks.add(mapResultSetToTask(rs));
+            while (resultSet.next()) {
+                tasks.add(mapResultSetToTask(resultSet));
             }
+            System.out.println("Tasks fetched successfully for study plan ID: " + studyPlanId);
+            return tasks;
         } catch (SQLException e) {
             handleSQLException("Error fetching tasks by study plan: " + studyPlanId, e);
         }
-        return tasks;
+        return null;
     }
 
-    public List<Task> getTasksByUser(int userId) {
-        List<Task> tasks = new ArrayList<>();
+    public boolean createTask(Task task) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
-        try (Connection conn = SqliteConnection.getInstance();
-             PreparedStatement pstmt = conn.prepareStatement(SELECT_BY_USER)) {
+            preparedStatement.setInt(1, task.getStudyPlanId());
+            preparedStatement.setInt(2, task.getTaskNumber());
+            preparedStatement.setString(3, task.getTitle());
+            preparedStatement.setString(4, task.getDescription());
+            preparedStatement.setString(5, task.getStatus());
 
-            pstmt.setInt(1, userId);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                tasks.add(mapResultSetToTask(rs));
-            }
-        } catch (SQLException e) {
-            handleSQLException("Error fetching tasks by user: " + userId, e);
-        }
-        return tasks;
-    }
-
-    public boolean addTask(Task task) {
-        try (Connection conn = SqliteConnection.getInstance();
-             PreparedStatement pstmt = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-
-            pstmt.setInt(1, task.getStudyPlanId());
-            pstmt.setInt(2, task.getUserId());
-            pstmt.setString(3, task.getTitle());
-            pstmt.setString(4, task.getDescription());
-            pstmt.setString(5, task.getStatus());
-            pstmt.setBoolean(6, task.isSticky());
-
-            int affectedRows = pstmt.executeUpdate();
+            int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
-                try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        task.setId(rs.getInt(1));
-                    }
+                try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                    if (resultSet.next()) {
+                        task.setId(resultSet.getInt(1));
+                    } //TODO: check this works
                 }
+                System.out.println("Task created successfully with ID: " + task.getId());
                 return true;
             }
         } catch (SQLException e) {
@@ -110,46 +99,49 @@ public class SqliteTaskDAO {
     }
 
     public boolean updateTask(Task task) {
-        try (Connection conn = SqliteConnection.getInstance();
-             PreparedStatement pstmt = conn.prepareStatement(UPDATE)) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement.setString(1, task.getTitle());
+            preparedStatement.setString(2, task.getDescription());
+            preparedStatement.setString(3, task.getStatus());
+            preparedStatement.setInt(4, task.getId());
 
-            pstmt.setInt(1, task.getStudyPlanId());
-            pstmt.setString(2, task.getTitle());
-            pstmt.setString(3, task.getDescription());
-            pstmt.setString(4, task.getStatus());
-            pstmt.setBoolean(5, task.isSticky());
-            pstmt.setInt(6, task.getId());
-
-            return pstmt.executeUpdate() > 0;
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Task updated successfully: " + task.getId());
+                return true;
+            }
         } catch (SQLException e) {
             handleSQLException("Error updating task: " + task.getId(), e);
-            return false;
         }
+        return false;
     }
 
     public boolean deleteTask(int id) {
-        try (Connection conn = SqliteConnection.getInstance();
-             PreparedStatement pstmt = conn.prepareStatement(DELETE)) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
 
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate() > 0;
+            preparedStatement.setInt(1, id);
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Task deleted successfully: " + id);
+                return true;
+            }
         } catch (SQLException e) {
             handleSQLException("Error deleting task: " + id, e);
-            return false;
         }
+        return false;
     }
 
     // Helper Methods
-    private Task mapResultSetToTask(ResultSet rs) throws SQLException {
-        Task task = new Task();
-        task.setId(rs.getInt("id"));
-        task.setStudyPlanId(rs.getInt("study_plan_id"));
-        task.setUserId(rs.getInt("user_id"));
-        task.setTitle(rs.getString("title"));
-        task.setDescription(rs.getString("description"));
-        task.setStatus(rs.getString("status"));
-        task.setSticky(rs.getBoolean("is_sticky"));
-
+    private Task mapResultSetToTask(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        int studyPlanId = resultSet.getInt("studyPlanId");
+        int taskNumber = resultSet.getInt("taskNumber");
+        String title = resultSet.getString("title");
+        String description = resultSet.getString("description");
+        String status = resultSet.getString("status");
+        Task task = new Task(studyPlanId, taskNumber, title, description, status);
         return task;
     }
 

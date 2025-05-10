@@ -8,7 +8,7 @@ import java.util.List;
  * SqliteStudyPlanDAO is a Data Access Object (DAO) for managing study plans in a SQLite database.
  * It provides the CRUD operations for study plans.
  */
-public class SqliteStudyPlanDAO {
+public class SqliteStudyPlanDAO  implements IStudyPlanDAO {
     // Database connection
     private Connection connection;
 
@@ -26,7 +26,7 @@ public class SqliteStudyPlanDAO {
     }
 
     /**
-     * Creates the study plans table if it doesn't exist.
+     * Creates the studyPlans table if it doesn't exist.
      */
     private void createTable() {
         try {
@@ -133,7 +133,7 @@ public class SqliteStudyPlanDAO {
      * @param studyPlan The StudyPlan object to add.
      * @return true if the study plan was added successfully, false otherwise.
      */
-    public boolean addStudyPlan(StudyPlan studyPlan) {
+    public boolean createStudyPlan(StudyPlan studyPlan) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
@@ -148,7 +148,7 @@ public class SqliteStudyPlanDAO {
                 try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                     if (resultSet.next()) {
                         studyPlan.setId(resultSet.getInt(1));
-                    }
+                    } //TODO: check that this try works and catches the newly created StudyPlanId and sets it.
                 }
                 return true;
             }

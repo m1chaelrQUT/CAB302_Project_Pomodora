@@ -3,18 +3,13 @@ package com.qut.cab302_project_pomodora.model;
 public class Task {
     private int id;
     private int studyPlanId;
-    private int userId;
+    private int taskNumber;
     public String title;
     private String description;
     private String status;
-    private boolean isSticky;
 
-
-    public Task() {}
-
-    public Task(int studyPlanId, int userId, String title, String description, String status) {
+    public Task(int studyPlanId, int taskNumber, String title, String description, String status) {
         this.studyPlanId = studyPlanId;
-        this.userId = userId;
         this.title = title;
         this.description = description;
         this.status = status;
@@ -32,16 +27,16 @@ public class Task {
         return studyPlanId;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public void setStudyPlanId(int studyPlanId) {
         this.studyPlanId = studyPlanId;
+    }
+
+    public int getTaskNumber() {
+        return taskNumber;
+    }
+
+    public void setTaskNumber(int taskNumber) {
+        this.taskNumber = taskNumber;
     }
 
     public String getTitle() {
@@ -68,14 +63,6 @@ public class Task {
         this.status = status;
     }
 
-    public boolean isSticky() {
-        return isSticky;
-    }
-
-    public void setSticky(boolean sticky) {
-        isSticky = sticky;
-    }
-
 
     @Override
     public String toString() {
@@ -83,8 +70,7 @@ public class Task {
                 "id=" + id +
                 ", studyPlanId=" + studyPlanId +
                 ", title='" + title + '\'' +
-                ", status='" + status + '\'' +
-                ", isSticky=" + isSticky +
+                ", status='" + status +
                 '}';
     }
 }

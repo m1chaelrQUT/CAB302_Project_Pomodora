@@ -1,14 +1,13 @@
 import com.qut.cab302_project_pomodora.model.StudyPlan;
-import com.qut.cab302_project_pomodora.model.Task;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class TaskTest {
+
+public class StudyPlanTest{
     private static final int USER_ID = 1;
     private static final int USER_ID_TWO = 4;
     private static final String TITLE = "Advanced Calculus Problem Solving Task";
@@ -23,6 +22,7 @@ public class TaskTest {
     private StudyPlan studyPlan;
     private StudyPlan studyPlanTwo;
 
+    
     @BeforeEach
     public void setUp() {
         studyPlan = new StudyPlan(USER_ID, TITLE, DESCRIPTION, STATUS);
@@ -49,15 +49,40 @@ public class TaskTest {
     }
 
     @Test
-    public void testSetAndGetTasks() {
-        Task task1 = new Task(); // Assuming Task has a no-arg constructor
-        Task task2 = new Task();
-        List<Task> taskList = List.of(task1, task2);
+    public void testParameterizedConstructor() {
+        StudyPlan plan = new StudyPlan(7, "Study", "Study description", "PENDING");
 
+        assertEquals(7, plan.getUserId());
+        assertEquals("Study", plan.getTitle());
+        assertEquals("Study description", plan.getDescription());
+        assertEquals("PENDING", plan.getStatus());
+    }
+    
+    @Test
+    public void testToStringIncludesKeyFields() {
         StudyPlan plan = new StudyPlan();
-        plan.setTasks(taskList);
+        plan.setId(10);
+        plan.setUserId(20);
+        plan.setTitle("ToStringTest");
+        plan.setStatus("DONE");
+        plan.setParticipantCount(3);
 
-        assertEquals(2, plan.tasks().size());
-        assertSame(task1, plan.tasks().get(0));
+        String result = plan.toString();
+        assertTrue(result.contains("id=10"));
+        assertTrue(result.contains("userId=20"));
+        assertTrue(result.contains("title='ToStringTest'"));
+        assertTrue(result.contains("status='DONE'"));
+        assertTrue(result.contains("participantCount=3"));
+    }
+
+    @Test
+    public void testEmptyTaskListByDefault() {
+        StudyPlan plan = new StudyPlan();
+        assertNull(plan.tasks(), "Tasks should be null by default unless initialized.");
+    }
+    
+    @Test
+    public void testUpdateStudyPlan() {
+        
     }
 }
