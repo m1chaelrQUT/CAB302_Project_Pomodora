@@ -4,9 +4,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class SqliteStudyPlanDAO {
     // Database connection
     private Connection connection;
+
+    // Current user
+    User currentUser = SessionManager.getCurrentUser();
 
     /**
      * Constructor for SqliteStudyPlanDAO
@@ -14,7 +18,6 @@ public class SqliteStudyPlanDAO {
      */
     public SqliteStudyPlanDAO() {
         connection = SqliteConnection.getInstance();
-
         // If table doesn't exist
         createTable();
     }
@@ -43,7 +46,6 @@ public class SqliteStudyPlanDAO {
     // SQL Queries
     private static final String SELECT_ALL = "SELECT * FROM study_plans where userId = ?";
     private static final String SELECT_BY_ID = "SELECT * FROM study_plans WHERE userId = ? AND id = ? ";
-//    private static final String SELECT_BY_USER = "SELECT * FROM study_plans WHERE user_id = ?";
     private static final String SELECT_BY_STATUS = "SELECT * FROM study_plans WHERE user_id = ? AND status = ?";
     private static final String INSERT = "INSERT INTO study_plans(user_id, title, description, status, participant_count) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE study_plans SET title = ?, description = ?, status = ?, participant_count = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
@@ -59,8 +61,8 @@ public class SqliteStudyPlanDAO {
         try{
             // Prepare the SQL statement
             PreparedStatement statement= connection.prepareStatement(SELECT_ALL);
-            // Set the userId parameter from SessionManager
-            statement.setInt(1, SessionManager.getCurrentUser().getId());
+            // Set the userId parameter
+            statement.setInt(1, currentUser.getId());
             ResultSet resultSet = statement.executeQuery();
 
             // Loop through the result set and add each study plan to the list
@@ -70,7 +72,7 @@ public class SqliteStudyPlanDAO {
             // Return the list of study plans
             return studyPlans;
         } catch (SQLException e) {
-            handleSQLException("Error retrieving study plan by id: ", e); //TODO: add the user id (save to local var)
+            handleSQLException("Error retrieving study plan by id: " + currentUser.getId(), e); //TODO: add the user id (save to local var)
         }
         return null;
     }
@@ -84,7 +86,7 @@ public class SqliteStudyPlanDAO {
     public StudyPlan getStudyPlanById(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
-            preparedStatement.setInt(1, SessionManager.getCurrentUser().getId());
+            preparedStatement.setInt(1, currentUser.getId());
             preparedStatement.setInt(2, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -96,26 +98,6 @@ public class SqliteStudyPlanDAO {
         }
         return null;
     }
-
-
-//    public List<StudyPlan> getStudyPlansByUser(int userId) {
-//        List<StudyPlan> studyPlans = new ArrayList<>();
-//
-//        try (
-//         PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_USER)) {
-//
-//            preparedStatement.setInt(1, userId);
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//
-//            while (resultSet.next()) {
-//                studyPlans.add(mapResultSetToStudyPlan(resultSet));
-//            }
-//        } catch (SQLException e) {
-//            handleSQLException("Error fetching study plans by user: " + userId, e);
-//        }
-//        return studyPlans;
-//    }
-
 
     /**
      * Retrieves study plans by their status.
@@ -143,7 +125,11 @@ public class SqliteStudyPlanDAO {
         return null;
     }
 
-
+    /**
+     * Adds a new study plan to the database.
+     * @param studyPlan The StudyPlan object to add.
+     * @return true if the study plan was added successfully, false otherwise.
+     */
     public boolean addStudyPlan(StudyPlan studyPlan) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -169,6 +155,11 @@ public class SqliteStudyPlanDAO {
         return false;
     }
 
+    /**
+     * Updates an existing study plan in the database.
+     * @param studyPlan The StudyPlan object with updated information.
+     * @return true if the study plan was updated successfully, false otherwise.
+     */
     public boolean updateStudyPlan(StudyPlan studyPlan) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
@@ -179,26 +170,45 @@ public class SqliteStudyPlanDAO {
             preparedStatement.setInt(4, studyPlan.getParticipantCount());
             preparedStatement.setInt(5, studyPlan.getId());
 
-            return preparedStatement.executeUpdate() > 0;
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Study plan updated successfully: " + studyPlan.getId());
+                return true;
+            }
         } catch (SQLException e) {
             handleSQLException("Error updating study plan: " + studyPlan.getId(), e);
-            return false;
         }
+        return false;
     }
 
+    /**
+     * Deletes a study plan from the database.
+     * @param id The ID of the study plan to delete.
+     * @return true if the study plan was deleted successfully, false otherwise.
+     */
     public boolean deleteStudyPlan(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
 
             preparedStatement.setInt(1, id);
-            return preparedStatement.executeUpdate() > 0;
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Study plan: " + id + " deleted successfully.");
+                return true;
+            }
         } catch (SQLException e) {
             handleSQLException("Error deleting study plan: " + id, e);
-            return false;
         }
+        return false;
     }
 
-    // Helper Methods
+    /**
+     * Maps a ResultSet to a StudyPlan object.
+     * @param resultSet The ResultSet to map.
+     * @return The StudyPlan object.
+     * @throws SQLException If an SQL error occurs.
+     */
     private StudyPlan mapResultSetToStudyPlan(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         int userId = resultSet.getInt("userId");
@@ -210,6 +220,11 @@ public class SqliteStudyPlanDAO {
         return studyPlan;
     }
 
+    /**
+     * Handles SQL exceptions by printing the error message and stack trace.
+     * @param message The error message.
+     * @param e The SQLException object.
+     */
     private void handleSQLException(String message, SQLException e) {
         System.err.println(message + ": " + e.getMessage());
         e.printStackTrace();
