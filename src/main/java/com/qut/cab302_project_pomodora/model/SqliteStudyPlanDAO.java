@@ -4,7 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * SqliteStudyPlanDAO is a Data Access Object (DAO) for managing study plans in a SQLite database.
+ * It provides the CRUD operations for study plans.
+ */
 public class SqliteStudyPlanDAO {
     // Database connection
     private Connection connection;
