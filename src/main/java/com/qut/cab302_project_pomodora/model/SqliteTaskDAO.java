@@ -72,6 +72,26 @@ public class SqliteTaskDAO implements ITaskDAO {
         return null;
     }
 
+    /**
+     * Retieves the current study plan's number of remaining tasks.
+     * @param studyPlanId The ID of the study plan.
+     * @return The number of remaining tasks in the study plan.
+     */
+    public int tasksRemaining(int studyPlanId) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM tasks WHERE studyPlanId = ? AND status != 'completed'");
+            preparedStatement.setInt(1, studyPlanId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                System.out.println("Remaining tasks: " + resultSet.getInt(1));
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            handleSQLException("Error retrieving remaining tasks for study plan: " + studyPlanId, e);
+        }
+        return 0;
+    }
+
     public boolean createTask(Task task) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);

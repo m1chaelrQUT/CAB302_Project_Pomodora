@@ -11,6 +11,13 @@ public interface ITaskDAO {
     boolean createTask(Task task);
 
     /**
+     * Retrieves the remaining number of tasks in a study plan.
+     * @param studyPlanId The ID of the study plan.
+     * @return The number of remaining tasks in the study plan.
+     */
+    int tasksRemaining(int studyPlanId);
+
+    /**
      * Retrieves all tasks associated with a specific study plan from the database.
      * @param studyPlanId The ID of the study plan.
      * @return A list of tasks associated with the specified study plan.
