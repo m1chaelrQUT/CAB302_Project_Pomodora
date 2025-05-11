@@ -93,4 +93,8 @@ public class StudyPlan
                 ", participantCount=" + participantCount +
                 '}';
     }
+
+    public boolean isActive() {
+        return status.equals("ACTIVE");
+    }
 }

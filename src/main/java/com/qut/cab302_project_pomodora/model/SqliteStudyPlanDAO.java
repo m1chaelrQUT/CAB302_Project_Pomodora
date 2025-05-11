@@ -8,7 +8,7 @@ import java.util.List;
  * SqliteStudyPlanDAO is a Data Access Object (DAO) for managing study plans in a SQLite database.
  * It provides the CRUD operations for study plans.
  */
-public class SqliteStudyPlanDAO  implements IStudyPlanDAO {
+public class SqliteStudyPlanDAO implements IStudyPlanDAO {
     // Database connection
     private Connection connection;
 
@@ -47,25 +47,26 @@ public class SqliteStudyPlanDAO  implements IStudyPlanDAO {
 
 
     // SQL Queries
-    private static final String SELECT_ALL = "SELECT * FROM study_plans where userId = ?";
-    private static final String SELECT_BY_ID = "SELECT * FROM study_plans WHERE userId = ? AND id = ? ";
-    private static final String SELECT_BY_STATUS = "SELECT * FROM study_plans WHERE user_id = ? AND status = ?";
-    private static final String INSERT = "INSERT INTO study_plans(user_id, title, description, status, participant_count) VALUES(?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE study_plans SET title = ?, description = ?, status = ?, participant_count = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
-    private static final String DELETE = "DELETE FROM study_plans WHERE id = ?";
+    private static final String SELECT_ALL = "SELECT * FROM studyPlans where userId = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM studyPlans WHERE userId = ? AND id = ? ";
+    private static final String SELECT_BY_STATUS = "SELECT * FROM studyPlans WHERE user_id = ? AND status = ?";
+    private static final String INSERT = "INSERT INTO studyPlans(user_id, title, description, status, participant_count) VALUES(?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE studyPlans SET title = ?, description = ?, status = ?, participant_count = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+    private static final String DELETE = "DELETE FROM studyPlans WHERE id = ?";
 
 
     /**
      * Retrieves all study plans for the current user.
      * @return List of StudyPlan objects
      */
-    public List<StudyPlan> getAllStudyPlans() {
+    public List<StudyPlan> getAllStudyPlans(int currentUserId) {
         List<StudyPlan> studyPlans = new ArrayList<>();
         try{
             // Prepare the SQL statement
             PreparedStatement statement= connection.prepareStatement(SELECT_ALL);
             // Set the userId parameter
-            statement.setInt(1, currentUser.getId());
+//            statement.setInt(1, currentUser.getId());
+            statement.setInt(1, currentUserId);
             ResultSet resultSet = statement.executeQuery();
 
             // Loop through the result set and add each study plan to the list
@@ -222,6 +223,9 @@ public class SqliteStudyPlanDAO  implements IStudyPlanDAO {
         StudyPlan studyPlan = new StudyPlan(userId, title, description, status);
         return studyPlan;
     }
+
+    //TODO: Add a method that marks the next task as completed and updates the status if need
+
 
     /**
      * Handles SQL exceptions by printing the error message and stack trace.
