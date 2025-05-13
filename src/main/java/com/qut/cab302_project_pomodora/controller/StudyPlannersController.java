@@ -5,15 +5,12 @@ import com.qut.cab302_project_pomodora.model.SessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -248,10 +245,56 @@ public class StudyPlannersController extends ControllerSkeleton {
             }
         }
         System.out.println("goToStudyPlan triggered for plan ID: " + planId);
-        // TODO: Open plan summary overlay
         openPopUp(studyPlanDetailsPopUp);
+        // TODO: loadTasks(*respective user's selected studyplan's task list to go here*);
+
         // TODO: Create actual page nav method and refactor this to make sense
     }
+
+    // Box within the studyPlanDetails pop-up that will actually show the tasks
+    @FXML private VBox taskListVBox;
+
+    // This has been made with some mock Object types and methods
+    // Will be changed when linking to study plan class
+    @FXML
+    private void loadTasks(List<Task> tasks) {
+        taskListVBox.getChildren().clear();
+
+        for (Task task : tasks) {
+            // Create a new box per task
+            VBox taskBox = new VBox(5);
+            taskBox.setAlignment(Pos.TOP_LEFT);
+
+            // Box for the task title
+            HBox titleRow = new HBox();
+            titleRow.setAlignment(Pos.CENTER_LEFT);
+            titleRow.setSpacing(10);
+            titleRow.setPadding(new Insets(5,5,5,5));
+            Label titleLabel = new Label(task.getTitle());
+
+            // Box for the task's checkbox
+            HBox checkboxRow = new HBox();
+            CheckBox taskCheckBox = new CheckBox();
+            HBox.setHgrow(checkboxRow, Priority.ALWAYS);
+
+            // Puts the task's title and checkbox in the same row
+            titleRow.getChildren().addAll(titleLabel, checkboxRow,taskCheckBox);
+
+            // Box for checkpoints (in bullet format) within task box
+            VBox checkpointsBox = new VBox(3);
+            checkpointsBox.setPadding(new Insets(0,0,0,20));
+
+            for (String checkpoint : task.getCheckpoints()) {
+                Label checkpointLabel = new Label("•" + checkpoint);
+                checkpointsBox.getChildren().add(checkpointLabel);
+            }
+
+            taskBox.getChildren().addAll(titleRow,checkpointsBox);
+            taskListVBox.getChildren().add(taskBox);
+
+        }
+    }
+
 
     @FXML
     private void resumeStudyPlan() {
