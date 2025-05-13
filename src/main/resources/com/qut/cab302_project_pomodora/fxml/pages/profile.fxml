@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="profile" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.ProfileController">
+<StackPane fx:id="profile" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.ProfileController">
     <StackPane styleClass="primitives">
         <StackPane styleClass="theme">
             <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
@@ -17,14 +24,57 @@
                     </left>
                     <center>
                         <AnchorPane prefHeight="1080.0" prefWidth="796.0" BorderPane.alignment="CENTER">
-                            <Label layoutX="56.0" layoutY="73.0" prefHeight="77.0" prefWidth="640.0" text="Page under construction 🚧" underline="true">
+                            <Label layoutX="338.0" layoutY="41.0" prefHeight="117.0" prefWidth="419.0" text="User 1" underline="true">
                                 <font>
-                                    <Font size="50.0" />
+                                    <Font size="70.0" />
                                 </font>
                             </Label>
-                            <Pane layoutX="1324.0" prefWidth="295.0" AnchorPane.rightAnchor="0.0">
-                                <fx:include source="../components/user-profile-w-level.fxml" />
-                            </Pane>
+                     <ImageView fitHeight="196.0" fitWidth="199.0" layoutX="54.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../images/User-indicator.png" />
+                        </image>
+                     </ImageView>
+                     <ImageView fx:id="rankShieldIcon" fitHeight="95.0" fitWidth="102.0" layoutX="316.0" layoutY="164.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../../images/user-level-shield.png" />
+                        </image>
+                     </ImageView>
+                     <Label fx:id="userRankLabel" alignment="CENTER" layoutX="351.0" layoutY="190.0" prefHeight="40.0" prefWidth="32.0" text="?">
+                        <font>
+                           <Font size="27.0" />
+                        </font>
+                     </Label>
+                     <ProgressBar fx:id="levelProgressIndicator" layoutX="439.0" layoutY="184.0" prefHeight="53.0" prefWidth="982.0" progress="0.0" />
+                     <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="297.0" prefHeight="783.0" prefWidth="1600.0" styleClass="window-background" vbarPolicy="NEVER">
+                       <content>
+                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="783.0" prefWidth="1599.0" styleClass="window-background">
+                              <children>
+                                 <AnchorPane layoutX="25.0" layoutY="22.0" prefHeight="390.0" prefWidth="1544.0" styleClass="brand-box">
+                                    <children>
+                                       <BarChart fx:id="tasksDoneBarChart" horizontalGridLinesVisible="false" layoutX="14.0" layoutY="55.0" legendVisible="false" prefHeight="315.0" prefWidth="819.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
+                                         <xAxis>
+                                           <CategoryAxis prefHeight="0.0" prefWidth="750.0" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" />
+                                         </xAxis>
+                                         <yAxis>
+                                           <NumberAxis minorTickVisible="false" prefHeight="300.0" prefWidth="0.0" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false" />
+                                         </yAxis>
+                                       </BarChart>
+                                       <Label layoutX="38.0" layoutY="14.0" prefHeight="46.0" prefWidth="246.0" text="Last seven days">
+                                          <font>
+                                             <Font size="30.0" />
+                                          </font>
+                                       </Label>
+                                       <TextArea editable="false" focusTraversable="false" layoutX="911.0" layoutY="20.0" prefHeight="350.0" prefWidth="602.0" text="Your productivity has improved by 12% in the last week, with 8 extra tasks completed in the last 3 days." wrapText="true">
+                                          <font>
+                                             <Font size="30.0" />
+                                          </font>
+                                       </TextArea>
+                                    </children>
+                                 </AnchorPane>
+                              </children>
+                           </AnchorPane>
+                       </content>
+                     </ScrollPane>
                         </AnchorPane>
                     </center>
                 </BorderPane>

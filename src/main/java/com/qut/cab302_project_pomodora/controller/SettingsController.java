@@ -1,13 +1,12 @@
 package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.model.*;
+import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -24,6 +23,8 @@ public class SettingsController extends ControllerSkeleton {
     private StackPane timerSettingsPopUp;
     @FXML
     private StackPane accountSettingsPopUp;
+    @FXML
+    private StackPane themeSettingsPopUp;
 
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
@@ -44,6 +45,14 @@ public class SettingsController extends ControllerSkeleton {
     private PasswordField newPasswordEntryField;
     @FXML
     private PasswordField confirmNewPasswordEntryField;
+
+    @FXML private ChoiceBox<Theme> colourSchemeSelector;
+
+    enum Timers {
+        BAR, ANALOG, DIGITAL
+    }
+
+    @FXML private ChoiceBox<Timers> timerUISelector;
 
     // DAO interfaces
     private IUserDAO userDAO;
@@ -68,6 +77,9 @@ public class SettingsController extends ControllerSkeleton {
         accountSettingsPopUp.setVisible(true);
     }
 
+    @FXML
+    private void openThemeSettings() {themeSettingsPopUp.setVisible(true); }
+
     // Close function for the pop-ups/overlays (Stackpanes)
     private void closePopUp(StackPane popUp) {
         popUp.setVisible(false);
@@ -82,6 +94,9 @@ public class SettingsController extends ControllerSkeleton {
     private void closeAccountSettings() {
         closePopUp(accountSettingsPopUp);
     }
+
+    @FXML
+    private void closeThemeSettings() { closePopUp(themeSettingsPopUp); }
 
 
     @Override
@@ -107,6 +122,8 @@ public class SettingsController extends ControllerSkeleton {
 
         Platform.runLater(() -> {
             navbarController.setNavButtonStyles(settings.getScene());
+            colourSchemeSelector.setItems(FXCollections.observableArrayList(Theme.values()));
+            timerUISelector.setItems(FXCollections.observableArrayList(Timers.values()));
         });
 
         System.out.println("SettingsController Initialization completed.");
@@ -253,6 +270,22 @@ public class SettingsController extends ControllerSkeleton {
         int longBreakAfterInput = Integer.parseInt(longBreakCyclesSpinner.getValue().toString());
 
         // Update the user's timer settings
+
+    }
+
+    @FXML
+    private void saveThemeSettings() {
+        if (colourSchemeSelector.getValue() != null) {
+            ThemeManager.getInstance().applyTheme(getRootPane().getScene(), colourSchemeSelector.getValue());
+            System.out.println("Theme: " + colourSchemeSelector.getValue() + " was applied");
+        } else {
+            System.out.println("Theme not selected");
+        }
+        if (timerUISelector.getValue() != null) {
+            System.out.print("TimerUI Selection: " + timerUISelector.getValue() + ".");
+        } else {
+            System.out.println("TimerUI not selected");
+        }
 
     }
 }
