@@ -1,5 +1,9 @@
 package com.qut.cab302_project_pomodora.model;
 
+/**
+ * Interface for Timer Data Access Object (DAO).
+ * This interface defines the methods for interacting with the timer data in the database.
+ */
 public interface ITimerDAO {
     /**
      * Updates the user timers with the given timer values.

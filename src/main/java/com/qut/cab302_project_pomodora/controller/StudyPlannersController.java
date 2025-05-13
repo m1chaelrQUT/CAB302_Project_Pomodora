@@ -1,7 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.User;
-import com.qut.cab302_project_pomodora.model.SessionManager;
+import com.qut.cab302_project_pomodora.model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,14 +35,28 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private GridPane pastStudyPlansGrid;
     @FXML private ScrollPane scrollPane;
 
+    // DAO interfaces
+    private IStudyPlanDAO studyPlanDAO;
+    private IUserDAO userDAO;
+    private ITaskDAO taskDAO;
+
+    // Current user object
+    private User currentUser;
+
+    // Study plans list
+    private List<StudyPlan> studyPlans;
+
+    public StudyPlannersController(){
+        // Initialize the DAO interfaces
+        studyPlanDAO = new SqliteStudyPlanDAO();
+        userDAO = new SqliteUserDAO();
+        taskDAO = new SqliteTaskDAO();
+    }
+
+
     private static final int MAX_COLUMNS = 3;
     private static final double PREF_VBOX_HEIGHT = 340;
     private static final double PREF_VBOX_WIDTH = 517;
-
-    // Mock Data Structure
-    private record StudyPlan(String id, String title, boolean isActive, int tasksRemaining) {}
-
-    private List<StudyPlan> mockStudyPlans;
 
     @Override
     protected StackPane getRootPane() {
@@ -60,12 +73,21 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML
     public void initialize() throws SQLException, IOException {
         super.initialize();
+        currentUser = SessionManager.getCurrentUser();
+
+        if(currentUser == null) {
+            throw new IllegalStateException("Current user is null. Cannot load study plans.");
+        }
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        createMockData();
+//        createMockData();
+        // Populate the study plans list
+
+
+        studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
 
         //-----------
         populateStudyPlanGrids();
@@ -79,33 +101,44 @@ public class StudyPlannersController extends ControllerSkeleton {
                         }
                     });
                 });
-
-        iniSession();
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
-    private void createMockData() {
-        mockStudyPlans = new ArrayList<>();
-        mockStudyPlans.add(new StudyPlan("plan-cs-proj", "CS Project", true, 3));
-        mockStudyPlans.add(new StudyPlan("plan-theo-essay", "Theology Essay", true, 5));
-        mockStudyPlans.add(new StudyPlan("plan-math-hw", "Math Homework", true, 1));
-        mockStudyPlans.add(new StudyPlan("plan-chem-lab", "Chemistry Lab", true, 8));
-        mockStudyPlans.add(new StudyPlan("plan-cs-exam-new", "CS Exam 2", true, 100));// Example for wrapping
-        mockStudyPlans.add(new StudyPlan("plan-cs-exam", "CS Exam", false, 0));
-        mockStudyPlans.add(new StudyPlan("plan-bio-report", "Biology Report", false, 0));
-        mockStudyPlans.add(new StudyPlan("plan-phys-test", "Physics Data Test", false, 0));
-        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
-    }
+//    /**
+//     * Initializes the session by loading the current user from the session manager.
+//     * This method is called during the initialization of the controller.
+//     * @throws SQLException if there is an error loading the session from the database
+//     * @throws IOException  if there is an error loading the session from the file
+//     */
+//    public void iniSession() throws SQLException, IOException {
+//        // Load the session to check if the user is already logged in
+//        SessionManager.loadSession();
+//
+//        User currentUser = SessionManager.getCurrentUser();
+//        System.out.println("Session loaded!");
+//    }
+
+//    private void createMockData() {
+//        mockStudyPlans = new ArrayList<>();
+//        mockStudyPlans.add(new StudyPlan("plan-cs-proj", "CS Project", true, 3));
+//        mockStudyPlans.add(new StudyPlan("plan-theo-essay", "Theology Essay", true, 5));
+//        mockStudyPlans.add(new StudyPlan("plan-math-hw", "Math Homework", true, 1));
+//        mockStudyPlans.add(new StudyPlan("plan-chem-lab", "Chemistry Lab", true, 8));
+//        mockStudyPlans.add(new StudyPlan("plan-cs-exam-new", "CS Exam 2", true, 100));// Example for wrapping
+//        mockStudyPlans.add(new StudyPlan("plan-cs-exam", "CS Exam", false, 0));
+//        mockStudyPlans.add(new StudyPlan("plan-bio-report", "Biology Report", false, 0));
+//        mockStudyPlans.add(new StudyPlan("plan-phys-test", "Physics Data Test", false, 0));
+//        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
+//    }
 
     private void populateStudyPlanGrids() {
-        //TODO: Create database table for studyplans and connect here. We don't need to keep the current data mockup, though it would prob be easiest to
 
         // Separate plans into active and past (uses list filtering)
-        List<StudyPlan> activePlans = mockStudyPlans.stream()
+        List<StudyPlan> activePlans = studyPlans.stream()
                 .filter(StudyPlan::isActive)
                 .collect(Collectors.toList());
 
-        List<StudyPlan> pastPlans = mockStudyPlans.stream()
+        List<StudyPlan> pastPlans = studyPlans.stream()
                 .filter(plan -> !plan.isActive())
                 .collect(Collectors.toList());
 
@@ -131,7 +164,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Check if no past plans exist, add filler if so
         if (plans.isEmpty() && !isActiveGrid) {
-            VBox noPastPlans = createStudyPlanVBox(new StudyPlan("plan-past-empty", "No past plans", false, 0));
+            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(currentUser.getId(), "No past plans", "No plans for this user", "INACTIVE"));
             grid.add(noPastPlans, col, row);
         }
 
@@ -166,7 +199,7 @@ public class StudyPlannersController extends ControllerSkeleton {
         vbox.setSpacing(10);
 
         // Title Label
-        Label titleLabel = new Label(plan.title());
+        Label titleLabel = new Label(plan.getTitle());
         titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setPrefHeight(85.0);
         titleLabel.setPrefWidth(504.0);
@@ -203,7 +236,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         if (plan.isActive()) {
             statusLabel.setText("Tasks Remaining:");
-            countLabel.setText(String.valueOf(plan.tasksRemaining()));
+            countLabel.setText(String.valueOf(taskDAO.tasksRemaining(plan.getId())));
         } else {
             statusLabel.setText("Tasks Complete!");
             countLabel.setText(":)");
@@ -214,7 +247,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
         // store the plan ID
-        vbox.setUserData(plan.id());
+        vbox.setUserData(plan.getId());
 
         // on mouse clicked
         vbox.setOnMouseClicked(this::goToStudyPlan);
@@ -247,18 +280,5 @@ public class StudyPlannersController extends ControllerSkeleton {
         // TODO: Open create plan overlay
     }
 
-    /**
-     * Initializes the session by loading the current user from the session manager.
-     * This method is called during the initialization of the controller.
-     *
-     * @throws SQLException if there is an error loading the session from the database
-     * @throws IOException  if there is an error loading the session from the file
-     */
-    public void iniSession() throws SQLException, IOException {
-        // Load the session to check if the user is already logged in
-        SessionManager.loadSession();
 
-        User currentUser = SessionManager.getCurrentUser();
-        System.out.println("Session loaded!");
-    }
 }
