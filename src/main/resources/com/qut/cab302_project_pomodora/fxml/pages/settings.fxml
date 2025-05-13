@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="settings" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SettingsController">
+      <StackPane styleClass="primitives">
+         <StackPane styleClass="theme">
+            <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
+               <BorderPane>
+                  <left>
+                     <fx:include source="../components/side-navbar.fxml" fx:id="navbar" />
+                  </left>
+                  <center>
+                     <AnchorPane prefHeight="1080.0" prefWidth="796.0" BorderPane.alignment="CENTER">
+                        <children>
+                           <Label fx:id="settingsPageLabel" layoutX="56.0" layoutY="73.0" prefHeight="77.0" prefWidth="306.0" text="Settings" underline="true">
+                              <font>
+                                 <Font size="50.0" />
+                              </font>
+                           </Label>
+                           <Button fx:id="themeSettingsButton" alignment="CENTER" layoutX="307.0" layoutY="180.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Theme &amp; Appearance ">
+                              <font>
+                                 <Font size="37.0" />
+                              </font>
+                           </Button>
+                           <Button fx:id="timerSettingsButton" layoutX="308.0" layoutY="383.0" mnemonicParsing="false" onAction="#openTimerSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Timer Settings">
+                              <font>
+                                 <Font size="37.0" />
+                              </font>
+                           </Button>
+                           <ImageView fitHeight="57.0" fitWidth="57.0" layoutX="1332.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/theme_icon.png" />
+                              </image>
+                           </ImageView>
+                           <ImageView fitHeight="71.0" fitWidth="60.0" layoutX="1333.0" layoutY="405.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/Clock.png" />
+                              </image>
+                           </ImageView>
+                           <Button fx:id="notificationSettingsButton" layoutX="312.0" layoutY="591.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Notification">
+                              <font>
+                                 <Font size="37.0" />
+                              </font>
+                           </Button>
+                           <ImageView fitHeight="65.0" fitWidth="80.0" layoutX="1324.0" layoutY="610.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/Bell.png" />
+                              </image>
+                           </ImageView>
+                           <Button fx:id="accountSettingsButton" layoutX="312.0" layoutY="788.0" mnemonicParsing="false" onAction="#openAccountSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Account">
+                              <font>
+                                 <Font size="37.0" />
+                              </font>
+                           </Button>
+                           <ImageView fitHeight="73.0" fitWidth="107.0" layoutX="1318.0" layoutY="807.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../../images/User-indicator.png" />
+                              </image>
+                           </ImageView>
+                           <Pane layoutX="1324.0" prefWidth="295.0" AnchorPane.rightAnchor="0.0">
+                              <fx:include source="../components/user-profile-w-level.fxml" />
+                           </Pane>
+                        </children>
+                     </AnchorPane>
+                  </center>
+               </BorderPane>
+               <!-- Overlays -->
+               <StackPane fx:id="timerSettingsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0"
+                          prefWidth="900.0" visible="false">
+                  <StackPane styleClass="overlay-shadow"/>
+                  <AnchorPane>
+                     <AnchorPane layoutX="586.0" layoutY="72.0" prefHeight="200.0" prefWidth="200.0"
+                                 styleClass="brand-box">
+                        <children>
+                           <Button fx:id="timerSettingsCloseButton" layoutX="801.0" layoutY="1.0"
+                                   mnemonicParsing="false" onAction="#closeTimerSettings" prefHeight="56.0"
+                                   prefWidth="56.0">
+                              <graphic>
+                                 <ImageView fitHeight="56.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true"
+                                            styleClass="button-primary">
+                                    <image>
+                                       <Image url="@../../images/close_icon.png"/>
+                                    </image>
+                                 </ImageView>
+                              </graphic>
+                           </Button>
+                           <Label fx:id="timerSettingsPopUpLabel" layoutX="335.0" layoutY="30.0" text="Timer Settings">
+                              <font>
+                                 <Font size="38.0"/>
+                              </font>
+                           </Label>
+                           <Label fx:id="pomodoroDurationLabel" layoutX="72.0" layoutY="209.0" text="Pomodoro Duration">
+                              <font>
+                                 <Font size="28.0"/>
+                              </font>
+                           </Label>
+                           <Spinner fx:id="pomodoroMinutesSpinner" layoutX="383.0" layoutY="202.0" prefHeight="60.0"
+                                    prefWidth="100.0" min="1" max="1000"/>
+                           <Spinner fx:id="pomodoroSecondsSpinner" layoutX="625.0" layoutY="204.0" prefHeight="60.0"
+                                    prefWidth="100.0" min="1" max="1000"/>
+                           <Label fx:id="pomodoroMinutesLabel" layoutX="500.0" layoutY="216.0" text="Minutes">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Label fx:id="pomodoroSecondsLabel" layoutX="741.0" layoutY="217.0" text="Seconds">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Label fx:id="shortBreakDurationLabel" layoutX="73.0" layoutY="350.0"
+                                  text="Short Break Duration">
+                              <font>
+                                 <Font size="28.0"/>
+                              </font>
+                           </Label>
+                           <Spinner fx:id="shortBreakMinutesSpinner" layoutX="383.0" layoutY="342.0" prefHeight="60.0"
+                                    prefWidth="100.0" min="1" max="1000"/>
+                           <Label fx:id="shortBreakMinutesLabel" layoutX="502.0" layoutY="354.0" text="Minutes">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Spinner fx:id="shortBreakSecondsSpinner" layoutX="625.0" layoutY="343.0" prefHeight="60.0"
+                                    prefWidth="100.0" min="1" max="1000"/>
+                           <Label fx:id="shortBreakSecondsLabel" layoutX="741.0" layoutY="356.0" text="Seconds">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Label fx:id="longBreakDurationLabel" layoutX="74.0" layoutY="493.0"
+                                  text="Long Break Duration">
+                              <font>
+                                 <Font size="28.0"/>
+                              </font>
+                           </Label>
+                           <Spinner fx:id="longBreakMinutesSpinner" layoutX="383.0" layoutY="484.0" prefHeight="60.0"
+                                    prefWidth="100.0" min="1" max="1000"/>
+                           <Label fx:id="longBreakMinutesLabel" layoutX="504.0" layoutY="497.0" text="Minutes">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Spinner fx:id="longBreakSecondsSpinner" layoutX="625.0" layoutY="484.0" prefHeight="60.0"
+                                    prefWidth="100.0" min="1" max="1000"/>
+                           <Label fx:id="longBreakSecondsLabel" layoutX="741.0" layoutY="497.0" text="Seconds">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Label fx:id="longBreakAfterLabel" layoutX="74.0" layoutY="633.0" text="Long Break After">
+                              <font>
+                                 <Font size="28.0"/>
+                              </font>
+                           </Label>
+                           <Label fx:id="longBreakEveryLabel" layoutX="505.0" layoutY="638.0" text="Every">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Spinner fx:id="longBreakCyclesSpinner" layoutX="625.0" layoutY="624.0" prefHeight="60.0"
+                                    prefWidth="100.0" min="1" max="1000"/>
+                           <Label fx:id="longBreakCyclesLabel" layoutX="741.0" layoutY="637.0" prefHeight="35.0"
+                                  prefWidth="102.0" text="Cycles">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Label>
+                           <Button fx:id="timerSettingsSaveButton" layoutX="412.0" layoutY="779.0"
+                                   mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" text="Save" onAction="#saveTimerSettings">
+                              <font>
+                                 <Font size="24.0"/>
+                              </font>
+                           </Button>
+                        </children>
+                     </AnchorPane>
+                  </AnchorPane>
+               </StackPane>
+               <StackPane fx:id="accountSettingsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
+                  <children>
+                     <StackPane styleClass="overlay-shadow" />
+                     <AnchorPane>
+                        <AnchorPane layoutX="586.0" layoutY="72.0" prefHeight="900.0" prefWidth="900.0" styleClass="brand-box">
+                           <children>
+                              <Button fx:id="accountSettingsCloseButton" layoutX="800.0" layoutY="15.0" mnemonicParsing="false" onAction="#closeAccountSettings" prefHeight="56.0" prefWidth="56.0" styleClass="button-primary">
+                                 <graphic>
+                                    <ImageView fitHeight="56.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" styleClass="button-primary">
+                                       <image>
+                                          <Image url="@../../images/close_icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label fx:id="accountSettingsPopUpLabel" layoutX="313.0" layoutY="31.0" text="Account Settings">
+                                 <font>
+                                    <Font size="38.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="accountProfilePicture" fitHeight="129.0" fitWidth="129.0" layoutX="398.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/User-indicator.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="editProfilePictureButton" layoutX="515.0" layoutY="221.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="51.0" styleClass="button-primary">
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/theme_icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Circle fill="#18b8f000" layoutX="542.0" layoutY="245.0" radius="24.0" stroke="BLACK" strokeType="INSIDE" />
+                              <Label fx:id="emailEnteringFieldLabel" layoutX="85.0" layoutY="287.0" text="Email/Username">
+                                 <font>
+                                    <Font size="28.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="emailTextField" layoutX="86.0" layoutY="340.0" prefHeight="65.0" prefWidth="727.0" />
+                              <!-- New Password Section -->
+                              <Label fx:id="newPasswordLabel" layoutX="85.0" layoutY="447.0" text="New Password">
+                                 <font>
+                                    <Font size="28.0" />
+                                 </font>
+                              </Label>
+                              <PasswordField fx:id="newPasswordEntryField" layoutX="88.0" layoutY="511.0" prefHeight="65.0" prefWidth="647.0" />
+                              <TextField fx:id="newPasswordTextField" layoutX="88.0" layoutY="512.0" managed="false" prefHeight="65.0" prefWidth="647.0" visible="false" />
+                              <Button fx:id="showNewPasswordButton" layoutX="740.0" layoutY="516.0" mnemonicParsing="false" onAction="#toggleSetPasswordVisibility" prefHeight="56.0" prefWidth="56.0">
+                                 <graphic>
+                                    <ImageView fitHeight="56.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/Eye-con.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <!-- Confirm Password Section -->
+                              <Label fx:id="confirmNewPasswordLabel" layoutX="85.0" layoutY="617.0" text="Confirm New Password">
+                                 <font>
+                                    <Font size="28.0" />
+                                 </font>
+                              </Label>
+                              <PasswordField fx:id="confirmNewPasswordEntryField" layoutX="88.0" layoutY="661.0" prefHeight="65.0" prefWidth="646.0" />
+                              <TextField fx:id="confirmNewPasswordTextField" layoutX="88.0" layoutY="661.0" managed="false" prefHeight="65.0" prefWidth="647.0" visible="false" />
+                              <Button fx:id="showConfirmNewPasswordButton" layoutX="740.0" layoutY="665.0" mnemonicParsing="false" onAction="#toggleConfirmNewPasswordVisibility" prefHeight="56.0" prefWidth="56.0">
+                                 <graphic>
+                                    <ImageView fitHeight="56.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/Eye-con.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button layoutX="335.0" layoutY="784.0" onAction="#confirmAccountUpdate" prefHeight="65.0" prefWidth="241.0" styleClass="button-secondary" text="Confirm" textFill="WHITE">
+                              <font>
+                                 <Font size="30.0" />
+                              </font></Button>
+                           </children>
+                        </AnchorPane>
+                     </AnchorPane>
+                  </children>
+               </StackPane>
+            </StackPane>
+         </StackPane>
+      </StackPane>
+</StackPane>

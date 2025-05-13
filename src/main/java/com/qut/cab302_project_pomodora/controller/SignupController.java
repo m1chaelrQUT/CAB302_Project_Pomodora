@@ -1,10 +1,7 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.IUserDAO;
+import com.qut.cab302_project_pomodora.model.*;
 import com.qut.cab302_project_pomodora.Main;
-import com.qut.cab302_project_pomodora.model.MockUserDAO;
-import com.qut.cab302_project_pomodora.model.SqliteUserDAO;
-import com.qut.cab302_project_pomodora.model.User;
 import com.qut.cab302_project_pomodora.config.Theme;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.fxml.FXML;
@@ -23,6 +20,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
+import java.sql.SQLException;
 
 // Extend the abstract skeleton
 public class SignupController extends ControllerSkeleton {
@@ -54,9 +52,11 @@ public class SignupController extends ControllerSkeleton {
     private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
 
     private IUserDAO userDAO;
+    private ITimerDAO timerDAO;
 
     public SignupController() {
         userDAO = new SqliteUserDAO();
+        timerDAO = new SqliteTimerDAO();
     }
 
     // Implement the abstract methods to provide the required containers : This is for common scaling
@@ -73,7 +73,7 @@ public class SignupController extends ControllerSkeleton {
     // Init
     @Override
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -122,9 +122,11 @@ public class SignupController extends ControllerSkeleton {
                 User newUser = new User(userNameInput, passwordInput, DEFAULT_PLAYER_LEVEL, DEFAULT_LEVEL_EXPERIENCE, emailInput);
                 System.out.println("New user: " + newUser);
                 userDAO.addUser(newUser);
+
+                // Initialize the User's timer
+                timerDAO.createUserTimer(newUser);
                 showSuccessDialog();
 
-                // TODO: Navigate through to Home Screen.
             }
         } else {
             failText.setText("Please fill any fields marked with *");
@@ -148,12 +150,18 @@ public class SignupController extends ControllerSkeleton {
     @FXML
     private void closeSuccessDialog() {
         successDialog.setVisible(false);
+        usernameField.clear();
+        emailField.clear();
+        passwordField.clear();
     }
 
     @FXML
-    private void handleSignIn() {
+    private void handleSignIn() throws SQLException, IOException {
         String userNameInput = usernameField.getText();
-        //This should ideally be the exact same logic as regular signin. TODO: Create parent controller class specific to sign-in-up
+
+        // Start session for the newly created user, then navigate to home page
+        SessionManager.startSession(userDAO.getUserByName(userNameInput));
+        navigateTo("studyplanners");
     }
 
     @FXML

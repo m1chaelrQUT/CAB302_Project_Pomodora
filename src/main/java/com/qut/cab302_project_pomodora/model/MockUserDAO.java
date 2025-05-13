@@ -12,13 +12,13 @@ public class MockUserDAO implements IUserDAO {
 
     public MockUserDAO() {
         // Initial Users - only if there are none in the Mock DB
-        if(users.isEmpty()) {
-            addUser(new User("MicRob", "Michael", 1, 0, "MicRob123@example.com"));
-            addUser(new User("EthHun", "Ethan", 1, 0, "EthHun123@example.com"));
-            addUser(new User("BriKan", "Brian", 1, 0, "BriKan123@example.com"));
-            addUser(new User("SriKri", "Sriman", 1, 0, "SriKri123@example.com"));
-            addUser(new User("ShaTow", "Shane", 1, 0, "ShaTow123@example.com"));
-        }
+//        if(users.isEmpty()) {
+//            addUser(new User("MicRob", "Michael", 1, 0, "MicRob123@example.com"));
+//            addUser(new User("EthHun", "Ethan", 1, 0, "EthHun123@example.com"));
+//            addUser(new User("BriKan", "Brian", 1, 0, "BriKan123@example.com"));
+//            addUser(new User("SriKri", "Sriman", 1, 0, "SriKri123@example.com"));
+//            addUser(new User("ShaTow", "Shane", 1, 0, "ShaTow123@example.com"));
+//        }
     }
 
     /**
@@ -56,5 +56,15 @@ public class MockUserDAO implements IUserDAO {
         }
         System.out.println("Email Entered: " + userEmail + " does not exist");
         return null;
+    }
+    @Override
+    public void updateUser(User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId() == user.getId()) {
+                users.set(i, user);
+                return;
+            }
+        }
+        System.out.println("User with ID: " + user.getId() + " does not exist");
     }
 }

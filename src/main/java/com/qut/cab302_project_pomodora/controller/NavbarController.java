@@ -2,6 +2,7 @@ package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.model.SessionManager;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,9 @@ import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+
 import java.util.Objects;
 
 public class NavbarController {
@@ -30,7 +34,7 @@ public class NavbarController {
     }
 
     @FXML
-    private void navigateToAction(ActionEvent event) {
+    private void navigateToAction(ActionEvent event) throws IOException {
 
         // ALL TEMP DEBUGGING LOGIC
         Object buttonClicked = event.getSource();
@@ -39,16 +43,7 @@ public class NavbarController {
             buttonID = (String) ((Button) buttonClicked).getId();
         }
         System.out.println("navigateTo: " + buttonID + ", From: " + navBarPane.getScene().getRoot().getId());
-        ThemeManager themeManager = ThemeManager.getInstance();
-        if (themeManager.getCurrentTheme() == Theme.DARK) {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.VOIDLIGHT);
-        } else if (themeManager.getCurrentTheme() == Theme.LIGHT) {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.DARK);
-        } else if (themeManager.getCurrentTheme() == Theme.VOIDLIGHT) {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.LIGHT);
-        } else {
-            themeManager.applyTheme(navBarPane.getScene(), Theme.DARK);
-        }
+        navigateTo(buttonID);
     }
 
     private void navigateTo(String toSceneName) throws IOException {
@@ -62,17 +57,17 @@ public class NavbarController {
     }
 
     @FXML
-    private void logOut(ActionEvent event) throws IOException {
-        System.out.println("logOut");
+    private void logOut(ActionEvent event) throws IOException, SQLException {
+        // Log out the user and end the session
+        System.out.println("Logging out user: " + SessionManager.getCurrentUser().getUserName() + ", closing session...");
+        SessionManager.endSession();
         navigateTo("signin");
     }
 
     public void setNavButtonStyles(Scene scene) {
-        System.out.println("setNavButtonStyles" + navButtonList);
-        System.out.println(navButtonList.getChildren());
+        System.out.println("setNavButtonStyles");
         for (Node button : navButtonList.getChildren()) {
             if (button.getClass() == Button.class) {
-                System.out.println(button.getId());
                 if (Objects.equals(((Button) button).getId(), scene.getRoot().getId())) {
                     button.getStyleClass().clear();
                     button.getStyleClass().add("current-page-nav-button");
