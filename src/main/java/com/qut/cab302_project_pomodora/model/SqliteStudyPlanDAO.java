@@ -221,6 +221,7 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
         String status = resultSet.getString("status");
         int participantCount = resultSet.getInt("participantCount");
         StudyPlan studyPlan = new StudyPlan(userId, title, description, status);
+        studyPlan.setId(id);
         return studyPlan;
     }
 
