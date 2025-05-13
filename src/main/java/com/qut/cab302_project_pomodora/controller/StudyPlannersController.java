@@ -256,6 +256,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
     // This has been made with some mock Object types and methods
     // Will be changed when linking to study plan class
+    /*
     @FXML
     private void loadTasks(List<Task> tasks) {
         taskListVBox.getChildren().clear();
@@ -294,7 +295,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         }
     }
-
+    */
 
     @FXML
     private void resumeStudyPlan() {
