@@ -2,18 +2,22 @@ package com.qut.cab302_project_pomodora.model;
 
 public interface ITimerDAO {
     /**
-     * Initializes the user timers with default values.
-     * @param user The user to initialize timers for.
+     * Updates the user timers with the given timer values.
+     * @param user
+     * @param timer
      */
-    public void initializeUserTimers(User user);
+    void updateUserTimers(User user, Timer timer);
 
     /**
-     * Updates the user timers with the given values.
+     * Retrieves the user timer from the database.
      * @param user
-     * @param workDuration
-     * @param shortBreakDuration
-     * @param longBreakDuration
-     * @param longBreakAfter
+     * @return The timer for the given user
      */
-    public void updateUserTimers(User user, int workDuration, int shortBreakDuration, int longBreakDuration, int longBreakAfter);
+    Timer getUserTimer(User user);
+
+    /**
+     * Creates a new user timer in the database.
+     * @param currentUser
+     */
+    void createUserTimer(User currentUser);
 }

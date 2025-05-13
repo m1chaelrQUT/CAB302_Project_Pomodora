@@ -8,17 +8,17 @@ public class SqliteConnection {
     private static Connection instance = null;
 
     private SqliteConnection() {
-        String url = "jdbc:sqlite:users.db";
-        try {
-            instance = DriverManager.getConnection(url);
-        } catch (SQLException sqlEx) {
-            System.err.println(sqlEx);
-        }
+        throw new UnsupportedOperationException("Utility class");
     }
 
     public static Connection getInstance() {
         if (instance == null) {
-            new SqliteConnection();
+            String url = "jdbc:sqlite:pomodora.db";
+            try {
+                instance = DriverManager.getConnection(url);
+            } catch (SQLException sqlEx) {
+                sqlEx.printStackTrace(System.err);
+            }
         }
         return instance;
     }
