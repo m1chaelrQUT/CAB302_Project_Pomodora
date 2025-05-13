@@ -1,5 +1,7 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.model.User;
+import com.qut.cab302_project_pomodora.model.SessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +9,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -16,6 +21,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,13 +36,14 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private BorderPane contentPane;
     @FXML private GridPane activeStudyPlansGrid;
     @FXML private GridPane pastStudyPlansGrid;
+    @FXML private ScrollPane scrollPane;
 
     @FXML private StackPane newStudyPlanPopUp;
     @FXML private StackPane studyPlanDetailsPopUp;
 
     private static final int MAX_COLUMNS = 3;
-    private static final double PREF_VBOX_HEIGHT = 350.0;
-    private static final double PREF_VBOX_WIDTH = 550.0;
+    private static final double PREF_VBOX_HEIGHT = 340;
+    private static final double PREF_VBOX_WIDTH = 517;
 
     // Mock Data Structure
     private record StudyPlan(String id, String title, boolean isActive, int tasksRemaining) {}
@@ -55,7 +63,7 @@ public class StudyPlannersController extends ControllerSkeleton {
     // Init
     @Override
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         super.initialize();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -68,7 +76,16 @@ public class StudyPlannersController extends ControllerSkeleton {
         populateStudyPlanGrids();
         Platform.runLater(() -> {
                     navbarController.setNavButtonStyles(studyPlanners.getScene());
+
+                    // Need this here for preventing side scrolling entirely.
+                    scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                        if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.RIGHT) {
+                            event.consume();
+                        }
+                    });
                 });
+
+        iniSession();
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
@@ -270,13 +287,18 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
 
+    /**
+     * Initializes the session by loading the current user from the session manager.
+     * This method is called during the initialization of the controller.
+     *
+     * @throws SQLException if there is an error loading the session from the database
+     * @throws IOException  if there is an error loading the session from the file
+     */
+    public void iniSession() throws SQLException, IOException {
+        // Load the session to check if the user is already logged in
+        SessionManager.loadSession();
 
-
-
-
-
-
-
-
-
+        User currentUser = SessionManager.getCurrentUser();
+        System.out.println("Session loaded!");
+    }
 }
