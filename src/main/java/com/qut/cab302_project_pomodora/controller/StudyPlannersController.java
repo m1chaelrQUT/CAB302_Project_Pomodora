@@ -30,7 +30,7 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private NavbarController navbarController;
 
     @FXML private StackPane studyPlanners;
-    @FXML private BorderPane contentPane;
+    @FXML private StackPane contentPane;
     @FXML private GridPane activeStudyPlansGrid;
     @FXML private GridPane pastStudyPlansGrid;
     @FXML private ScrollPane scrollPane;
