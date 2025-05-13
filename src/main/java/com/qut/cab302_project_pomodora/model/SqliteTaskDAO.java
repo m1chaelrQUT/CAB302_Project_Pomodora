@@ -52,6 +52,11 @@ public class SqliteTaskDAO implements ITaskDAO {
     private static final String UPDATE = "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM tasks WHERE id = ?";
 
+    /**
+     * Retrieves all tasks for a given study plan.
+     * @param studyPlanId The ID of the study plan.
+     * @return List of Task objects associated with the study plan.
+     */
     public List<Task> getTasksByStudyPlan(int studyPlanId) {
         List<Task> tasks = new ArrayList<>();
 
@@ -79,11 +84,11 @@ public class SqliteTaskDAO implements ITaskDAO {
      */
     public int tasksRemaining(int studyPlanId) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM tasks WHERE studyPlanId = ? AND status != 'completed'");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM tasks WHERE studyPlanId = ? AND status != 'COMPLETED'");
             preparedStatement.setInt(1, studyPlanId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                System.out.println("Remaining tasks: " + resultSet.getInt(1));
+                System.out.println("Remaining tasks: " + resultSet.getInt(1) + " for study plan ID: " + studyPlanId);
                 return resultSet.getInt(1);
             }
         } catch (SQLException e) {
@@ -92,6 +97,11 @@ public class SqliteTaskDAO implements ITaskDAO {
         return 0;
     }
 
+    /**
+     * Creates a new task in the database.
+     * @param task The Task object to be created.
+     * @return true if the task was created successfully, false otherwise.
+     */
     public boolean createTask(Task task) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
@@ -118,6 +128,11 @@ public class SqliteTaskDAO implements ITaskDAO {
         return false;
     }
 
+    /**
+     * Updates an existing task in the database.
+     * @param task The Task object with updated information.
+     * @return true if the task was updated successfully, false otherwise.
+     */
     public boolean updateTask(Task task) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
@@ -137,6 +152,11 @@ public class SqliteTaskDAO implements ITaskDAO {
         return false;
     }
 
+    /**
+     * Deletes a task from the database.
+     * @param id The ID of the task to delete.
+     * @return true if the task was deleted successfully, false otherwise.
+     */
     public boolean deleteTask(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
@@ -153,7 +173,12 @@ public class SqliteTaskDAO implements ITaskDAO {
         return false;
     }
 
-    // Helper Methods
+    /**
+     * Maps a ResultSet to a Task object.
+     * @param resultSet The ResultSet containing task data.
+     * @return A Task object populated with data from the ResultSet.
+     * @throws SQLException If an SQL error occurs while processing the ResultSet.
+     */
     private Task mapResultSetToTask(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         int studyPlanId = resultSet.getInt("studyPlanId");
@@ -165,6 +190,11 @@ public class SqliteTaskDAO implements ITaskDAO {
         return task;
     }
 
+    /**
+     * Handles SQL exceptions by printing the error message and stack trace.
+     * @param message The custom error message to display.
+     * @param e The SQLException that occurred.
+     */
     private void handleSQLException(String message, SQLException e) {
         System.err.println(message + ": " + e.getMessage());
         e.printStackTrace();

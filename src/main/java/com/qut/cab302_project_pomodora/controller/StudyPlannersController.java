@@ -104,19 +104,19 @@ public class StudyPlannersController extends ControllerSkeleton {
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
-    /**
-     * Initializes the session by loading the current user from the session manager.
-     * This method is called during the initialization of the controller.
-     * @throws SQLException if there is an error loading the session from the database
-     * @throws IOException  if there is an error loading the session from the file
-     */
-    public void iniSession() throws SQLException, IOException {
-        // Load the session to check if the user is already logged in
-        SessionManager.loadSession();
-
-        User currentUser = SessionManager.getCurrentUser();
-        System.out.println("Session loaded!");
-    }
+//    /**
+//     * Initializes the session by loading the current user from the session manager.
+//     * This method is called during the initialization of the controller.
+//     * @throws SQLException if there is an error loading the session from the database
+//     * @throws IOException  if there is an error loading the session from the file
+//     */
+//    public void iniSession() throws SQLException, IOException {
+//        // Load the session to check if the user is already logged in
+//        SessionManager.loadSession();
+//
+//        User currentUser = SessionManager.getCurrentUser();
+//        System.out.println("Session loaded!");
+//    }
 
 //    private void createMockData() {
 //        mockStudyPlans = new ArrayList<>();
@@ -132,7 +132,6 @@ public class StudyPlannersController extends ControllerSkeleton {
 //    }
 
     private void populateStudyPlanGrids() {
-        //TODO: Create database table for studyplans and connect here. We don't need to keep the current data mockup, though it would prob be easiest to
 
         // Separate plans into active and past (uses list filtering)
         List<StudyPlan> activePlans = studyPlans.stream()
@@ -237,7 +236,6 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         if (plan.isActive()) {
             statusLabel.setText("Tasks Remaining:");
-//            countLabel.setText(String.valueOf(plan.tasksRemaining()));
             countLabel.setText(String.valueOf(taskDAO.tasksRemaining(plan.getId())));
         } else {
             statusLabel.setText("Tasks Complete!");
