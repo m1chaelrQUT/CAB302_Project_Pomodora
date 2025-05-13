@@ -17,8 +17,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        int START_WIDTH = 1920;
-        int START_HEIGHT = 1080;
+        int START_WIDTH = 1067;
+        int START_HEIGHT = 600;
         int MIN_WIDTH = 1067;
         int MIN_HEIGHT = 600;
         String TITLE = "CAB302: Project Pomodora";

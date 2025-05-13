@@ -49,6 +49,7 @@ public class SessionManager {
      * @throws SQLException // SQL exception if there is an error with the database
      * @throws IOException // IO exception if there is an error with the file system
      */
+    //TODO : I dont think this is actually returning or setting anything, so maybe have this return the user
     public static void loadSession() throws SQLException, IOException{
         // Check if the session file exists
         System.out.println("Checking if session file exists...");
