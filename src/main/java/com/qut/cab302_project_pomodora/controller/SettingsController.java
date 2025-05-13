@@ -25,6 +25,8 @@ public class SettingsController extends ControllerSkeleton {
     private StackPane accountSettingsPopUp;
     @FXML
     private StackPane themeSettingsPopUp;
+    @FXML
+    private StackPane notificationSettingsPopUp;
 
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
@@ -86,6 +88,9 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private void openThemeSettings() {themeSettingsPopUp.setVisible(true); }
 
+    @FXML
+    private void openNotificationSettings() {notificationSettingsPopUp.setVisible(true); }
+
     // Close function for the pop-ups/overlays (Stackpanes)
     private void closePopUp(StackPane popUp) {
         popUp.setVisible(false);
@@ -103,6 +108,9 @@ public class SettingsController extends ControllerSkeleton {
 
     @FXML
     private void closeThemeSettings() { closePopUp(themeSettingsPopUp); }
+
+    @FXML
+    private void closeNotificationSettings() { closePopUp(notificationSettingsPopUp); }
 
 
     @Override
