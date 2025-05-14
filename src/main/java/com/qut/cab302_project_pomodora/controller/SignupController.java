@@ -1,12 +1,9 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.*;
-import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.model.*;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;

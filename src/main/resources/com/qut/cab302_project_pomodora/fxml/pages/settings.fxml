@@ -218,7 +218,7 @@
                      </AnchorPane>
                   </AnchorPane>
                </StackPane>
-               <StackPane fx:id="accountSettingsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0">
+               <StackPane fx:id="accountSettingsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
                   <children>
                      <StackPane styleClass="overlay-shadow" />
                      <AnchorPane>
