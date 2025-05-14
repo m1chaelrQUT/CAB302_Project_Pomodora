@@ -2,6 +2,11 @@ package com.qut.cab302_project_pomodora.model;
 
 import java.util.ArrayList;
 
+/**
+ * Mock implementation of the IUserDAO interface for testing purposes.
+ * This class simulates a database of users and provides methods to
+ * add, retrieve, and update users.
+ */
 public class MockUserDAO implements IUserDAO {
     /**
      * A mock database of static Users to be used in testing
@@ -10,6 +15,10 @@ public class MockUserDAO implements IUserDAO {
     public static final ArrayList<User> users = new ArrayList<>();
     private static int autoIncrementId = 0;
 
+    /**
+     * Constructor for the MockUserDAO class.
+     * Initializes the mock database with some sample users.
+     */
     public MockUserDAO() {
         // Initial Users - only if there are none in the Mock DB
 //        if(users.isEmpty()) {
@@ -47,6 +56,11 @@ public class MockUserDAO implements IUserDAO {
         System.out.println("Username Entered: " + userName + " does not exist");
         return null;
     }
+    /**
+     * Check if the userEmail exists
+     * @param userEmail The email of the user to retrieve.
+     * @return the user if they exist, else error
+     */
     @Override
     public User getUserByEmail(String userEmail) {
         for (User user : users) {
@@ -57,6 +71,10 @@ public class MockUserDAO implements IUserDAO {
         System.out.println("Email Entered: " + userEmail + " does not exist");
         return null;
     }
+    /**
+     * Update the user in the database
+     * @param user The user to update.
+     */
     @Override
     public void updateUser(User user) {
         for (int i = 0; i < users.size(); i++) {

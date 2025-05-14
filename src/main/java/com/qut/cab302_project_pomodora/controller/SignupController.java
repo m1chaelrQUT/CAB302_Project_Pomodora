@@ -1,12 +1,9 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.*;
-import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.model.*;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,14 +12,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
 
-// Extend the abstract skeleton
+/**
+ * SignupController is responsible for managing the sign-up view in the application.
+ * It handles user registration and navigation to other views.
+ */
 public class SignupController extends ControllerSkeleton {
 
     // FXML ids specific to the Signup Controller
@@ -54,23 +53,39 @@ public class SignupController extends ControllerSkeleton {
     private IUserDAO userDAO;
     private ITimerDAO timerDAO;
 
+    /**
+     * Constructor for SignupController.
+     * Initializes the userDAO and timerDAO to interact with the database.
+     */
     public SignupController() {
         userDAO = new SqliteUserDAO();
         timerDAO = new SqliteTimerDAO();
     }
 
-    // Implement the abstract methods to provide the required containers : This is for common scaling
+    /**
+     * Gets the root pane of the sign-up view.
+     * @return the root pane of the sign-up view.
+     */
     @Override
     protected StackPane getRootPane() {
         return signUp;
     }
 
+    /**
+     * Gets the content pane of the sign-up view.
+     * @return the content pane of the sign-up view.
+     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
-    // Init
+    /**
+     * Initializes the sign-up view.
+     * Sets the preferred size of the content pane and initializes the theme.
+     * @throws SQLException if there is an error with the database connection.
+     * @throws IOException if there is an error with the FXML file.
+     */
     @Override
     @FXML
     public void initialize() throws SQLException, IOException {
@@ -84,7 +99,11 @@ public class SignupController extends ControllerSkeleton {
         System.out.println("SignupController Initialization completed.");
     }
 
-    // Sign-Up
+
+    /**
+     * Handles the sign-up process when the sign-up button is clicked.
+     * Validates user input and creates a new user if the input is valid.
+     */
     @FXML
     private void handleSignUp() {
         // Get sign in inputs
@@ -136,17 +155,28 @@ public class SignupController extends ControllerSkeleton {
         }
     }
 
+    /**
+     * Go to the sign-in page when the "Already have an account?" button is clicked.
+     * This method is called when the button is clicked.
+     * @throws IOException if there is an error with the FXML file.
+     */
     @FXML
     private void goToSignIn() throws IOException {
         System.out.println("SignupController goToSignup");
         navigateTo("signin");
     }
 
+    /**
+     * shows the success dialog when the sign-up is successful.
+     */
     @FXML
     private void showSuccessDialog() {
         successDialog.setVisible(true);
     }
 
+    /**
+     * closes the success dialog when the "Sign In" button is clicked.
+     */
     @FXML
     private void closeSuccessDialog() {
         successDialog.setVisible(false);
@@ -155,6 +185,12 @@ public class SignupController extends ControllerSkeleton {
         passwordField.clear();
     }
 
+    /**
+     * Handles the sign-in process when the "Sign In" button is clicked.
+     * Navigates to the home page after successful sign-in.
+     * @throws SQLException if there is an error with the database connection.
+     * @throws IOException if there is an error with the FXML file.
+     */
     @FXML
     private void handleSignIn() throws SQLException, IOException {
         String userNameInput = usernameField.getText();
@@ -164,6 +200,10 @@ public class SignupController extends ControllerSkeleton {
         navigateTo("studyplanners");
     }
 
+    /**
+     * get support when the "Get Support" button is clicked.
+     * This method is called when the button is clicked.
+     */
     @FXML
     private void getSupport() {
         try {
