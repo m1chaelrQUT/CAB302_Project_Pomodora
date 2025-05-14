@@ -39,6 +39,12 @@
                 <Font size="28.0" />
             </font>
         </Button>
+     <Line endX="115.0" startX="-100.0"/>
+        <Button fx:id="studyPlanTimer" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="277.0" styleClass="button-primary" text="Study Timer">
+            <font>
+                <Font size="28.0" />
+            </font>
+        </Button>
      <Line endX="115.0" startX="-100.0" />
         <Button fx:id="settings" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#navigateToAction" prefHeight="51.0" prefWidth="273.0" styleClass="button-primary" text="Preferences">
             <font>
