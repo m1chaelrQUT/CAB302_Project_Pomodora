@@ -47,7 +47,7 @@ public class SqliteTaskDAO implements ITaskDAO {
     }
 
     // SQL Queries
-    private static final String SELECT_BY_STUDY_PLAN = "SELECT * FROM tasks WHERE study_plan_id = ?";
+    private static final String SELECT_BY_STUDY_PLAN = "SELECT * FROM tasks WHERE studyPlanId = ?";
     private static final String INSERT = "INSERT INTO tasks(studyPlanId, taskNumber, title, description, status) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM tasks WHERE id = ?";
@@ -64,7 +64,7 @@ public class SqliteTaskDAO implements ITaskDAO {
             while (resultSet.next()) {
                 tasks.add(mapResultSetToTask(resultSet));
             }
-            System.out.println("Tasks fetched successfully for study plan ID: " + studyPlanId);
+            //System.out.println("Tasks fetched successfully for study plan ID: " + studyPlanId);
             return tasks;
         } catch (SQLException e) {
             handleSQLException("Error fetching tasks by study plan: " + studyPlanId, e);

@@ -19,8 +19,8 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane fx:id="studyPlanners" styleClass="primitives" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.StudyPlannersController">
-   <StackPane styleClass="theme">
-      <BorderPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
+   <StackPane fx:id="contentPane" styleClass="theme">
+      <BorderPane prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
          <left>
             <fx:include fx:id="navbar" source="../components/side-navbar.fxml" />
          </left>

@@ -1,5 +1,6 @@
 package com.qut.cab302_project_pomodora.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,13 +13,16 @@ public class StudyPlan
     private String description;
     private String status;
     private List<Task> tasks;
-    private int participantCount;
 
     public  StudyPlan()
-    {}
-
-    public StudyPlan(int userId,String title,String description,String status)
     {
+        this.tasks = new ArrayList<>();
+    }
+
+    public StudyPlan(int id, int userId,String title,String description,String status)
+    {
+        this();
+        this.id = id;
         this.userId = userId;
         this.title = title;
         this.description = description;
@@ -75,13 +79,6 @@ public class StudyPlan
         this.tasks = tasks;
     }
 
-    public int getParticipantCount() {
-        return participantCount;
-    }
-
-    public void setParticipantCount(int participantCount) {
-        this.participantCount = participantCount;
-    }
 
     @Override
     public String toString() {
@@ -90,7 +87,6 @@ public class StudyPlan
                 ", userId=" + userId +
                 ", title='" + title + '\'' +
                 ", status='" + status + '\'' +
-                ", participantCount=" + participantCount +
                 '}';
     }
 

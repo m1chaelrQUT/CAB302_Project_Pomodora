@@ -1,7 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.User;
-import com.qut.cab302_project_pomodora.model.SessionManager;
+import com.qut.cab302_project_pomodora.model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,7 +32,7 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private NavbarController navbarController;
 
     @FXML private StackPane studyPlanners;
-    @FXML private BorderPane contentPane;
+    @FXML private StackPane contentPane;
     @FXML private GridPane activeStudyPlansGrid;
     @FXML private GridPane pastStudyPlansGrid;
     @FXML private ScrollPane scrollPane;
@@ -109,6 +108,7 @@ public class StudyPlannersController extends ControllerSkeleton {
                 });
 
         iniSession();
+        //System.out.println("StudyPlannersController" + studyPlans.size() + " StudyPlans: " + studyPlans);
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
@@ -173,7 +173,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Check if no past plans exist, add filler if so
         if (plans.isEmpty() && !isActiveGrid) {
-            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(currentUser.getId(), "No past plans", "No plans for this user", "INACTIVE"));
+            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(0, currentUser.getId(), "No past plans", "No plans for this user", "ACTIVE"));
             grid.add(noPastPlans, col, row);
         }
 
