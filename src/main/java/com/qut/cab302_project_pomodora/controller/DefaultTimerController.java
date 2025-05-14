@@ -20,11 +20,18 @@ import javafx.scene.shape.Circle;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * DefaultTimerController is responsible for managing the default timer functionality
+ * in the application. It handles user interactions, updates the timer display,
+ * and manages the timer state (running, paused, stopped).
+ */
 public class DefaultTimerController extends ControllerSkeleton {
 
+    // Constants for design dimensions
     @FXML private StackPane defaultTimer;
     @FXML private Region contentPane;
 
+    // Buttons and labels for the timer
     @FXML
     private Button startPauseButton, stopButton, resetButton, nextButton;
     @FXML
@@ -38,19 +45,27 @@ public class DefaultTimerController extends ControllerSkeleton {
     private ITimerDAO timerDAO;
     private IUserDAO userDAO;
 
+    /**
+     * Constructor for DefaultTimerController.
+     * Initializes the timer and user DAO interfaces.
+     */
     public DefaultTimerController() {
         timerDAO = new SqliteTimerDAO();
         userDAO = new SqliteUserDAO();
     }
 
 
+    /// FXML components
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
+
+    // Timer variables
     private Timeline timeline;
     private int minutes;
     private int seconds;
     private boolean isRunning = false;
 
+    // Timer settings
     private int pomodoroCount;
     private boolean isWorkSession;
     private int WORK_DURATION;
@@ -58,16 +73,32 @@ public class DefaultTimerController extends ControllerSkeleton {
     private int LONG_BREAK;
 
 
+    /**
+     * Gets the design width of the timer.
+     * @return The design width of the timer.
+     */
     @Override
     protected StackPane getRootPane() {
         return defaultTimer;
     }
 
+    /**
+     * Gets the content pane of the timer.
+     * @return The content pane of the timer.
+     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
+    /**
+     * Initializes the timer controller.
+     * This method is called when the controller is loaded.
+     * It sets up the initial state of the timer and binds event handlers to buttons.
+     *
+     * @throws SQLException if there is an error loading the session from the database
+     * @throws IOException  if there is an error loading the session from the file
+     */
     @Override
     public void initialize() throws SQLException, IOException {
         super.initialize();
@@ -87,21 +118,25 @@ public class DefaultTimerController extends ControllerSkeleton {
         minutes = WORK_DURATION / 60;
         seconds = WORK_DURATION % 60;
 
+        // Set the initial styles for the navbar
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
+        // Set the initial styles for the navbar
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
+        // Set the initial styles for the timer circle
         Platform.runLater(() -> {
             navbarController.setNavButtonStyles(defaultTimer.getScene());
         });
 
+        // Set the initial timer display
         startPauseButton.setOnAction(event -> handleStartPause());
         stopButton.setOnAction(event -> handleStop());
         resetButton.setOnAction(event -> handleReset());
         nextButton.setOnAction(event -> handleNextPomodoro());
 
-
+        // Set the initial timer display
         updateTimerDisplay();
 
     }
@@ -121,6 +156,11 @@ public class DefaultTimerController extends ControllerSkeleton {
         System.out.println("Session loaded!");
     }
 
+    /**
+     * Handles the start/pause button action.
+     * This method is called when the start/pause button is clicked.
+     * It starts or pauses the timer based on its current state.
+     */
     private void handleStartPause() {
         if (isRunning) {
             pauseTimer();
@@ -129,6 +169,11 @@ public class DefaultTimerController extends ControllerSkeleton {
         }
     }
 
+    /**
+     * Starts the timer.
+     * This method is called when the start button is clicked.
+     * It updates the button text and starts the timer animation.
+     */
     private void startTimer() {
         isRunning = true;
         startPauseButton.setText("⏸");
@@ -140,6 +185,11 @@ public class DefaultTimerController extends ControllerSkeleton {
         timeline.play();
     }
 
+    /**
+     * Pauses the timer.
+     * This method is called when the pause button is clicked.
+     * It updates the button text and pauses the timer animation.
+     */
     private void pauseTimer() {
         isRunning = false;
         startPauseButton.setText("▶");
@@ -149,6 +199,11 @@ public class DefaultTimerController extends ControllerSkeleton {
         }
     }
 
+    /**
+     * Handles the stop button action.
+     * This method is called when the stop button is clicked.
+     * It stops the timer and resets it to the initial state.
+     */
     private void handleStop() {
         if (timeline != null) {
             timeline.stop();
@@ -158,10 +213,20 @@ public class DefaultTimerController extends ControllerSkeleton {
         resetTimer();
     }
 
+    /**
+     * Handles the reset button action.
+     * This method is called when the reset button is clicked.
+     * It resets the timer to the initial state.
+     */
     private void handleReset() {
         resetTimer();
     }
 
+    /**
+     * Handles the next button action.
+     * This method is called when the next button is clicked.
+     * It updates the timer to the next Pomodoro session.
+     */
     private void handleNextPomodoro() {
         if (isWorkSession) {
             pomodoroCount++;
@@ -195,6 +260,11 @@ public class DefaultTimerController extends ControllerSkeleton {
         updateTimerDisplay();
     }
 
+    /**
+     * Resets the timer to its initial state.
+     * This method is called when the reset button is clicked.
+     * It stops the timer and resets the timer values.
+     */
     private void resetTimer() {
         if (timeline != null) {
             timeline.stop();
@@ -210,6 +280,11 @@ public class DefaultTimerController extends ControllerSkeleton {
         updateTimerDisplay();
     }
 
+    /**
+     * Updates the timer display.
+     * This method is called every second to update the timer display.
+     * It decrements the timer values and updates the display accordingly.
+     */
     private void updateTimer() {
         if (seconds == 0) {
             if (minutes == 0) {
@@ -229,6 +304,11 @@ public class DefaultTimerController extends ControllerSkeleton {
         updateTimerDisplay();
     }
 
+    /**
+     * Handles the end of the timer.
+     * This method is called when the timer reaches zero.
+     * It updates the timer values and starts the next session.
+     */
     private void handleTimerEnd() {
         if (isWorkSession) {
             pomodoroCount++;
@@ -248,6 +328,10 @@ public class DefaultTimerController extends ControllerSkeleton {
         startTimer();
     }
 
+    /**
+     * Updates the session style based on the current session type.
+     * This method is called to change the color of the timer circle based on the session type.
+     */
     private void updateSessionStyle() {
         if (timerCircle != null) {
             if (isWorkSession) {
@@ -259,6 +343,11 @@ public class DefaultTimerController extends ControllerSkeleton {
             }
         }
     }
+
+    /**
+     * Shows a completion message when the Pomodoro cycle is complete.
+     * This method is called to display a message when the user completes a full Pomodoro cycle.
+     */
     private void showCompletionMessage() {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setTitle("Pomodoro Complete!");
@@ -267,10 +356,20 @@ public class DefaultTimerController extends ControllerSkeleton {
         alert.showAndWait();
     }
 
+    /**
+     * Updates the timer display with the current time.
+     * This method is called to update the timer display with the current time.
+     */
     private void updateTimerDisplay() {
         timerText.setText(String.format("%02d:%02d", minutes, seconds));
     }
 
+    /**
+     * Sets the scene for the timer controller.
+     * This method is called to set the scene for the timer controller.
+     *
+     * @param scene The scene to set for the timer controller.
+     */
     public void setScene(Scene scene) {
         Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
         ThemeManager.getInstance().applyTheme(scene, Theme.LIGHT);

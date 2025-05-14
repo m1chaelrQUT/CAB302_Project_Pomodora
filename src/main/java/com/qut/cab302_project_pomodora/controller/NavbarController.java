@@ -22,17 +22,32 @@ import java.sql.SQLException;
 
 import java.util.Objects;
 
+/**
+ * NavbarController is responsible for managing the navigation bar in the application.
+ * It handles navigation between different scenes and manages the visibility of the navbar.
+ */
 public class NavbarController {
 
+    // FXML elements
     @FXML private AnchorPane navBarPane;
     @FXML private Button studyButton;
     @FXML private VBox navButtonList;
 
+    /**
+     * Toggles the visibility of the navbar.
+     *@param event The event that triggered the initialization.
+     */
     @FXML
     private void toggleNavbar(ActionEvent event) {
         System.out.println("toggleNavbar");
+        //TODO: Implement toggleNavbar logic
     }
 
+
+    /**
+     * Navigates to the specified scene when a button is clicked.
+     * @param event The event that triggered the navigation.
+     */
     @FXML
     private void navigateToAction(ActionEvent event) throws IOException {
 
@@ -46,6 +61,10 @@ public class NavbarController {
         navigateTo(buttonID);
     }
 
+    /**
+     * Navigates to the specified scene.
+     * @param toSceneName The name of the scene to navigate to.
+     */
     private void navigateTo(String toSceneName) throws IOException {
         Scene currentScene = navBarPane.getScene();
         Stage stage = (Stage) currentScene.getWindow();
@@ -56,6 +75,10 @@ public class NavbarController {
         stage.setScene(scene);
     }
 
+    /**
+     * Logs out the user and ends the session.
+     * @param event The event that triggered the logout.
+     */
     @FXML
     private void logOut(ActionEvent event) throws IOException, SQLException {
         // Log out the user and end the session
@@ -64,6 +87,10 @@ public class NavbarController {
         navigateTo("signin");
     }
 
+    /**
+     * Sets the theme of the navbar.
+     * @param scene The current scene.
+     */
     public void setNavButtonStyles(Scene scene) {
         System.out.println("setNavButtonStyles");
         for (Node button : navButtonList.getChildren()) {

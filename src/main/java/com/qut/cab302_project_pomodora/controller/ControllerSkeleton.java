@@ -116,6 +116,11 @@ public abstract class ControllerSkeleton {
         setupScaling(scene);
     }
 
+    /**
+     * Changes the theme of the current scene.
+     * This method should be called when the user selects a new theme from the UI.
+     * @param newTheme The new Theme to apply.
+     */
     protected void changeTheme(Theme newTheme) {
         System.out.println("Changing theme to " + newTheme);
         Scene scene = getCurrentScene();
@@ -140,6 +145,11 @@ public abstract class ControllerSkeleton {
     }
 
 
+    /**
+     * Adds listeners to the scene's width and height properties to handle scaling.
+     * These listeners will update the scale of the content pane when the scene size changes.
+     * @param scene The Scene object.
+     */
     private void addScalingListeners(Scene scene) {
         Region contentPane = getContentPane();
         if (contentPane == null) {
@@ -164,6 +174,11 @@ public abstract class ControllerSkeleton {
         System.out.println("Added scaling listeners to Scene hash: " + scene.hashCode());
     }
 
+    /**
+     * Removes the scaling listeners from the scene's width and height properties.
+     * This is called when the scene is removed or changed.
+     * @param scene The Scene object.
+     */
     private void removeScalingListeners(Scene scene) {
         if (scene == null) return;
         if (widthListener != null) {
@@ -176,6 +191,11 @@ public abstract class ControllerSkeleton {
         // System.out.println("Removed scaling listeners from Scene hash: " + scene.hashCode());
     }
 
+    /**
+     * Updates the scale of the content pane based on the current scene size.
+     * This method is called whenever the scene's width or height changes.
+     * @param scene The Scene object.
+     */
     private void updateScale(Scene scene) {
         Region contentPane = getContentPane();
         if (scene == null || contentPane == null) {
@@ -213,6 +233,10 @@ public abstract class ControllerSkeleton {
         return (root != null) ? root.getScene() : null;
     }
 
+    /**
+     * Utility method to get the current user from the session manager.
+     * @return The current User object, or null if not logged in.
+     */
     protected void navigateTo(String toSceneName) throws IOException {
         Scene currentScene = getCurrentScene();
         Stage stage = (Stage) currentScene.getWindow();

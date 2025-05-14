@@ -46,8 +46,8 @@ public class SqliteTimerDAO  implements ITimerDAO {
 
     /**
      * Updates the user timers with the given values.
-     * @param user
-     * @param timer
+     * @param user The user to update the timer for.
+     * @param timer The timer object containing the new values.
      */
     @Override
     public void updateUserTimers(User user, Timer timer) {
