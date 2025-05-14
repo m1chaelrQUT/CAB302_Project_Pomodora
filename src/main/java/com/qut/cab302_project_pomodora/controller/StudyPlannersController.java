@@ -1,14 +1,14 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.*;
+import com.qut.cab302_project_pomodora.model.User;
+import com.qut.cab302_project_pomodora.model.SessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -30,33 +30,22 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private NavbarController navbarController;
 
     @FXML private StackPane studyPlanners;
-    @FXML private BorderPane contentPane;
+    @FXML private StackPane contentPane;
     @FXML private GridPane activeStudyPlansGrid;
     @FXML private GridPane pastStudyPlansGrid;
     @FXML private ScrollPane scrollPane;
 
-    // DAO interfaces
-    private IStudyPlanDAO studyPlanDAO;
-    private IUserDAO userDAO;
-    private ITaskDAO taskDAO;
-
-    // Current user object
-    private User currentUser;
-
-    // Study plans list
-    private List<StudyPlan> studyPlans;
-
-    public StudyPlannersController(){
-        // Initialize the DAO interfaces
-        studyPlanDAO = new SqliteStudyPlanDAO();
-        userDAO = new SqliteUserDAO();
-        taskDAO = new SqliteTaskDAO();
-    }
-
+    @FXML private StackPane newStudyPlanPopUp;
+    @FXML private StackPane studyPlanDetailsPopUp;
 
     private static final int MAX_COLUMNS = 3;
     private static final double PREF_VBOX_HEIGHT = 340;
     private static final double PREF_VBOX_WIDTH = 517;
+
+    // Mock Data Structure
+    private record StudyPlan(String id, String title, boolean isActive, int tasksRemaining) {}
+
+    private List<StudyPlan> mockStudyPlans;
 
     @Override
     protected StackPane getRootPane() {
@@ -73,21 +62,12 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML
     public void initialize() throws SQLException, IOException {
         super.initialize();
-        currentUser = SessionManager.getCurrentUser();
-
-        if(currentUser == null) {
-            throw new IllegalStateException("Current user is null. Cannot load study plans.");
-        }
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-//        createMockData();
-        // Populate the study plans list
-
-
-        studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
+        createMockData();
 
         //-----------
         populateStudyPlanGrids();
@@ -101,44 +81,33 @@ public class StudyPlannersController extends ControllerSkeleton {
                         }
                     });
                 });
+
+        iniSession();
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
-//    /**
-//     * Initializes the session by loading the current user from the session manager.
-//     * This method is called during the initialization of the controller.
-//     * @throws SQLException if there is an error loading the session from the database
-//     * @throws IOException  if there is an error loading the session from the file
-//     */
-//    public void iniSession() throws SQLException, IOException {
-//        // Load the session to check if the user is already logged in
-//        SessionManager.loadSession();
-//
-//        User currentUser = SessionManager.getCurrentUser();
-//        System.out.println("Session loaded!");
-//    }
-
-//    private void createMockData() {
-//        mockStudyPlans = new ArrayList<>();
-//        mockStudyPlans.add(new StudyPlan("plan-cs-proj", "CS Project", true, 3));
-//        mockStudyPlans.add(new StudyPlan("plan-theo-essay", "Theology Essay", true, 5));
-//        mockStudyPlans.add(new StudyPlan("plan-math-hw", "Math Homework", true, 1));
-//        mockStudyPlans.add(new StudyPlan("plan-chem-lab", "Chemistry Lab", true, 8));
-//        mockStudyPlans.add(new StudyPlan("plan-cs-exam-new", "CS Exam 2", true, 100));// Example for wrapping
-//        mockStudyPlans.add(new StudyPlan("plan-cs-exam", "CS Exam", false, 0));
-//        mockStudyPlans.add(new StudyPlan("plan-bio-report", "Biology Report", false, 0));
-//        mockStudyPlans.add(new StudyPlan("plan-phys-test", "Physics Data Test", false, 0));
-//        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
-//    }
+    private void createMockData() {
+        mockStudyPlans = new ArrayList<>();
+        mockStudyPlans.add(new StudyPlan("plan-cs-proj", "CS Project", true, 3));
+        mockStudyPlans.add(new StudyPlan("plan-theo-essay", "Theology Essay", true, 5));
+        mockStudyPlans.add(new StudyPlan("plan-math-hw", "Math Homework", true, 1));
+        mockStudyPlans.add(new StudyPlan("plan-chem-lab", "Chemistry Lab", true, 8));
+        mockStudyPlans.add(new StudyPlan("plan-cs-exam-new", "CS Exam 2", true, 100));// Example for wrapping
+        mockStudyPlans.add(new StudyPlan("plan-cs-exam", "CS Exam", false, 0));
+        mockStudyPlans.add(new StudyPlan("plan-bio-report", "Biology Report", false, 0));
+        mockStudyPlans.add(new StudyPlan("plan-phys-test", "Physics Data Test", false, 0));
+        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
+    }
 
     private void populateStudyPlanGrids() {
+        //TODO: Create database table for studyplans and connect here. We don't need to keep the current data mockup, though it would prob be easiest to
 
         // Separate plans into active and past (uses list filtering)
-        List<StudyPlan> activePlans = studyPlans.stream()
+        List<StudyPlan> activePlans = mockStudyPlans.stream()
                 .filter(StudyPlan::isActive)
                 .collect(Collectors.toList());
 
-        List<StudyPlan> pastPlans = studyPlans.stream()
+        List<StudyPlan> pastPlans = mockStudyPlans.stream()
                 .filter(plan -> !plan.isActive())
                 .collect(Collectors.toList());
 
@@ -164,7 +133,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Check if no past plans exist, add filler if so
         if (plans.isEmpty() && !isActiveGrid) {
-            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(currentUser.getId(), "No past plans", "No plans for this user", "INACTIVE"));
+            VBox noPastPlans = createStudyPlanVBox(new StudyPlan("plan-past-empty", "No past plans", false, 0));
             grid.add(noPastPlans, col, row);
         }
 
@@ -199,7 +168,7 @@ public class StudyPlannersController extends ControllerSkeleton {
         vbox.setSpacing(10);
 
         // Title Label
-        Label titleLabel = new Label(plan.getTitle());
+        Label titleLabel = new Label(plan.title());
         titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setPrefHeight(85.0);
         titleLabel.setPrefWidth(504.0);
@@ -236,7 +205,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         if (plan.isActive()) {
             statusLabel.setText("Tasks Remaining:");
-            countLabel.setText(String.valueOf(taskDAO.tasksRemaining(plan.getId())));
+            countLabel.setText(String.valueOf(plan.tasksRemaining()));
         } else {
             statusLabel.setText("Tasks Complete!");
             countLabel.setText(":)");
@@ -247,7 +216,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
         // store the plan ID
-        vbox.setUserData(plan.getId());
+        vbox.setUserData(plan.id());
 
         // on mouse clicked
         vbox.setOnMouseClicked(this::goToStudyPlan);
@@ -257,6 +226,12 @@ public class StudyPlannersController extends ControllerSkeleton {
         //TODO: Properly add styleclasses
     }
 
+
+    private void openPopUp(StackPane popUp) {popUp.setVisible(true);}
+    private void closePopUp(StackPane popUp) {popUp.setVisible(false);}
+
+    @FXML private Button resumeStudyPlanButton;
+    @FXML private Button closeStudyPlanDetailsPopUpButton;
 
     @FXML
     private void goToStudyPlan(MouseEvent event) {
@@ -270,15 +245,104 @@ public class StudyPlannersController extends ControllerSkeleton {
             }
         }
         System.out.println("goToStudyPlan triggered for plan ID: " + planId);
-        // TODO: Open plan summary overlay
+        openPopUp(studyPlanDetailsPopUp);
+        // TODO: loadTasks(*respective user's selected studyplan's task list to go here*);
+
         // TODO: Create actual page nav method and refactor this to make sense
     }
+
+    // Box within the studyPlanDetails pop-up that will actually show the tasks
+    @FXML private VBox taskListVBox;
+
+    // This has been made with some mock Object types and methods
+    // Will be changed when linking to study plan class
+    /*
+    @FXML
+    private void loadTasks(List<Task> tasks) {
+        taskListVBox.getChildren().clear();
+
+        for (Task task : tasks) {
+            // Create a new box per task
+            VBox taskBox = new VBox(5);
+            taskBox.setAlignment(Pos.TOP_LEFT);
+
+            // Box for the task title
+            HBox titleRow = new HBox();
+            titleRow.setAlignment(Pos.CENTER_LEFT);
+            titleRow.setSpacing(10);
+            titleRow.setPadding(new Insets(5,5,5,5));
+            Label titleLabel = new Label(task.getTitle());
+
+            // Box for the task's checkbox
+            HBox checkboxRow = new HBox();
+            CheckBox taskCheckBox = new CheckBox();
+            HBox.setHgrow(checkboxRow, Priority.ALWAYS);
+
+            // Puts the task's title and checkbox in the same row
+            titleRow.getChildren().addAll(titleLabel, checkboxRow,taskCheckBox);
+
+            // Box for checkpoints (in bullet format) within task box
+            VBox checkpointsBox = new VBox(3);
+            checkpointsBox.setPadding(new Insets(0,0,0,20));
+
+            for (String checkpoint : task.getCheckpoints()) {
+                Label checkpointLabel = new Label("•" + checkpoint);
+                checkpointsBox.getChildren().add(checkpointLabel);
+            }
+
+            taskBox.getChildren().addAll(titleRow,checkpointsBox);
+            taskListVBox.getChildren().add(taskBox);
+
+        }
+    }
+    */
+
+    @FXML
+    private void resumeStudyPlan() {
+        // TODO: Go to specific study plan's timer page
+    }
+
+    @FXML
+    private void closeStudyPlanDetailsPopUp(){
+        closePopUp(studyPlanDetailsPopUp);
+    }
+
+    @FXML private TextArea promptEntryTextArea;
+    @FXML private TextField studyHoursEntryTextField;
+    @FXML private Button generateStudyPlanButton;
+    @FXML private Button closeCreateStudyPlanPopUpButton;
 
     @FXML
     private void createNewStudyPlan(ActionEvent event) {
         System.out.println("createNewStudyPlan button clicked");
-        // TODO: Open create plan overlay
+        openPopUp(newStudyPlanPopUp);
+    }
+
+    @FXML
+    private void generateStudyPlan(){
+        /* TODO: take input from 'promptEntryTextArea' and 'studyHoursEntryTextField
+            to send to API */
+    }
+
+    @FXML
+    private void closeCreateStudyPlanPopUp(){
+        closePopUp(newStudyPlanPopUp);
     }
 
 
+
+    /**
+     * Initializes the session by loading the current user from the session manager.
+     * This method is called during the initialization of the controller.
+     *
+     * @throws SQLException if there is an error loading the session from the database
+     * @throws IOException  if there is an error loading the session from the file
+     */
+    public void iniSession() throws SQLException, IOException {
+        // Load the session to check if the user is already logged in
+        SessionManager.loadSession();
+
+        User currentUser = SessionManager.getCurrentUser();
+        System.out.println("Session loaded!");
+    }
 }

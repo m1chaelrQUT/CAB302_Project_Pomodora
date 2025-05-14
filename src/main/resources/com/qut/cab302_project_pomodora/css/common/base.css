@@ -205,4 +205,14 @@
     -fx-padding: 10px 20px;
 }
 
+.bar-chart .chart-content .chart-plot-background {
+    -fx-background-color: transparent;
+}
 
+.chart-bar {
+    -fx-bar-fill: -fx-surface-invert;
+}
+
+.text-area .content {
+    -fx-background-color: -fx-surface-primary;
+}

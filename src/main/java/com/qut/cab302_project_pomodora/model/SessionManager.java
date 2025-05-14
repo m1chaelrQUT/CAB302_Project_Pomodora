@@ -109,9 +109,9 @@ public class SessionManager {
     }
 
     /**
-     * Getters & Setters
+     * Gets the current user.
+     * @return The current user, or null if no user is logged in.
      */
-
     public static User getCurrentUser() {
         // Check if the current user is not null and return null, returning currentUser = null causes an error in the controller
         if (currentUser == null) {
@@ -124,6 +124,10 @@ public class SessionManager {
         }
     }
 
+    /**
+     * Sets the current user.
+     * @param user The user to set as the current user.
+     */
     public static void setCurrentUser(User user) {
         currentUser = user;
     }
