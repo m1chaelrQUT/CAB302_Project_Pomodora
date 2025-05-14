@@ -235,7 +235,6 @@ public abstract class ControllerSkeleton {
 
     /**
      * Utility method to get the current user from the session manager.
-     * @return The current User object, or null if not logged in.
      */
     protected void navigateTo(String toSceneName) throws IOException {
         Scene currentScene = getCurrentScene();
