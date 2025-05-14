@@ -1,5 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.model.*;
 import javafx.application.Platform;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import com.qut.cab302_project_pomodora.config.Theme;
@@ -31,19 +32,31 @@ public class DefaultTimerController extends ControllerSkeleton {
     @FXML
     private Circle timerCircle;
 
+    private User currentUser;
+
+    // DAO interfaces
+    private ITimerDAO timerDAO;
+    private IUserDAO userDAO;
+
+    public DefaultTimerController() {
+        timerDAO = new SqliteTimerDAO();
+        userDAO = new SqliteUserDAO();
+    }
+
 
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
     private Timeline timeline;
-    private int minutes = 25;  // Default work duration (Pomodoro technique)
-    private int seconds = 0;
+    private int minutes;
+    private int seconds;
     private boolean isRunning = false;
 
-    private int pomodoroCount = 0;
-    private final int WORK_DURATION = 25;
-    private final int SHORT_BREAK = 5;
-    private final int LONG_BREAK = 15; // You can make this customizable
-    private boolean isWorkSession = true;
+    private int pomodoroCount;
+    private boolean isWorkSession;
+    private int WORK_DURATION;
+    private int SHORT_BREAK;
+    private int LONG_BREAK;
+
 
     @Override
     protected StackPane getRootPane() {
@@ -58,6 +71,21 @@ public class DefaultTimerController extends ControllerSkeleton {
     @Override
     public void initialize() throws SQLException, IOException {
         super.initialize();
+        iniSession();
+
+        // Initialize the timer values for the current user
+        Timer userTimer = timerDAO.getUserTimer(currentUser);
+
+        // Set the user timer values
+        pomodoroCount = userTimer.getLongBreakAfter();
+        WORK_DURATION = userTimer.getWorkDuration();
+        SHORT_BREAK = userTimer.getShortBreakDuration();
+        LONG_BREAK = userTimer.getLongBreakDuration();
+        isWorkSession = true;
+
+        // Set the initial timer values
+        minutes = WORK_DURATION;
+        seconds = 0;
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
@@ -73,9 +101,26 @@ public class DefaultTimerController extends ControllerSkeleton {
         resetButton.setOnAction(event -> handleReset());
         nextButton.setOnAction(event -> handleNextPomodoro());
 
+
         updateTimerDisplay();
 
     }
+
+    /**
+     * Initializes the session by loading the current user from the session manager.
+     * This method is called during the initialization of the controller.
+     *
+     * @throws SQLException if there is an error loading the session from the database
+     * @throws IOException  if there is an error loading the session from the file
+     */
+    public void iniSession() throws SQLException, IOException {
+        // Load the session to check if the user is already logged in
+        SessionManager.loadSession();
+
+        currentUser = SessionManager.getCurrentUser();
+        System.out.println("Session loaded!");
+    }
+
     private void handleStartPause() {
         if (isRunning) {
             pauseTimer();

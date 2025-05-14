@@ -135,7 +135,6 @@ public class SettingsController extends ControllerSkeleton {
         System.out.println("SettingsController Initialization completed.");
     }
 
-    // TODO: Add the iniSession() method to load the session and get the user
     /**
      * Initializes the session by loading the current user from the session manager.
      * This method is called during the initialization of the controller.
