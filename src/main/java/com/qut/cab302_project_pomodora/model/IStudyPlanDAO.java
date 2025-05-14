@@ -49,4 +49,11 @@ public interface IStudyPlanDAO {
      * @return A list of study plans with the specified status.
      */
     List<StudyPlan> getStudyPlansByStatus(int userId, String status);
+
+    /**
+     * Retrieves a study plan from the database by its Title.
+     * @param title The Title of the study plan to retrieve.
+     * @return The study plan with the specified Title, or null if not found.
+     */
+    StudyPlan getStudyPlanByTitle(String title);
 }

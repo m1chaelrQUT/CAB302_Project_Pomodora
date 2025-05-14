@@ -52,8 +52,8 @@ public class SqliteTaskDAO implements ITaskDAO {
     private static final String UPDATE = "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM tasks WHERE id = ?";
 
-    public List<Task> getTasksByStudyPlan(int studyPlanId) {
-        List<Task> tasks = new ArrayList<>();
+    public List<StudyTask> getTasksByStudyPlan(int studyPlanId) {
+        List<StudyTask> studyTasks = new ArrayList<>();
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_STUDY_PLAN);
@@ -62,10 +62,10 @@ public class SqliteTaskDAO implements ITaskDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                tasks.add(mapResultSetToTask(resultSet));
+                studyTasks.add(mapResultSetToTask(resultSet));
             }
             //System.out.println("Tasks fetched successfully for study plan ID: " + studyPlanId);
-            return tasks;
+            return studyTasks;
         } catch (SQLException e) {
             handleSQLException("Error fetching tasks by study plan: " + studyPlanId, e);
         }
@@ -92,24 +92,24 @@ public class SqliteTaskDAO implements ITaskDAO {
         return 0;
     }
 
-    public boolean createTask(Task task) {
+    public boolean createTask(StudyTask studyTask) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.setInt(1, task.getStudyPlanId());
-            preparedStatement.setInt(2, task.getTaskNumber());
-            preparedStatement.setString(3, task.getTitle());
-            preparedStatement.setString(4, task.getDescription());
-            preparedStatement.setString(5, task.getStatus());
+            preparedStatement.setInt(1, studyTask.getStudyPlanId());
+            preparedStatement.setInt(2, studyTask.getTaskNumber());
+            preparedStatement.setString(3, studyTask.getTitle());
+            preparedStatement.setString(4, studyTask.getDescription());
+            preparedStatement.setString(5, studyTask.getStatus());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                     if (resultSet.next()) {
-                        task.setId(resultSet.getInt(1));
+                        studyTask.setId(resultSet.getInt(1));
                     } //TODO: check this works
                 }
-                System.out.println("Task created successfully with ID: " + task.getId());
+                System.out.println("Task created successfully with ID: " + studyTask.getId());
                 return true;
             }
         } catch (SQLException e) {
@@ -118,21 +118,21 @@ public class SqliteTaskDAO implements ITaskDAO {
         return false;
     }
 
-    public boolean updateTask(Task task) {
+    public boolean updateTask(StudyTask studyTask) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-            preparedStatement.setString(1, task.getTitle());
-            preparedStatement.setString(2, task.getDescription());
-            preparedStatement.setString(3, task.getStatus());
-            preparedStatement.setInt(4, task.getId());
+            preparedStatement.setString(1, studyTask.getTitle());
+            preparedStatement.setString(2, studyTask.getDescription());
+            preparedStatement.setString(3, studyTask.getStatus());
+            preparedStatement.setInt(4, studyTask.getId());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
-                System.out.println("Task updated successfully: " + task.getId());
+                System.out.println("Task updated successfully: " + studyTask.getId());
                 return true;
             }
         } catch (SQLException e) {
-            handleSQLException("Error updating task: " + task.getId(), e);
+            handleSQLException("Error updating task: " + studyTask.getId(), e);
         }
         return false;
     }
@@ -154,15 +154,15 @@ public class SqliteTaskDAO implements ITaskDAO {
     }
 
     // Helper Methods
-    private Task mapResultSetToTask(ResultSet resultSet) throws SQLException {
+    private StudyTask mapResultSetToTask(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         int studyPlanId = resultSet.getInt("studyPlanId");
         int taskNumber = resultSet.getInt("taskNumber");
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
         String status = resultSet.getString("status");
-        Task task = new Task(studyPlanId, taskNumber, title, description, status);
-        return task;
+        StudyTask studyTask = new StudyTask(studyPlanId, taskNumber, title, description, status);
+        return studyTask;
     }
 
     private void handleSQLException(String message, SQLException e) {

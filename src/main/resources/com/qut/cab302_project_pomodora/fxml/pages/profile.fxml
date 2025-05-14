@@ -64,7 +64,7 @@
                                              <Font size="30.0" />
                                           </font>
                                        </Label>
-                                       <TextArea editable="false" focusTraversable="false" layoutX="911.0" layoutY="20.0" prefHeight="350.0" prefWidth="602.0" text="Your productivity has improved by 12% in the last week, with 8 extra tasks completed in the last 3 days." wrapText="true">
+                                       <TextArea editable="false" focusTraversable="false" layoutX="911.0" layoutY="20.0" prefHeight="350.0" prefWidth="602.0" text="Your productivity has improved by 12% in the last week, with 8 extra studyTasks completed in the last 3 days." wrapText="true">
                                           <font>
                                              <Font size="30.0" />
                                           </font>

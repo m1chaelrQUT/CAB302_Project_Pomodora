@@ -1,6 +1,6 @@
 package com.qut.cab302_project_pomodora.model;
 
-public class Task {
+public class StudyTask {
     private int id;
     private int studyPlanId;
     private int taskNumber;
@@ -8,7 +8,7 @@ public class Task {
     private String description;
     private String status;
 
-    public Task(int studyPlanId, int taskNumber, String title, String description, String status) {
+    public StudyTask(int studyPlanId, int taskNumber, String title, String description, String status) {
         this.studyPlanId = studyPlanId;
         this.title = title;
         this.description = description;

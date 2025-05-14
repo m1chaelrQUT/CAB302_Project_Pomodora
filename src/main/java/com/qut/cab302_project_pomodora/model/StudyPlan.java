@@ -12,11 +12,11 @@ public class StudyPlan
     private String title;
     private String description;
     private String status;
-    private List<Task> tasks;
+    private List<StudyTask> studyTasks;
 
     public  StudyPlan()
     {
-        this.tasks = new ArrayList<>();
+        this.studyTasks = new ArrayList<>();
     }
 
     public StudyPlan(int id, int userId,String title,String description,String status)
@@ -71,12 +71,12 @@ public class StudyPlan
         this.description = description;
     }
 
-    public List<Task> tasks() {
-        return tasks;
+    public List<StudyTask> tasks() {
+        return studyTasks;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setTasks(List<StudyTask> studyTasks) {
+        this.studyTasks = studyTasks;
     }
 
 
@@ -90,7 +90,7 @@ public class StudyPlan
                 '}';
     }
 
-    public boolean isActive() {
+    public boolean planIsActive() {
         return status.equals("ACTIVE");
     }
 }

@@ -1,18 +1,17 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qut.cab302_project_pomodora.model.*;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -22,8 +21,8 @@ import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StudyPlannersController extends ControllerSkeleton {
@@ -39,6 +38,13 @@ public class StudyPlannersController extends ControllerSkeleton {
 
     @FXML private StackPane newStudyPlanPopUp;
     @FXML private StackPane studyPlanDetailsPopUp;
+
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private Label statusLabel;
+
+    private LLMService llmService;
 
     // DAO interfaces
     private IStudyPlanDAO studyPlanDAO;
@@ -79,6 +85,7 @@ public class StudyPlannersController extends ControllerSkeleton {
     public void initialize() throws SQLException, IOException {
         super.initialize();
         currentUser = SessionManager.getCurrentUser();
+        this.llmService = new LLMService();
 
         if(currentUser == null) {
             throw new IllegalStateException("Current user is null. Cannot load study plans.");
@@ -105,6 +112,7 @@ public class StudyPlannersController extends ControllerSkeleton {
                             event.consume();
                         }
                     });
+                    statusLabel.textProperty().bind(llmService.statusMessageProperty());
                 });
 
         iniSession();
@@ -144,11 +152,11 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Separate plans into active and past (uses list filtering)
         List<StudyPlan> activePlans = studyPlans.stream()
-                .filter(StudyPlan::isActive)
+                .filter(StudyPlan::planIsActive)
                 .collect(Collectors.toList());
 
         List<StudyPlan> pastPlans = studyPlans.stream()
-                .filter(plan -> !plan.isActive())
+                .filter(plan -> !plan.planIsActive())
                 .collect(Collectors.toList());
 
         // Populate the gridpanes
@@ -243,7 +251,7 @@ public class StudyPlannersController extends ControllerSkeleton {
         countLabel.setFont(new Font(40.0));
 
 
-        if (plan.isActive()) {
+        if (plan.planIsActive()) {
             statusLabel.setText("Tasks Remaining:");
 //            countLabel.setText(String.valueOf(plan.tasksRemaining()));
             countLabel.setText(String.valueOf(taskDAO.tasksRemaining(plan.getId())));
@@ -257,7 +265,8 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
         // store the plan ID
-        vbox.setUserData(plan.getId());
+
+        vbox.setUserData(plan.getTitle());
 
         // on mouse clicked
         vbox.setOnMouseClicked(this::goToStudyPlan);
@@ -313,9 +322,14 @@ public class StudyPlannersController extends ControllerSkeleton {
     }
 
     @FXML
-    private void generateStudyPlan(){
+    private void generateStudyPlan() throws IOException {
         /* TODO: take input from 'promptEntryTextArea' and 'studyHoursEntryTextField
             to send to API */
+        System.out.println("generateStudyPlan button clicked");
+        String prompt = promptEntryTextArea.getText();
+        String totalHours = studyHoursEntryTextField.getText();
+        handleSendPrompt(prompt, totalHours);
+
     }
 
     @FXML
@@ -324,6 +338,102 @@ public class StudyPlannersController extends ControllerSkeleton {
     }
 
 
+    @FXML
+    private void handleSendPrompt(String prompt, String hours) {
+        if (prompt.isEmpty()) {
+            llmService.statusMessageProperty().set("Status: Please enter a prompt.");
+            return;
+        }
 
+        generateStudyPlanButton.setDisable(true);
+        promptEntryTextArea.setDisable(true);
+        studyHoursEntryTextField.setDisable(true);
+        progressIndicator.setVisible(true);
+
+        Task<String> ollamaTask = new Task<>() {
+            @Override
+            protected String call() throws Exception {
+                ObjectMapper objectMapper = new ObjectMapper();
+
+                StudyPlanPartial studyPlanFormat = new StudyPlanPartial("title", "description");
+                String STUDY_PLAN_FORMAT = objectMapper.writeValueAsString(studyPlanFormat);
+                String systemPrompt1 = "Generate one study plan with the following format: " + STUDY_PLAN_FORMAT + ",  based on the following user prompt: " + prompt +". Keep the description concise.";
+
+                String requestFormat = "json";
+                String generatedResponse = llmService.getCompletion(systemPrompt1, requestFormat).join();
+
+                StudyPlanPartial plan = objectMapper.readValue(generatedResponse, StudyPlanPartial.class);
+                String systemPrompt2 = "Generate a list of tasks as so: {task1: (title, description), task2: (title, description), ...} for an appropriate number of tasks, based on this study plan: " + generatedResponse;
+                String generatedTasks = llmService.getCompletion(systemPrompt2, requestFormat).join();
+
+
+                StudyPlan generatedStudyPlan = new StudyPlan(0, currentUser.getId(), plan.getTitle(), plan.getDescription(), "ACTIVE");
+                studyPlanDAO.createStudyPlan(generatedStudyPlan);
+
+                // make map of tasks
+                Map<String, StudyTaskPartial> tasks = objectMapper.readValue(
+                        generatedTasks,
+                        new TypeReference<Map<String, StudyTaskPartial>>() {}
+                );
+
+                // iterate over the map
+                for (Map.Entry<String, StudyTaskPartial> entry : tasks.entrySet()) {
+                    String key = entry.getKey();
+                    String taskNumberString = key.replaceAll("\\D+", "");
+                    int taskNumber = Integer.parseInt(taskNumberString);
+
+                    String taskTitle = entry.getValue().getTitle();
+                    String taskDescription = entry.getValue().getDescription();
+
+                    int studyPlanId = studyPlanDAO.getStudyPlanByTitle(plan.getTitle()).getId();
+                    StudyTask currentTask = new StudyTask(studyPlanId, taskNumber, taskTitle, taskDescription, "ACTIVE");
+                    taskDAO.createTask(currentTask);
+                }
+
+
+                System.out.println("STUDY PLAN COMPLETED! \n");
+                Platform.runLater(() -> {
+                    try {
+                        navigateTo("studyplanners");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                return "Success"; //
+
+            }
+        };
+
+        ollamaTask.setOnSucceeded(event -> {
+
+            generateStudyPlanButton.setDisable(false);
+            promptEntryTextArea.setDisable(false);
+            studyHoursEntryTextField.setDisable(false);
+            progressIndicator.setVisible(false);
+            // llmService.statusMessageProperty().set("Status: Response received.");
+        });
+
+        //fail
+        ollamaTask.setOnFailed(event -> {
+
+            Throwable exception = ollamaTask.getException();
+            String errorMessage = "Error: " + (exception != null ? exception.getMessage() : "Unknown error");
+
+            Platform.runLater(() -> {
+                llmService.statusMessageProperty().set("Status: " + errorMessage);
+                System.out.println("Error: " + errorMessage);
+                generateStudyPlanButton.setDisable(false);
+                promptEntryTextArea.setDisable(false);
+                studyHoursEntryTextField.setDisable(false);
+                progressIndicator.setVisible(false);
+            });
+            if (exception != null) {
+                exception.printStackTrace();
+            }
+        });
+
+        // Start task on new thread
+        new Thread(ollamaTask).start();
+    }
 
 }
