@@ -11,6 +11,10 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * ProfileController is responsible for managing the profile view in the application.
+ * It handles the display of user statistics and progress indicators.
+ */
 public class ProfileController extends ControllerSkeleton{
 
     @FXML private StackPane profile;
@@ -22,16 +26,29 @@ public class ProfileController extends ControllerSkeleton{
     @FXML private BarChart<String, Number> tasksDoneBarChart;
     @FXML private ProgressBar levelProgressIndicator;
 
+    /**
+     * gets the root pane of the profile view.
+     * @return the root pane of the profile view.
+     */
     @Override
     protected StackPane getRootPane() {
         return profile;
     }
 
+    /**
+     * gets the navbar of the profile view.
+     * @return the navbar of the profile view.
+     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
+    /**
+     * initializes the profile view.
+     * @throws SQLException throws SQLException if there is an error with the database connection.
+     * @throws IOException throws IOException if there is an error with the FXML file.
+     */
     @Override
     public void initialize() throws SQLException, IOException {
         super.initialize();
@@ -53,7 +70,6 @@ public class ProfileController extends ControllerSkeleton{
         tasksDoneBarChart.getData().add(tasksDoneSeries);
 
         levelProgressIndicator.setProgress(0.5);
-
 
         Platform.runLater(() -> {
             navbarController.setNavButtonStyles(profile.getScene());

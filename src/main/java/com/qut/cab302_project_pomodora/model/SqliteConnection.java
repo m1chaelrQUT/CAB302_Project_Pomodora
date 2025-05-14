@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * SqliteConnection is a singleton class that manages the connection to the SQLite database.
+ * It provides a method to get the instance of the connection and allows for testing with a mock connection.
+ */
 public class SqliteConnection {
     private static Connection instance = null;
     private static boolean isTest = false;

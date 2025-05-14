@@ -23,6 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * StudyPlannersController is responsible for managing the study planners view in the application.
+ * It handles the display of active and past study plans, as well as the creation of new study plans.
+ */
 public class StudyPlannersController extends ControllerSkeleton {
 
     @FXML private Region navbar;
@@ -65,17 +69,29 @@ public class StudyPlannersController extends ControllerSkeleton {
         taskDAO = new SqliteTaskDAO();
     }
 
+    /**
+     * Gets the root pane of the study planners view.
+     * @return the root pane of the study planners view.
+     */
     @Override
     protected StackPane getRootPane() {
         return studyPlanners;
     }
 
+    /**
+     * Gets the navbar of the study planners view.
+     * @return the navbar of the study planners view.
+     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
-    // Init
+    /**
+     * Initializes the study planners view.
+     * @throws SQLException if there is an error with the database connection.
+     * @throws IOException if there is an error with the FXML file.
+     */
     @Override
     @FXML
     public void initialize() throws SQLException, IOException {
@@ -123,6 +139,10 @@ public class StudyPlannersController extends ControllerSkeleton {
 //        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
 //    }
 
+    /**
+     * Populates the study plan grids with active and past study plans.
+     * This method separates the plans into active and past categories and populates the respective grid panes.
+     */
     private void populateStudyPlanGrids() {
         //TODO: Create database table for studyplans and connect here. We don't need to keep the current data mockup, though it would prob be easiest to
 
@@ -251,12 +271,25 @@ public class StudyPlannersController extends ControllerSkeleton {
     }
 
 
+    /**
+     * Opens a pop-up window.
+     * @param popUp The StackPane representing the pop-up to be opened.
+     */
     private void openPopUp(StackPane popUp) {popUp.setVisible(true);}
+    /**
+     * Closes a pop-up window.
+     * @param popUp The StackPane representing the pop-up to be closed.
+     */
     private void closePopUp(StackPane popUp) {popUp.setVisible(false);}
 
     @FXML private Button resumeStudyPlanButton;
     @FXML private Button closeStudyPlanDetailsPopUpButton;
 
+    /**
+     * Handles the action when a study plan is clicked.
+     * This method opens the study plan details pop-up and loads the tasks for the selected study plan.
+     * @param event The mouse event that triggered this action.
+     */
     @FXML
     private void goToStudyPlan(MouseEvent event) {
         Object source = event.getSource();
@@ -322,11 +355,18 @@ public class StudyPlannersController extends ControllerSkeleton {
 //        }
 //    }
 
+    /**
+     * Handles the action when the "Resume Study Plan" button is clicked.
+     * This method should navigate to the specific study plan's timer page.
+     */
     @FXML
     private void resumeStudyPlan() {
         // TODO: Go to specific study plan's timer page
     }
 
+    /**
+     * Closes the study plan details pop-up.
+     */
     @FXML
     private void closeStudyPlanDetailsPopUp(){
         closePopUp(studyPlanDetailsPopUp);
@@ -337,18 +377,31 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private Button generateStudyPlanButton;
     @FXML private Button closeCreateStudyPlanPopUpButton;
 
+    /**
+     * Handles the action when the "Create New Study Plan" button is clicked.
+     * This method opens the pop-up for creating a new study plan.
+     * @param event The action event that triggered this method.
+     */
     @FXML
     private void createNewStudyPlan(ActionEvent event) {
         System.out.println("createNewStudyPlan button clicked");
         openPopUp(newStudyPlanPopUp);
     }
 
+    /**
+     * Handles the action when the "Generate Study Plan" button is clicked.
+     * This method should send the input data to the API for generating a study plan.
+     */
     @FXML
     private void generateStudyPlan(){
         /* TODO: take input from 'promptEntryTextArea' and 'studyHoursEntryTextField
             to send to API */
     }
 
+    /**
+     * Handles the action when the "Close" button is clicked in the create study plan pop-up.
+     * This method closes the pop-up and resets the input fields.
+     */
     @FXML
     private void closeCreateStudyPlanPopUp(){
         closePopUp(newStudyPlanPopUp);
