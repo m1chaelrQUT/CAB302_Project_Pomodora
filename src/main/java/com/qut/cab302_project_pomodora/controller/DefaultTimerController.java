@@ -84,8 +84,8 @@ public class DefaultTimerController extends ControllerSkeleton {
         isWorkSession = true;
 
         // Set the initial timer values
-        minutes = WORK_DURATION;
-        seconds = 0;
+        minutes = WORK_DURATION / 60;
+        seconds = WORK_DURATION % 60;
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
@@ -167,17 +167,17 @@ public class DefaultTimerController extends ControllerSkeleton {
             pomodoroCount++;
 
             if (pomodoroCount % 4 == 0) {
-                minutes = LONG_BREAK;
+                minutes = LONG_BREAK / 60;
             } else {
-                minutes = SHORT_BREAK;
+                minutes = SHORT_BREAK / 60;
             }
         } else {
             if (pomodoroCount % 4 == 0) {
                 showCompletionMessage();
                 pomodoroCount = 0;
                 isWorkSession = true;
-                minutes = WORK_DURATION;
-                seconds = 0;
+                minutes = WORK_DURATION / 60;
+                seconds = WORK_DURATION % 60;
                 isRunning = false;
 
                 if (timeline != null) timeline.stop();
@@ -186,10 +186,10 @@ public class DefaultTimerController extends ControllerSkeleton {
                 updateTimerDisplay();
                 return;
             }
-            minutes = WORK_DURATION;
+            minutes = WORK_DURATION / 60;
         }
 
-        seconds = 0;
+        seconds = WORK_DURATION % 60;
         isWorkSession = !isWorkSession;
         updateSessionStyle();
         updateTimerDisplay();
@@ -202,8 +202,8 @@ public class DefaultTimerController extends ControllerSkeleton {
         isRunning = false;
         pomodoroCount = 0;
         isWorkSession = true;
-        minutes = WORK_DURATION;
-        seconds = 0;
+        minutes = WORK_DURATION / 60;
+        seconds = WORK_DURATION % 60;
 
         startPauseButton.setText("▶");
         updateSessionStyle();
@@ -233,14 +233,14 @@ public class DefaultTimerController extends ControllerSkeleton {
         if (isWorkSession) {
             pomodoroCount++;
             if (pomodoroCount % 4 == 0) {
-                minutes = LONG_BREAK;
+                minutes = LONG_BREAK / 60;
             } else {
-                minutes = SHORT_BREAK;
+                minutes = SHORT_BREAK / 60;
             }
         } else {
-            minutes = WORK_DURATION;
+            minutes = WORK_DURATION / 60;
         }
-        seconds = 0;
+        seconds = WORK_DURATION % 60;
         isWorkSession = !isWorkSession;
 
         updateSessionStyle(); // 🔥 Add this
