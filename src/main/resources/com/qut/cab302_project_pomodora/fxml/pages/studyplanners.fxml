@@ -125,7 +125,7 @@
                                     <Font size="28.0" />
                                  </font>
                               </TextField>
-                              <Button fx:id="generateStudyPlanButton" layoutX="65.0" layoutY="736.0" mnemonicParsing="false" onAction="#generateStudyPlan" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Generate" textFill="WHITE">
+                              <Button fx:id="generateStudyPlanButton" layoutX="65.0" layoutY="736.0" mnemonicParsing="false" onAction="#createNewStudyPlan" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Generate" textFill="WHITE">
                                  <font>
                                     <Font size="28.0" />
                                  </font>

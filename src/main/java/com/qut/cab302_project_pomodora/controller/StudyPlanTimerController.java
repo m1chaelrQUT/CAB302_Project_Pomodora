@@ -39,9 +39,9 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private boolean isRunning = false;
 
     private int pomodoroCount = 0;
-    private final int WORK_DURATION = 25;
-    private final int SHORT_BREAK = 5;
-    private final int LONG_BREAK = 15; // You can make this customizable
+    private int WORK_DURATION = 25;
+    private int SHORT_BREAK = 5;
+    private int LONG_BREAK = 15; // You can make this customizable
     private boolean isWorkSession = true;
 
     @Override
@@ -229,4 +229,19 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
         ThemeManager.getInstance().applyTheme(scene, Theme.LIGHT);
     }
+
+    public void loadUserTimer(com.qut.cab302_project_pomodora.model.Timer timer) {
+        this.WORK_DURATION = timer.getWorkDuration();
+        this.SHORT_BREAK = timer.getShortBreakDuration();
+        this.LONG_BREAK = timer.getLongBreakDuration();
+
+        this.minutes = WORK_DURATION;
+        this.seconds = 0;
+        this.pomodoroCount = 0;
+        this.isWorkSession = true;
+
+        updateSessionStyle();
+        updateTimerDisplay();
+    }
+
 }
