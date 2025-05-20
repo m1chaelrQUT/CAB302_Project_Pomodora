@@ -1,9 +1,5 @@
-import com.qut.cab302_project_pomodora.model.StudyPlan;
-import com.qut.cab302_project_pomodora.model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;

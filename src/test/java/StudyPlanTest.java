@@ -38,14 +38,12 @@ public class StudyPlanTest{
         studyPlanTwo.setTitle("Test Plan");
         studyPlanTwo.setDescription("A plan for testing");
         studyPlanTwo.setStatus("ACTIVE");
-        studyPlanTwo.setParticipantCount(5);
 
         assertEquals(3, studyPlanTwo.getId());
         assertEquals(42, studyPlanTwo.getUserId());
         assertEquals("Test Plan", studyPlanTwo.getTitle());
         assertEquals("A plan for testing", studyPlanTwo.getDescription());
         assertEquals("ACTIVE", studyPlanTwo.getStatus());
-        assertEquals(5, studyPlanTwo.getParticipantCount());
     }
 
     @Test
@@ -65,14 +63,12 @@ public class StudyPlanTest{
         plan.setUserId(20);
         plan.setTitle("ToStringTest");
         plan.setStatus("DONE");
-        plan.setParticipantCount(3);
 
         String result = plan.toString();
         assertTrue(result.contains("id=10"));
         assertTrue(result.contains("userId=20"));
         assertTrue(result.contains("title='ToStringTest'"));
         assertTrue(result.contains("status='DONE'"));
-        assertTrue(result.contains("participantCount=3"));
     }
 
     @Test

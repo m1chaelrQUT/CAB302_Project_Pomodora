@@ -1,5 +1,6 @@
 package com.qut.cab302_project_pomodora.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -11,14 +12,17 @@ public class StudyPlan
     private String title;
     private String description;
     private String status;
-    private List<Task> tasks;
-    private int participantCount;
+    private List<StudyTask> studyTasks;
 
     public  StudyPlan()
-    {}
-
-    public StudyPlan(int userId,String title,String description,String status)
     {
+        this.studyTasks = new ArrayList<>();
+    }
+
+    public StudyPlan(int id, int userId,String title,String description,String status)
+    {
+        this();
+        this.id = id;
         this.userId = userId;
         this.title = title;
         this.description = description;
@@ -67,21 +71,14 @@ public class StudyPlan
         this.description = description;
     }
 
-    public List<Task> tasks() {
-        return tasks;
+    public List<StudyTask> tasks() {
+        return studyTasks;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setTasks(List<StudyTask> studyTasks) {
+        this.studyTasks = studyTasks;
     }
 
-    public int getParticipantCount() {
-        return participantCount;
-    }
-
-    public void setParticipantCount(int participantCount) {
-        this.participantCount = participantCount;
-    }
 
     @Override
     public String toString() {
@@ -90,11 +87,10 @@ public class StudyPlan
                 ", userId=" + userId +
                 ", title='" + title + '\'' +
                 ", status='" + status + '\'' +
-                ", participantCount=" + participantCount +
                 '}';
     }
 
-    public boolean isActive() {
+    public boolean planIsActive() {
         return status.equals("ACTIVE");
     }
 }

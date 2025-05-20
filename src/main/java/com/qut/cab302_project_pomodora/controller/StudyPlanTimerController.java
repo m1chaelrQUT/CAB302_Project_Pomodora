@@ -6,6 +6,7 @@ import com.qut.cab302_project_pomodora.util.ThemeManager;
 import com.qut.cab302_project_pomodora.config.Theme;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -46,7 +47,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private SqliteTaskDAO taskDAO = new SqliteTaskDAO();
 
     private StudyPlan activeStudyPlan;
-    private List<Task> activeTasks;
+    private List<StudyTask> activeTasks;
 
     private Timeline timeline;
     private int minutes = 25;  // Default work duration (Pomodoro technique)
@@ -67,6 +68,12 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         selectPlanModal.setVisible(false);
         selectPlanModal.setManaged(false);
         selectPlanModal.setMouseTransparent(true);
+        try{
+            navigateTo("studyplanners");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         System.out.println("Closing Modal");
         System.out.println("selectPlanModal =" + selectPlanModal);
     }
@@ -274,12 +281,12 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     }
 
     private void checkActiveStudyPlan() {
-        List<StudyPlan> plans = studyPlanDAO.getStudyPlansByStatus(currentUser.getId(), "ACTIVE");
+        List<StudyPlan> plans = studyPlanDAO.getStudyPlansByStatus(currentUser.getId(), "RESUME");
 
         if (plans == null || plans.isEmpty()) {
             showNoActivePlanUI();
         } else {
-            activeStudyPlan = plans.get(0); // assume only one ACTIVE plan
+            activeStudyPlan = plans.get(0);
             activeTasks = taskDAO.getTasksByStudyPlan(activeStudyPlan.getId());
             showTimerUI();
         }
@@ -319,7 +326,9 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     }
 
     private void showTimerUI() {
-        plusButton.setVisible(true);
+        plusButton.setVisible(false);
+        plusButton.setManaged(false);
+        plusButton.setMouseTransparent(true);
 
         startPauseButton.setVisible(true);
         stopButton.setVisible(true);
@@ -327,29 +336,9 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         nextButton.setVisible(true);
         timerText.setVisible(true);
         timerCircle.setVisible(true);
-        plusButton.setVisible(false);
 
         studyPlanTitleLabel.setText(activeStudyPlan.getTitle());
         studyPlanTitleLabel.setVisible(true);
         taskSideBar.setVisible(true);
-    }
-
-    public void changeStudyPlan(int newPlanId) {
-        if (currentUser != null) {
-            SqliteUserDAO userDAO = new SqliteUserDAO();
-            SqliteStudyPlanDAO studyPlanDAO = new SqliteStudyPlanDAO();
-
-            boolean updated = studyPlanDAO.resumeStudyPlan(currentUser.getId(), newPlanId);
-
-            if (updated) {
-                System.out.println("Study plan resumed successfully.");
-                // Refresh the UI with new active study plan data
-                checkActiveStudyPlan();
-            } else {
-                System.out.println("Failed to resume the selected study plan.");
-            }
-        } else {
-            System.out.println("No user is currently logged in.");
-        }
     }
 }

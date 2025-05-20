@@ -14,10 +14,6 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.sql.SQLException;
 
-/**
- * SettingsController is responsible for managing the settings view in the application.
- * It handles the display and modification of user settings, including timer settings, account settings, and theme settings.
- */
 public class SettingsController extends ControllerSkeleton {
     @FXML
     private StackPane settings;
@@ -29,6 +25,8 @@ public class SettingsController extends ControllerSkeleton {
     private StackPane accountSettingsPopUp;
     @FXML
     private StackPane themeSettingsPopUp;
+    @FXML
+    private StackPane notificationSettingsPopUp;
 
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
@@ -71,103 +69,60 @@ public class SettingsController extends ControllerSkeleton {
     // Current user object
     private User currentUser;
 
-    /**
-     * Constructor for SettingsController.
-     * Initializes the userDAO and timerDAO objects.
-     */
     public SettingsController() {
         userDAO = new SqliteUserDAO();
         timerDAO = new SqliteTimerDAO();
     }
 
-    /**
-     * Opens the timer settings pop-up.
-     * This method is called when the user clicks the "Timer Settings" button.
-     */
+    // Open/Show function for the pop-ups/overlays (Stackpanes)
     @FXML
     private void openTimerSettings() {
         timerSettingsPopUp.setVisible(true);
     }
 
-    /**
-     * Opens the account settings pop-up.
-     * This method is called when the user clicks the "Account Settings" button.
-     */
     @FXML
     private void openAccountSettings() {
         accountSettingsPopUp.setVisible(true);
     }
 
-    /**
-     * Opens the theme settings pop-up.
-     * This method is called when the user clicks the "Theme Settings" button.
-     */
     @FXML
     private void openThemeSettings() {themeSettingsPopUp.setVisible(true); }
 
+    @FXML
+    private void openNotificationSettings() {notificationSettingsPopUp.setVisible(true); }
 
-    /**
-     * Closes the specified pop-up.
-     * This method is called when the user clicks the "Close" button in the pop-up.
-     *
-     * @param popUp The pop-up to be closed.
-     */
+    // Close function for the pop-ups/overlays (Stackpanes)
     private void closePopUp(StackPane popUp) {
         popUp.setVisible(false);
     }
 
-    /**
-     * Closes the timer settings pop-up.
-     * This method is called when the user clicks the "Close" button in the timer settings pop-up.
-     */
     @FXML
     private void closeTimerSettings() {
         closePopUp(timerSettingsPopUp);
     }
 
-    /**
-     * Closes the account settings pop-up.
-     * This method is called when the user clicks the "Close" button in the account settings pop-up.
-     */
     @FXML
     private void closeAccountSettings() {
         closePopUp(accountSettingsPopUp);
     }
 
-    /**
-     * Closes the theme settings pop-up.
-     * This method is called when the user clicks the "Close" button in the theme settings pop-up.
-     */
     @FXML
     private void closeThemeSettings() { closePopUp(themeSettingsPopUp); }
 
-    /**
-     * Gets the root pane of the settings view.
-     *
-     * @return the root pane of the settings view.
-     */
+    @FXML
+    private void closeNotificationSettings() { closePopUp(notificationSettingsPopUp); }
+
+
     @Override
     protected StackPane getRootPane() {
         return settings;
     }
 
-    /**
-     * Gets the content pane of the settings view.
-     *
-     * @return the content pane of the settings view.
-     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
-    /**
-     * Initializes the settings view.
-     * This method is called when the controller is loaded.
-     *
-     * @throws SQLException if there is an error with the database connection.
-     * @throws IOException  if there is an error with the FXML file.
-     */
     @Override
     @FXML
     public void initialize() throws SQLException, IOException {
@@ -188,6 +143,7 @@ public class SettingsController extends ControllerSkeleton {
         System.out.println("SettingsController Initialization completed.");
     }
 
+    // TODO: Add the iniSession() method to load the session and get the user
     /**
      * Initializes the session by loading the current user from the session manager.
      * This method is called during the initialization of the controller.
@@ -203,10 +159,18 @@ public class SettingsController extends ControllerSkeleton {
         System.out.println("Session loaded!");
     }
 
+    /* Account Settings Pop Up Methods*/
+    //@FXML
+//    private PasswordField newPasswordEntryField;
+
     @FXML
     private TextField newPasswordTextField;
 
     @FXML Button showNewPasswordButton;
+
+
+//    @FXML
+//    private PasswordField confirmNewPasswordEntryField;
 
     @FXML
     private TextField confirmNewPasswordTextField;
@@ -218,10 +182,6 @@ public class SettingsController extends ControllerSkeleton {
     private boolean isSetPasswordVisible = false;
     private boolean isConfirmPasswordVisible = false;
 
-    /**
-     * Toggles the visibility of the password field in the account settings pop-up.
-     * This method is called when the user clicks the "Show/Hide" button next to the password field.
-     */
     @FXML
     private void toggleSetPasswordVisibility() {
         // Flip the bool value
@@ -246,10 +206,6 @@ public class SettingsController extends ControllerSkeleton {
         }
     }
 
-    /**
-     * Toggles the visibility of the confirm password field in the account settings pop-up.
-     * This method is called when the user clicks the "Show/Hide" button next to the confirm password field.
-     */
     @FXML
     private void toggleConfirmNewPasswordVisibility() {
         isConfirmPasswordVisible = !isConfirmPasswordVisible;
@@ -273,22 +229,10 @@ public class SettingsController extends ControllerSkeleton {
         }
     }
 
-    /**
-     * Gets the password entered in the password field.
-     * This method is used to retrieve the password when the user clicks the "Confirm" button.
-     *
-     * @return the password entered in the password field.
-     */
     public String getSetPassword() {
         return isSetPasswordVisible ? newPasswordTextField.getText() : newPasswordEntryField.getText();
     }
 
-    /**
-     * Gets the password entered in the confirm password field.
-     * This method is used to retrieve the password when the user clicks the "Confirm" button.
-     *
-     * @return the password entered in the confirm password field.
-     */
     public String getConfirmPassword() {
         return isConfirmPasswordVisible ? confirmNewPasswordTextField.getText() : confirmNewPasswordEntryField.getText();
     }
@@ -332,10 +276,6 @@ public class SettingsController extends ControllerSkeleton {
         //TODO: [FrontEnd] Display success message to user
     }
 
-    /**
-     * This method is called when the user clicks the "Save" button in the timer settings pop-up.
-     * It saves the timer settings for the current user in the database.
-     */
     @FXML
     private void saveTimerSettings() {
 
@@ -364,10 +304,6 @@ public class SettingsController extends ControllerSkeleton {
         timerDAO.updateUserTimers(currentUser, currentUserTimer);
     }
 
-    /**
-     * This method is called when the user clicks the "Save" button in the theme settings pop-up.
-     * It saves the selected theme and timer UI settings for the current user.
-     */
     @FXML
     private void saveThemeSettings() {
         if (colourSchemeSelector.getValue() != null) {
