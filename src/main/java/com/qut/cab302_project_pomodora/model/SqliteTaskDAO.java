@@ -66,11 +66,18 @@ public class SqliteTaskDAO implements ITaskDAO {
             preparedStatement.setInt(1, studyPlanId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                tasks.add(mapResultSetToTask(resultSet));
+            // Check if the result set is empty
+            if (!resultSet.isBeforeFirst()) {
+                System.out.println("No tasks found for study plan ID: " + studyPlanId);
+                return tasks; // Return an empty list if no tasks are found
+            } else {
+                while (resultSet.next()) {
+                    tasks.add(mapResultSetToTask(resultSet));
+                }
+                System.out.println("Tasks fetched successfully for study plan ID: " + studyPlanId);
+                return tasks;
             }
-            System.out.println("Tasks fetched successfully for study plan ID: " + studyPlanId);
-            return tasks;
+
         } catch (SQLException e) {
             handleSQLException("Error fetching tasks by study plan: " + studyPlanId, e);
         }

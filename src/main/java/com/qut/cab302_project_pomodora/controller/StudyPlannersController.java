@@ -364,31 +364,38 @@ public class StudyPlannersController extends ControllerSkeleton {
     private void displayTasks(List<Task> tasks) {
         taskListVBox.getChildren().clear();
 
-        for (Task task : tasks) {
-            HBox taskBox = new HBox();
-            taskBox.setSpacing(10);
-            taskBox.setAlignment(Pos.TOP_LEFT);
-            taskBox.setPadding(new Insets(10));
-            taskBox.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
+        // Check if the task list is empty
+        if (tasks == null || tasks.isEmpty()) {
+            Label noTasksLabel = new Label("No tasks available for this study plan.");
+            noTasksLabel.setStyle("-fx-font-style: italic;");
+            taskListVBox.getChildren().add(noTasksLabel);
+            return;
+        } else {
+            for (Task task : tasks) {
+                HBox taskBox = new HBox();
+                taskBox.setSpacing(10);
+                taskBox.setAlignment(Pos.TOP_LEFT);
+                taskBox.setPadding(new Insets(10));
+                taskBox.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
 
-            VBox textBox = new VBox();
-            textBox.setAlignment(Pos.TOP_LEFT);
+                VBox textBox = new VBox();
+                textBox.setAlignment(Pos.TOP_LEFT);
 
-            Label titleLabel = new Label(task.getTitle());
-            titleLabel.setStyle("-fx-font-weight: bold;");
+                Label titleLabel = new Label(task.getTitle());
+                titleLabel.setStyle("-fx-font-weight: bold;");
 
-            Label descLabel = new Label(task.getDescription());
-            descLabel.setWrapText(true);
+                Label descLabel = new Label(task.getDescription());
+                descLabel.setWrapText(true);
 
-            textBox.getChildren().addAll(titleLabel, descLabel);
-            HBox.setHgrow(textBox, Priority.ALWAYS);
+                textBox.getChildren().addAll(titleLabel, descLabel);
+                HBox.setHgrow(textBox, Priority.ALWAYS);
 
-            CheckBox checkBox = new CheckBox();
-            checkBox.setAlignment(Pos.TOP_RIGHT);
+                CheckBox checkBox = new CheckBox();
+                checkBox.setAlignment(Pos.TOP_RIGHT);
 
-            taskBox.getChildren().addAll(textBox, checkBox);
-            taskListVBox.getChildren().add(taskBox);
-
+                taskBox.getChildren().addAll(textBox, checkBox);
+                taskListVBox.getChildren().add(taskBox);
+            }
         }
     }
 
