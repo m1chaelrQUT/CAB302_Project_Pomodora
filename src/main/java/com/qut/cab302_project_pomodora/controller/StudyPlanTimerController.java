@@ -1,5 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.qut.cab302_project_pomodora.model.*;
 import javafx.application.Platform;
 import com.qut.cab302_project_pomodora.util.ThemeManager;
 import com.qut.cab302_project_pomodora.config.Theme;
@@ -7,8 +8,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -18,6 +21,7 @@ import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 public class StudyPlanTimerController extends ControllerSkeleton {
     @FXML private StackPane studyPlanTimer;
@@ -33,6 +37,17 @@ public class StudyPlanTimerController extends ControllerSkeleton {
 
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
+    @FXML private Button plusButton;
+    @FXML private Label studyPlanTitleLabel;
+    @FXML private StackPane selectPlanModal;
+    @FXML private AnchorPane taskSideBar;
+
+    private SqliteStudyPlanDAO studyPlanDAO = new SqliteStudyPlanDAO();
+    private SqliteTaskDAO taskDAO = new SqliteTaskDAO();
+
+    private StudyPlan activeStudyPlan;
+    private List<Task> activeTasks;
+
     private Timeline timeline;
     private int minutes = 25;  // Default work duration (Pomodoro technique)
     private int seconds = 0;
@@ -43,6 +58,24 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private int SHORT_BREAK = 5;
     private int LONG_BREAK = 15; // You can make this customizable
     private boolean isWorkSession = true;
+
+    @FXML
+    private void handleCloseModal() {
+        selectPlanModal.setVisible(false);
+        selectPlanModal.setManaged(false);
+        selectPlanModal.setMouseTransparent(true);
+        System.out.println("Closing Modal");
+        System.out.println("selectPlanModal =" + selectPlanModal);
+    }
+
+    @FXML
+    public void handlePlusButtonClicked() {
+        System.out.println("Plus button actually clicked");
+        selectPlanModal.setVisible(true);
+        selectPlanModal.setManaged(true);
+        selectPlanModal.setMouseTransparent(false);
+    }
+
 
     @Override
     protected StackPane getRootPane() {
@@ -57,6 +90,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     @Override
     public void initialize() throws SQLException, IOException {
         super.initialize();
+        checkActiveStudyPlan();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
@@ -71,6 +105,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         stopButton.setOnAction(event -> handleStop());
         resetButton.setOnAction(event -> handleReset());
         nextButton.setOnAction(event -> handleNextPomodoro());
+
 
         updateTimerDisplay();
 
@@ -230,6 +265,20 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         ThemeManager.getInstance().applyTheme(scene, Theme.LIGHT);
     }
 
+    private void checkActiveStudyPlan() {
+        User currentUser = SessionManager.getCurrentUser();
+        List<StudyPlan> plans = studyPlanDAO.getStudyPlansByStatus(currentUser.getId(), "ACTIVE");
+
+        if (plans == null || plans.isEmpty()) {
+            showNoActivePlanUI();
+        } else {
+            activeStudyPlan = plans.get(0); // assume only one ACTIVE plan
+            activeTasks = taskDAO.getTasksByStudyPlan(activeStudyPlan.getId());
+            showTimerUI();
+        }
+    }
+
+
     public void loadUserTimer(com.qut.cab302_project_pomodora.model.Timer timer) {
         this.WORK_DURATION = timer.getWorkDuration();
         this.SHORT_BREAK = timer.getShortBreakDuration();
@@ -244,4 +293,33 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         updateTimerDisplay();
     }
 
+    private void showNoActivePlanUI() {
+        plusButton.setVisible(true);plusButton.setManaged(true);
+        plusButton.setMouseTransparent(false);
+        startPauseButton.setVisible(false);
+        stopButton.setVisible(false);
+        resetButton.setVisible(false);
+        nextButton.setVisible(false);
+        timerText.setVisible(false);
+        timerCircle.setVisible(false);
+
+        studyPlanTitleLabel.setVisible(false);
+        taskSideBar.setVisible(false);
+    }
+
+    private void showTimerUI() {
+        plusButton.setVisible(true);
+
+        startPauseButton.setVisible(true);
+        stopButton.setVisible(true);
+        resetButton.setVisible(true);
+        nextButton.setVisible(true);
+        timerText.setVisible(true);
+        timerCircle.setVisible(true);
+        plusButton.setVisible(false);
+
+        studyPlanTitleLabel.setText(activeStudyPlan.getTitle());
+        studyPlanTitleLabel.setVisible(true);
+        taskSideBar.setVisible(true);
+    }
 }

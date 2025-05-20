@@ -49,7 +49,7 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
     // SQL Queries
     private static final String SELECT_ALL = "SELECT * FROM studyPlans where userId = ?";
     private static final String SELECT_BY_ID = "SELECT * FROM studyPlans WHERE userId = ? AND id = ? ";
-    private static final String SELECT_BY_STATUS = "SELECT * FROM studyPlans WHERE user_id = ? AND status = ?";
+    private static final String SELECT_BY_STATUS = "SELECT * FROM studyPlans WHERE userId = ? AND status = ?";
     private static final String INSERT = "INSERT INTO studyPlans(user_id, title, description, status, participant_count) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE studyPlans SET title = ?, description = ?, status = ?, participant_count = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
     private static final String DELETE = "DELETE FROM studyPlans WHERE id = ?";

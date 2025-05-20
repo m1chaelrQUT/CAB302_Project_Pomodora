@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="970.0" prefWidth="296.0" style="-fx-background-color: #B2AFAF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane visible="false" prefHeight="970.0" prefWidth="296.0" style="-fx-background-color: #B2AFAF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Title -->
     <Label layoutX="20.0" layoutY="10.0" text="Current task" textFill="WHITE">
