@@ -47,7 +47,7 @@ public class SqliteTaskDAO implements ITaskDAO {
     }
 
     // SQL Queries
-    private static final String SELECT_BY_STUDY_PLAN = "SELECT * FROM tasks WHERE study_plan_id = ?";
+    private static final String SELECT_BY_STUDY_PLAN = "SELECT * FROM tasks WHERE studyPlanId = ?";
     private static final String INSERT = "INSERT INTO tasks(studyPlanId, taskNumber, title, description, status) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM tasks WHERE id = ?";
@@ -75,6 +75,7 @@ public class SqliteTaskDAO implements ITaskDAO {
             handleSQLException("Error fetching tasks by study plan: " + studyPlanId, e);
         }
         return null;
+        // TODO: Handle the case where no tasks are found
     }
 
     /**

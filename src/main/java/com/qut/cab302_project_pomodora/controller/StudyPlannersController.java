@@ -109,14 +109,14 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
 
-        // Mock Study Plan and Tasks for view details pop up testing
-        StudyPlan mock = new StudyPlan(currentUser.getId(),"Mock Study Plan", "This is a test plan", "ACTIVE");
-        List<Task> mockTasks = new ArrayList<>();
-        mockTasks.add(new Task(101,1,"Mock Task 1", "This is a mock task description", "PENDING"));
-        mockTasks.add(new Task(101, 2, "Mock Task 2", "This is another mock task description", "IN_PROGRESS"));
-        mock.setTasks(mockTasks);
-
-        studyPlans.add(mock);
+//        // Mock Study Plan and Tasks for view details pop up testing
+//        StudyPlan mock = new StudyPlan(currentUser.getId(),"Mock Study Plan", "This is a test plan", "ACTIVE");
+//        List<Task> mockTasks = new ArrayList<>();
+//        mockTasks.add(new Task(101,1,"Mock Task 1", "This is a mock task description", "PENDING"));
+//        mockTasks.add(new Task(101, 2, "Mock Task 2", "This is another mock task description", "IN_PROGRESS"));
+//        mock.setTasks(mockTasks);
+//
+//        studyPlans.add(mock);
 
         //-----------
         populateStudyPlanGrids();
@@ -304,32 +304,50 @@ public class StudyPlannersController extends ControllerSkeleton {
         Object source = event.getSource();
         String planIdStr = "N/A";
 
+        // Check if the source is a VBox and get the user data
         if (source instanceof Node node) {
+            // Get the user data from the clicked node and parse it to an integer
             Object userData = node.getUserData();
+            int selectedStudyPlanId = Integer.parseInt(String.valueOf(userData));
+
+            // Find the selected study plan from the list
+            StudyPlan selectedStudyPlan = studyPlans.stream()
+                    .filter(plan -> plan.getId() == selectedStudyPlanId)
+                    .findFirst()
+                    .orElse(null);
+
+            // If the selected study plan is found, display its details
+            if (selectedStudyPlan != null) {
+                System.out.println("Selected Study Plan: " + selectedStudyPlan.getTitle());
+                List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedStudyPlanId);
+                displayTasks(tasks);
+                openPopUp(studyPlanDetailsPopUp);
+            }
 
             // I started extending bits from here  -Sriman
-            if (userData instanceof String planIDStr){
-                if (planIDStr.equals("N/A")){
-                    System.err.println("Invalid planID format: N/A");
-                    return;
-                }
-                try {
-                    int planID = Integer.parseInt(planIdStr);
-
-                    StudyPlan selectedPlan = studyPlans.stream()
-                            .filter(plan -> plan.getId() == planID).findFirst().orElse(null);
-
-                    if (selectedPlan != null) {
-                        List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedPlan.getId());
-                        displayTasks(tasks);
-                        openPopUp(studyPlanDetailsPopUp);
-                    } else {
-                        System.err.println("No study plan found with id: " + planID);
-                    }
-                } catch (NumberFormatException e) {
-                    System.err.println("PlanID is not a valid number: " + planIDStr);
-                }
-            }
+//            if (userData instanceof String planIDStr){
+//                if (planIDStr.equals("N/A")){
+//                    System.err.println("Invalid planID format: N/A");
+//                    return;
+//                }
+//                try {
+//                    int planID = Integer.parseInt(planIdStr);
+//
+//                    StudyPlan selectedPlan = studyPlans.stream()
+//                            .filter(plan -> plan.getId() == planID).findFirst().orElse(null);
+//
+//                    if (selectedPlan != null) {
+//                        System.out.println("Selected Study Plan: " + selectedPlan.getTitle());
+//                        List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedPlan.getId());
+//                        displayTasks(tasks);
+//                        openPopUp(studyPlanDetailsPopUp);
+//                    } else {
+//                        System.err.println("No study plan found with id: " + planID);
+//                    }
+//                } catch (NumberFormatException e) {
+//                    System.err.println("PlanID is not a valid number: " + planIDStr);
+//                }
+//            }
         } else {
                 System.err.println("UserData is not a Studyplan object or is null.");
             }
