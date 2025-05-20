@@ -59,6 +59,9 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private int LONG_BREAK = 15; // You can make this customizable
     private boolean isWorkSession = true;
 
+    private User currentUser;
+
+
     @FXML
     private void handleCloseModal() {
         selectPlanModal.setVisible(false);
@@ -90,6 +93,11 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     @Override
     public void initialize() throws SQLException, IOException {
         super.initialize();
+        currentUser = SessionManager.getCurrentUser();
+        if(currentUser == null) {
+            throw new IllegalStateException("Current user is null. Cannot load study plans.");
+        }
+
         checkActiveStudyPlan();
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -266,7 +274,6 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     }
 
     private void checkActiveStudyPlan() {
-        User currentUser = SessionManager.getCurrentUser();
         List<StudyPlan> plans = studyPlanDAO.getStudyPlansByStatus(currentUser.getId(), "ACTIVE");
 
         if (plans == null || plans.isEmpty()) {
@@ -278,6 +285,10 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         }
     }
 
+    private void changeActiveStudyPlan() {
+        User currentUser = SessionManager.getCurrentUser();
+
+    }
 
     public void loadUserTimer(com.qut.cab302_project_pomodora.model.Timer timer) {
         this.WORK_DURATION = timer.getWorkDuration();
@@ -321,5 +332,24 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         studyPlanTitleLabel.setText(activeStudyPlan.getTitle());
         studyPlanTitleLabel.setVisible(true);
         taskSideBar.setVisible(true);
+    }
+
+    public void changeStudyPlan(int newPlanId) {
+        if (currentUser != null) {
+            SqliteUserDAO userDAO = new SqliteUserDAO();
+            SqliteStudyPlanDAO studyPlanDAO = new SqliteStudyPlanDAO();
+
+            boolean updated = studyPlanDAO.resumeStudyPlan(currentUser.getId(), newPlanId);
+
+            if (updated) {
+                System.out.println("Study plan resumed successfully.");
+                // Refresh the UI with new active study plan data
+                checkActiveStudyPlan();
+            } else {
+                System.out.println("Failed to resume the selected study plan.");
+            }
+        } else {
+            System.out.println("No user is currently logged in.");
+        }
     }
 }

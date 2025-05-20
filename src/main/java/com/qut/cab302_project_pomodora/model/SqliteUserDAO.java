@@ -1,9 +1,6 @@
 package com.qut.cab302_project_pomodora.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 /**
@@ -158,5 +155,17 @@ public class SqliteUserDAO implements IUserDAO {
         }
         return null;
 
+    }
+
+    public boolean updateUserStudyPlan(int userId, int studyPlanId) {
+        String sql = "UPDATE users SET studyPlanId = ? WHERE id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, studyPlanId);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -237,4 +237,48 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
         System.err.println(message + ": " + e.getMessage());
         e.printStackTrace();
     }
+
+    public boolean resumeStudyPlan(int userId, int studyPlanId) {
+        try {
+            connection.setAutoCommit(false);
+
+            // 1. Set all user's plans back to ACTIVE if they are RESUME
+            PreparedStatement resetStatus = connection.prepareStatement(
+                    "UPDATE studyPlans SET status = 'ACTIVE' WHERE userId = ? AND status = 'RESUME'"
+            );
+            resetStatus.setInt(1, userId);
+            resetStatus.executeUpdate();
+
+            // 2. Set selected plan to RESUME
+            PreparedStatement setResume = connection.prepareStatement(
+                    "UPDATE studyPlans SET status = 'RESUME' WHERE userId = ? AND id = ?"
+            );
+            setResume.setInt(1, userId);
+            setResume.setInt(2, studyPlanId);
+            setResume.executeUpdate();
+
+            // 3. Update user's studyPlanId
+            SqliteUserDAO userDAO = new SqliteUserDAO();
+            boolean userUpdated = userDAO.updateUserStudyPlan(userId, studyPlanId);
+
+            connection.commit();
+            return userUpdated;
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
