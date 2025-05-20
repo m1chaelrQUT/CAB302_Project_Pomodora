@@ -1,7 +1,6 @@
 package com.qut.cab302_project_pomodora.controller;
 
-import com.qut.cab302_project_pomodora.model.User;
-import com.qut.cab302_project_pomodora.model.SessionManager;
+import com.qut.cab302_project_pomodora.model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,9 +46,28 @@ public class StudyPlannersController extends ControllerSkeleton {
     private static final double PREF_VBOX_WIDTH = 517;
 
     // Mock Data Structure
-    private record StudyPlan(String id, String title, boolean isActive, int tasksRemaining) {}
+//    private record StudyPlan(String id, String title, boolean isActive, int tasksRemaining) {}
+//
+//    private List<StudyPlan> mockStudyPlans;
 
-    private List<StudyPlan> mockStudyPlans;
+
+    // DAO interfaces
+    private IStudyPlanDAO studyPlanDAO;
+    private IUserDAO userDAO;
+    private ITaskDAO taskDAO;
+
+    // Current user object
+    private User currentUser;
+
+    // Study plans list
+    private List<StudyPlan> studyPlans;
+
+    public StudyPlannersController(){
+        // Initialize the DAO interfaces
+        studyPlanDAO = new SqliteStudyPlanDAO();
+        userDAO = new SqliteUserDAO();
+        taskDAO = new SqliteTaskDAO();
+    }
 
     /**
      * Gets the root pane of the study planners view.
@@ -78,12 +96,18 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML
     public void initialize() throws SQLException, IOException {
         super.initialize();
+        currentUser = SessionManager.getCurrentUser();
+
+        if(currentUser == null) {
+            throw new IllegalStateException("Current user is null. Cannot load study plans.");
+        }
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        createMockData();
+//        createMockData();
+        studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
 
         //-----------
         populateStudyPlanGrids();
@@ -98,26 +122,22 @@ public class StudyPlannersController extends ControllerSkeleton {
                     });
                 });
 
-        iniSession();
+
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
-    /**
-     * Creates mock data for study plans.
-     * This is temporary and should be replaced with actual data retrieval from a database.
-     */
-    private void createMockData() {
-        mockStudyPlans = new ArrayList<>();
-        mockStudyPlans.add(new StudyPlan("plan-cs-proj", "CS Project", true, 3));
-        mockStudyPlans.add(new StudyPlan("plan-theo-essay", "Theology Essay", true, 5));
-        mockStudyPlans.add(new StudyPlan("plan-math-hw", "Math Homework", true, 1));
-        mockStudyPlans.add(new StudyPlan("plan-chem-lab", "Chemistry Lab", true, 8));
-        mockStudyPlans.add(new StudyPlan("plan-cs-exam-new", "CS Exam 2", true, 100));// Example for wrapping
-        mockStudyPlans.add(new StudyPlan("plan-cs-exam", "CS Exam", false, 0));
-        mockStudyPlans.add(new StudyPlan("plan-bio-report", "Biology Report", false, 0));
-        mockStudyPlans.add(new StudyPlan("plan-phys-test", "Physics Data Test", false, 0));
-        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
-    }
+//    private void createMockData() {
+//        mockStudyPlans = new ArrayList<>();
+//        mockStudyPlans.add(new StudyPlan("plan-cs-proj", "CS Project", true, 3));
+//        mockStudyPlans.add(new StudyPlan("plan-theo-essay", "Theology Essay", true, 5));
+//        mockStudyPlans.add(new StudyPlan("plan-math-hw", "Math Homework", true, 1));
+//        mockStudyPlans.add(new StudyPlan("plan-chem-lab", "Chemistry Lab", true, 8));
+//        mockStudyPlans.add(new StudyPlan("plan-cs-exam-new", "CS Exam 2", true, 100));// Example for wrapping
+//        mockStudyPlans.add(new StudyPlan("plan-cs-exam", "CS Exam", false, 0));
+//        mockStudyPlans.add(new StudyPlan("plan-bio-report", "Biology Report", false, 0));
+//        mockStudyPlans.add(new StudyPlan("plan-phys-test", "Physics Data Test", false, 0));
+//        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
+//    }
 
     /**
      * Populates the study plan grids with active and past study plans.
@@ -127,11 +147,11 @@ public class StudyPlannersController extends ControllerSkeleton {
         //TODO: Create database table for studyplans and connect here. We don't need to keep the current data mockup, though it would prob be easiest to
 
         // Separate plans into active and past (uses list filtering)
-        List<StudyPlan> activePlans = mockStudyPlans.stream()
+        List<StudyPlan> activePlans = studyPlans.stream()
                 .filter(StudyPlan::isActive)
                 .collect(Collectors.toList());
 
-        List<StudyPlan> pastPlans = mockStudyPlans.stream()
+        List<StudyPlan> pastPlans = studyPlans.stream()
                 .filter(plan -> !plan.isActive())
                 .collect(Collectors.toList());
 
@@ -157,7 +177,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Check if no past plans exist, add filler if so
         if (plans.isEmpty() && !isActiveGrid) {
-            VBox noPastPlans = createStudyPlanVBox(new StudyPlan("plan-past-empty", "No past plans", false, 0));
+            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(currentUser.getId(), "No past plans", "The user does not have any past plans", "INACTIVE"));
             grid.add(noPastPlans, col, row);
         }
 
@@ -192,7 +212,7 @@ public class StudyPlannersController extends ControllerSkeleton {
         vbox.setSpacing(10);
 
         // Title Label
-        Label titleLabel = new Label(plan.title());
+        Label titleLabel = new Label(plan.getTitle());
         titleLabel.setAlignment(Pos.CENTER);
         titleLabel.setPrefHeight(85.0);
         titleLabel.setPrefWidth(504.0);
@@ -229,7 +249,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         if (plan.isActive()) {
             statusLabel.setText("Tasks Remaining:");
-            countLabel.setText(String.valueOf(plan.tasksRemaining()));
+            countLabel.setText(String.valueOf(taskDAO.tasksRemaining(plan.getId())));
         } else {
             statusLabel.setText("Tasks Complete!");
             countLabel.setText(":)");
@@ -240,7 +260,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
         // store the plan ID
-        vbox.setUserData(plan.id());
+        vbox.setUserData(plan.getId());
 
         // on mouse clicked
         vbox.setOnMouseClicked(this::goToStudyPlan);
@@ -283,6 +303,8 @@ public class StudyPlannersController extends ControllerSkeleton {
         }
         System.out.println("goToStudyPlan triggered for plan ID: " + planId);
         openPopUp(studyPlanDetailsPopUp);
+
+//        taskDAO.getTasksByStudyPlan(planId);
         // TODO: loadTasks(*respective user's selected studyplan's task list to go here*);
 
         // TODO: Create actual page nav method and refactor this to make sense
@@ -293,46 +315,45 @@ public class StudyPlannersController extends ControllerSkeleton {
 
     // This has been made with some mock Object types and methods
     // Will be changed when linking to study plan class
-    /*
-    @FXML
-    private void loadTasks(List<Task> tasks) {
-        taskListVBox.getChildren().clear();
 
-        for (Task task : tasks) {
-            // Create a new box per task
-            VBox taskBox = new VBox(5);
-            taskBox.setAlignment(Pos.TOP_LEFT);
-
-            // Box for the task title
-            HBox titleRow = new HBox();
-            titleRow.setAlignment(Pos.CENTER_LEFT);
-            titleRow.setSpacing(10);
-            titleRow.setPadding(new Insets(5,5,5,5));
-            Label titleLabel = new Label(task.getTitle());
-
-            // Box for the task's checkbox
-            HBox checkboxRow = new HBox();
-            CheckBox taskCheckBox = new CheckBox();
-            HBox.setHgrow(checkboxRow, Priority.ALWAYS);
-
-            // Puts the task's title and checkbox in the same row
-            titleRow.getChildren().addAll(titleLabel, checkboxRow,taskCheckBox);
-
-            // Box for checkpoints (in bullet format) within task box
-            VBox checkpointsBox = new VBox(3);
-            checkpointsBox.setPadding(new Insets(0,0,0,20));
-
-            for (String checkpoint : task.getCheckpoints()) {
-                Label checkpointLabel = new Label("•" + checkpoint);
-                checkpointsBox.getChildren().add(checkpointLabel);
-            }
-
-            taskBox.getChildren().addAll(titleRow,checkpointsBox);
-            taskListVBox.getChildren().add(taskBox);
-
-        }
-    }
-    */
+//    @FXML
+//    private void loadTasks(List<Task> tasks) {
+//        taskListVBox.getChildren().clear();
+//
+//        for (Task task : tasks) {
+//            // Create a new box per task
+//            VBox taskBox = new VBox(5);
+//            taskBox.setAlignment(Pos.TOP_LEFT);
+//
+//            // Box for the task title
+//            HBox titleRow = new HBox();
+//            titleRow.setAlignment(Pos.CENTER_LEFT);
+//            titleRow.setSpacing(10);
+//            titleRow.setPadding(new Insets(5,5,5,5));
+//            Label titleLabel = new Label(task.getTitle());
+//
+//            // Box for the task's checkbox
+//            HBox checkboxRow = new HBox();
+//            CheckBox taskCheckBox = new CheckBox();
+//            HBox.setHgrow(checkboxRow, Priority.ALWAYS);
+//
+//            // Puts the task's title and checkbox in the same row
+//            titleRow.getChildren().addAll(titleLabel, checkboxRow,taskCheckBox);
+//
+//            // Box for checkpoints (in bullet format) within task box
+//            VBox checkpointsBox = new VBox(3);
+//            checkpointsBox.setPadding(new Insets(0,0,0,20));
+//
+//            for (String checkpoint : task.getCheckpoints()) {
+//                Label checkpointLabel = new Label("•" + checkpoint);
+//                checkpointsBox.getChildren().add(checkpointLabel);
+//            }
+//
+//            taskBox.getChildren().addAll(titleRow,checkpointsBox);
+//            taskListVBox.getChildren().add(taskBox);
+//
+//        }
+//    }
 
     /**
      * Handles the action when the "Resume Study Plan" button is clicked.
@@ -384,22 +405,5 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML
     private void closeCreateStudyPlanPopUp(){
         closePopUp(newStudyPlanPopUp);
-    }
-
-
-
-    /**
-     * Initializes the session by loading the current user from the session manager.
-     * This method is called during the initialization of the controller.
-     *
-     * @throws SQLException if there is an error loading the session from the database
-     * @throws IOException  if there is an error loading the session from the file
-     */
-    public void iniSession() throws SQLException, IOException {
-        // Load the session to check if the user is already logged in
-        SessionManager.loadSession();
-
-        User currentUser = SessionManager.getCurrentUser();
-        System.out.println("Session loaded!");
     }
 }
