@@ -64,115 +64,115 @@
                               </font>
                            </Label>
 
-                           <GridPane fx:id="pastStudyPlansGrid" hgap="20.0" layoutX="16.0" layoutY="89.0" prefWidth="1591.0" vgap="30.0">
-                              <columnConstraints>
-                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" />
-                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" />
-                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" />
-                              </columnConstraints>
-                              <!-- Past study plan VBoxes will be added here by the controller -->
-                           </GridPane>
+                                 <GridPane fx:id="pastStudyPlansGrid" hgap="20.0" layoutX="16.0" layoutY="89.0" prefWidth="1591.0" vgap="30.0">
+                                    <columnConstraints>
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" />
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" />
+                                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="33.33" />
+                                    </columnConstraints>
+                                    <!-- Past study plan VBoxes will be added here by the controller -->
+                                 </GridPane>
+                              </Group>
+                              <Region layoutX="10.0" layoutY="10.0" prefHeight="33.0" prefWidth="1763.0" />
+                           </VBox>
                         </Group>
-                        <Region layoutX="10.0" layoutY="10.0" prefHeight="33.0" prefWidth="1763.0" />
-                     </VBox>
-                  </Group>
-                  <padding>
-                     <Insets left="20.0" />
-                  </padding>
-               </ScrollPane>
-               <Pane AnchorPane.rightAnchor="0.0">
-                  <fx:include source="../components/user-profile-nobar.fxml" />
-               </Pane>
-            </AnchorPane>
-         </center>
-      </BorderPane>
-      <!-- Overlays -->
-      <StackPane fx:id="newStudyPlanPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
-         <children>
-            <StackPane styleClass="overlay-shadow" />
-            <AnchorPane layoutX="586.0" layoutY="72.0">
+                        <padding>
+                           <Insets left="20.0" />
+                        </padding>
+                     </ScrollPane>
+                     <Pane AnchorPane.rightAnchor="0.0">
+                        <fx:include source="../components/user-profile-nobar.fxml" />
+                     </Pane>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+            <!-- Overlays -->
+            <StackPane fx:id="newStudyPlanPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
                <children>
-                  <AnchorPane layoutX="586.0" layoutY="72.0" prefHeight="900.0" prefWidth="900.0" styleClass="brand-box">
+                  <StackPane styleClass="overlay-shadow" />
+                  <AnchorPane layoutX="586.0" layoutY="72.0">
                      <children>
-                        <Label fx:id="createStudyPlanPopUpLabel" layoutX="53.0" layoutY="35.0" text="Create New Study Plan">
-                           <font>
-                              <Font size="42.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="createStudyPlanDescriptionLabel" layoutX="57.0" layoutY="90.0" prefHeight="190.0" prefWidth="780.0" text="Enter in the description of what you would like to complete and Pomodora will generate a customized study plan for you." wrapText="true">
-                           <font>
-                              <Font size="32.0" />
-                           </font>
-                        </Label>
-                        <TextArea fx:id="promptEntryTextArea" layoutX="57.0" layoutY="277.0" prefHeight="250.0" prefWidth="778.0" promptText="Enter description here...">
-                           <font>
-                              <Font size="28.0" />
-                           </font>
-                        </TextArea>
-                        <Label fx:id="totalStudyHoursLabel" layoutX="55.0" layoutY="530.0" prefHeight="97.0" prefWidth="303.0" text="Total hours of study ">
-                           <font>
-                              <Font size="32.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="optionalHoursLabel" layoutX="54.0" layoutY="575.0" prefHeight="88.0" prefWidth="245.0" style="-fx-font-style: italic;" text="(optional)">
-                           <font>
-                              <Font size="32.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="studyHoursEntryTextField" alignment="CENTER" layoutX="357.0" layoutY="565.0" prefHeight="73.0" prefWidth="114.0" promptText="Enter">
-                           <font>
-                              <Font size="28.0" />
-                           </font>
-                        </TextField>
-                        <Button fx:id="generateStudyPlanButton" layoutX="65.0" layoutY="736.0" mnemonicParsing="false" onAction="#generateStudyPlan" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Generate" textFill="WHITE">
-                           <font>
-                              <Font size="28.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="closeCreateStudyPlanPopUpButton" layoutX="625.0" layoutY="736.0" mnemonicParsing="false" onAction="#closeCreateStudyPlanPopUp" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Close" textFill="WHITE">
-                           <font>
-                              <Font size="28.0" />
-                           </font>
-                        </Button>
-                        <Label fx:id="statusLabel" layoutX="488.0" layoutY="544.0" prefHeight="62.0" prefWidth="337.0" text="Label" />
-                        <ProgressIndicator fx:id="progressIndicator" layoutX="434.0" layoutY="726.0" prefHeight="73.0" prefWidth="52.0" progress="0.0" />
+                        <AnchorPane layoutX="586.0" layoutY="72.0" prefHeight="900.0" prefWidth="900.0" styleClass="brand-box">
+                           <children>
+                              <Label fx:id="createStudyPlanPopUpLabel" layoutX="53.0" layoutY="35.0" text="Create New Study Plan">
+                                 <font>
+                                    <Font size="42.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="createStudyPlanDescriptionLabel" layoutX="57.0" layoutY="90.0" prefHeight="190.0" prefWidth="780.0" text="Enter in the description of what you would like to complete and Pomodora will generate a customized study plan for you." wrapText="true">
+                                 <font>
+                                    <Font size="32.0" />
+                                 </font>
+                              </Label>
+                              <TextArea fx:id="promptEntryTextArea" layoutX="57.0" layoutY="277.0" prefHeight="250.0" prefWidth="778.0" promptText="Enter description here...">
+                                 <font>
+                                    <Font size="28.0" />
+                                 </font>
+                              </TextArea>
+                              <Label fx:id="totalStudyHoursLabel" layoutX="55.0" layoutY="530.0" prefHeight="97.0" prefWidth="303.0" text="Total hours of study ">
+                                 <font>
+                                    <Font size="32.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="optionalHoursLabel" layoutX="54.0" layoutY="575.0" prefHeight="88.0" prefWidth="245.0" style="-fx-font-style: italic;" text="(optional)">
+                                 <font>
+                                    <Font size="32.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="studyHoursEntryTextField" alignment="CENTER" layoutX="357.0" layoutY="565.0" prefHeight="73.0" prefWidth="114.0" promptText="Enter">
+                                 <font>
+                                    <Font size="28.0" />
+                                 </font>
+                              </TextField>
+                              <Button fx:id="generateStudyPlanButton" layoutX="65.0" layoutY="736.0" mnemonicParsing="false" onAction="#generateStudyPlan" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Generate" textFill="WHITE">
+                                 <font>
+                                    <Font size="28.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="closeCreateStudyPlanPopUpButton" layoutX="625.0" layoutY="736.0" mnemonicParsing="false" onAction="#closeCreateStudyPlanPopUp" prefHeight="60.0" prefWidth="200.0" styleClass="button-secondary" text="Close" textFill="WHITE">
+                                 <font>
+                                    <Font size="28.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
                      </children>
                   </AnchorPane>
                </children>
-            </AnchorPane>
-         </children>
-      </StackPane>
-      <StackPane fx:id="studyPlanDetailsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
-         <children>
-            <StackPane styleClass="overlay-shadow" />
-            <AnchorPane layoutX="586.0" layoutY="72.0">
-               <children>
-                  <AnchorPane layoutX="586.0" layoutY="72.0" prefHeight="900.0" prefWidth="900.0" styleClass="brand-box">
-                     <children>
-                        <Label fx:id="studyPlanDetailsPopUpLabel" layoutX="63.0" layoutY="40.0" text="Study Plan:">
-                           <font>
-                              <Font size="42.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane fx:id="taskListScrollBox" hbarPolicy="NEVER" layoutX="61.0" layoutY="118.0" prefHeight="590.0" prefWidth="777.0" styleClass="close-button" vbarPolicy="ALWAYS">
-                           <content>
-                              <VBox fx:id="taskListVBox" prefHeight="588.0" prefWidth="760.0" spacing="10.0" styleClass="current-page-nav-button" />
-                           </content>
-                        </ScrollPane>
-                        <Button fx:id="resumeStudyPlanButton" layoutX="65.0" layoutY="768.0" mnemonicParsing="false" onAction="#resumeStudyPlan" prefHeight="55.0" prefWidth="150.0" text="Resume">
-                           <font>
-                              <Font size="28.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="closeStudyPlanDetailsPopUpButton" layoutX="680.0" layoutY="769.0" mnemonicParsing="false" onAction="#closeStudyPlanDetailsPopUp" prefHeight="59.0" prefWidth="150.0" text="Close">
-                           <font>
-                              <Font size="28.0" />
-                           </font>
-                        </Button>
-                     </children></AnchorPane>
-               </children>
-            </AnchorPane>
-         </children>
+            </StackPane>
+            <StackPane fx:id="studyPlanDetailsPopUp" layoutX="366.0" layoutY="103.0" prefHeight="900.0" prefWidth="900.0" visible="false">
+            <children>
+               <StackPane styleClass="overlay-shadow" />
+               <AnchorPane layoutX="586.0" layoutY="72.0">
+                  <children>
+                     <AnchorPane layoutX="586.0" layoutY="72.0" prefHeight="900.0" prefWidth="900.0" styleClass="brand-box">
+                        <children>
+                           <Label fx:id="studyPlanDetailsPopUpLabel" layoutX="63.0" layoutY="40.0" text="Study Plan:">
+                              <font>
+                                 <Font size="42.0" />
+                              </font>
+                           </Label>
+                           <ScrollPane fx:id="taskListScrollBox" hbarPolicy="NEVER" layoutX="61.0" layoutY="118.0" prefHeight="590.0" prefWidth="777.0" styleClass="close-button" vbarPolicy="ALWAYS">
+                              <content>
+                                 <VBox fx:id="taskListVBox" prefHeight="588.0" prefWidth="760.0" spacing="10.0" styleClass="current-page-nav-button" />
+                              </content>
+                           </ScrollPane>
+                           <Button fx:id="resumeStudyPlanButton" layoutX="65.0" layoutY="768.0" mnemonicParsing="false" onAction="#resumeStudyPlan" prefHeight="55.0" prefWidth="150.0" text="Resume">
+                              <font>
+                                 <Font size="28.0" />
+                              </font>
+                           </Button>
+                           <Button fx:id="closeStudyPlanDetailsPopUpButton" layoutX="680.0" layoutY="769.0" mnemonicParsing="false" onAction="#closeStudyPlanDetailsPopUp" prefHeight="59.0" prefWidth="150.0" text="Close">
+                              <font>
+                                 <Font size="28.0" />
+                              </font>
+                           </Button>
+                        </children></AnchorPane>
+                  </children>
+               </AnchorPane>
+            </children>
+         </StackPane>
+         </StackPane>
       </StackPane>
    </StackPane>
 </StackPane>

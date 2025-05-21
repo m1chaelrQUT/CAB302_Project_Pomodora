@@ -100,6 +100,7 @@ public class StudyPlannersController extends ControllerSkeleton {
         currentUser = SessionManager.getCurrentUser();
         this.llmService = new LLMService();
 
+
         if(currentUser == null) {
             throw new IllegalStateException("Current user is null. Cannot load study plans.");
         }
@@ -108,8 +109,16 @@ public class StudyPlannersController extends ControllerSkeleton {
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-//        createMockData();
         studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
+
+//        // Mock Study Plan and Tasks for view details pop up testing
+//        StudyPlan mock = new StudyPlan(currentUser.getId(),"Mock Study Plan", "This is a test plan", "ACTIVE");
+//        List<Task> mockTasks = new ArrayList<>();
+//        mockTasks.add(new Task(101,1,"Mock Task 1", "This is a mock task description", "PENDING"));
+//        mockTasks.add(new Task(101, 2, "Mock Task 2", "This is another mock task description", "IN_PROGRESS"));
+//        mock.setTasks(mockTasks);
+//
+//        studyPlans.add(mock);
 
         //-----------
         populateStudyPlanGrids();
@@ -298,67 +307,116 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML
     private void goToStudyPlan(MouseEvent event) {
         Object source = event.getSource();
-        String planId = "N/A";
+        String planIdStr = "N/A";
 
+        // Check if the source is a VBox and get the user data
         if (source instanceof Node node) {
+            // Get the user data from the clicked node and parse it to an integer
             Object userData = node.getUserData();
-            if (userData instanceof String) {
-                planId = (String) userData;
+            int selectedStudyPlanId = Integer.parseInt(String.valueOf(userData));
+
+            // Find the selected study plan from the list
+            StudyPlan selectedStudyPlan = studyPlans.stream()
+                    .filter(plan -> plan.getId() == selectedStudyPlanId)
+                    .findFirst()
+                    .orElse(null);
+
+            // If the selected study plan is found, display its details
+            if (selectedStudyPlan != null) {
+                System.out.println("Selected Study Plan: " + selectedStudyPlan.getTitle());
+                List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedStudyPlanId);
+                displayTasks(tasks);
+                openPopUp(studyPlanDetailsPopUp);
             }
-        }
-        System.out.println("goToStudyPlan triggered for plan ID: " + planId);
-        openPopUp(studyPlanDetailsPopUp);
 
-//        taskDAO.getTasksByStudyPlan(planId);
-        // TODO: loadTasks(*respective user's selected studyplan's task list to go here*);
-
-        // TODO: Create actual page nav method and refactor this to make sense
+            // I started extending bits from here  -Sriman
+//            if (userData instanceof String planIDStr){
+//                if (planIDStr.equals("N/A")){
+//                    System.err.println("Invalid planID format: N/A");
+//                    return;
+//                }
+//                try {
+//                    int planID = Integer.parseInt(planIdStr);
+//
+//                    StudyPlan selectedPlan = studyPlans.stream()
+//                            .filter(plan -> plan.getId() == planID).findFirst().orElse(null);
+//
+//                    if (selectedPlan != null) {
+//                        System.out.println("Selected Study Plan: " + selectedPlan.getTitle());
+//                        List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedPlan.getId());
+//                        displayTasks(tasks);
+//                        openPopUp(studyPlanDetailsPopUp);
+//                    } else {
+//                        System.err.println("No study plan found with id: " + planID);
+//                    }
+//                } catch (NumberFormatException e) {
+//                    System.err.println("PlanID is not a valid number: " + planIDStr);
+//                }
+//            }
+        } else {
+                System.err.println("UserData is not a Studyplan object or is null.");
+            }
     }
+
+
 
     // Box within the studyPlanDetails pop-up that will actually show the tasks
     @FXML private VBox taskListVBox;
 
-    // This has been made with some mock Object types and methods
-    // Will be changed when linking to study plan class
 
-//    @FXML
-//    private void loadTasks(List<Task> tasks) {
-//        taskListVBox.getChildren().clear();
-//
-//        for (Task task : tasks) {
-//            // Create a new box per task
-//            VBox taskBox = new VBox(5);
-//            taskBox.setAlignment(Pos.TOP_LEFT);
-//
-//            // Box for the task title
-//            HBox titleRow = new HBox();
-//            titleRow.setAlignment(Pos.CENTER_LEFT);
-//            titleRow.setSpacing(10);
-//            titleRow.setPadding(new Insets(5,5,5,5));
-//            Label titleLabel = new Label(task.getTitle());
-//
-//            // Box for the task's checkbox
-//            HBox checkboxRow = new HBox();
-//            CheckBox taskCheckBox = new CheckBox();
-//            HBox.setHgrow(checkboxRow, Priority.ALWAYS);
-//
-//            // Puts the task's title and checkbox in the same row
-//            titleRow.getChildren().addAll(titleLabel, checkboxRow,taskCheckBox);
-//
-//            // Box for checkpoints (in bullet format) within task box
-//            VBox checkpointsBox = new VBox(3);
-//            checkpointsBox.setPadding(new Insets(0,0,0,20));
-//
-//            for (String checkpoint : task.getCheckpoints()) {
-//                Label checkpointLabel = new Label("•" + checkpoint);
-//                checkpointsBox.getChildren().add(checkpointLabel);
-//            }
-//
-//            taskBox.getChildren().addAll(titleRow,checkpointsBox);
-//            taskListVBox.getChildren().add(taskBox);
-//
-//        }
-//    }
+    // This is the method I'm trying to call    -Sriman
+    @FXML
+    private void displayTasks(List<Task> tasks) {
+        taskListVBox.getChildren().clear();
+
+        // Check if the task list is empty
+        if (tasks == null || tasks.isEmpty()) {
+            Label noTasksLabel = new Label("No tasks available for this study plan.");
+            noTasksLabel.setStyle("-fx-font-style: italic;");
+            taskListVBox.getChildren().add(noTasksLabel);
+            return;
+        } else {
+            for (Task task : tasks) {
+                HBox taskBox = new HBox();
+                taskBox.setSpacing(10);
+                taskBox.setAlignment(Pos.CENTER_LEFT);
+                taskBox.setPadding(new Insets(10));
+                taskBox.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
+
+                VBox textBox = new VBox();
+                textBox.setAlignment(Pos.TOP_LEFT);
+
+                Label titleLabel = new Label(task.getTitle());
+                titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px;");
+
+                Label descLabel = new Label(task.getDescription());
+                descLabel.setWrapText(true);
+                descLabel.setStyle("-fx-font-size: 28px;");
+
+                textBox.getChildren().addAll(titleLabel, descLabel);
+                HBox.setHgrow(textBox, Priority.ALWAYS);
+
+                CheckBox checkBox = new CheckBox();
+                checkBox.setSelected("COMPLETE".equalsIgnoreCase(task.getStatus()));
+                checkBox.setAlignment(Pos.TOP_RIGHT);
+                checkBox.setStyle("-fx-font-size: 28px; -fx-padding: 10;");
+
+                checkBox.selectedProperty().addListener((observe, wasSelected, isNowSelected) -> {
+                    String newStatus = isNowSelected ? "COMPLETE" : "INCOMPLETE";
+                    task.setStatus(newStatus);
+                    System.out.println("Task details updated: "  + task.toString());
+
+                    boolean updateSuccess = taskDAO.updateTask(task);
+                    if (!updateSuccess){
+                        System.err.println("Failed to update task status for task id: " + task.getId());
+                    }
+                });
+
+                taskBox.getChildren().addAll(textBox, checkBox);
+                taskListVBox.getChildren().add(taskBox);
+            }
+        }
+    }
 
     /**
      * Handles the action when the "Resume Study Plan" button is clicked.

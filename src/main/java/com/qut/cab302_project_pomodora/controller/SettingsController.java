@@ -89,6 +89,30 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private void openTimerSettings() {
         timerSettingsPopUp.setVisible(true);
+        settingsSavedLabel.setVisible(false);
+
+        // Load current timer settings
+        Timer currentTimerSettings = timerDAO.getUserTimer(currentUser);
+        if (currentTimerSettings != null) {
+            int workDuration = currentTimerSettings.getWorkDuration();
+            int shortBreak = currentTimerSettings.getShortBreakDuration();
+            int longBreak = currentTimerSettings.getLongBreakDuration();
+            int longBreakAfter = currentTimerSettings.getLongBreakAfter();
+
+            // Set values into spinners
+            // Total time stored in seconds, so value / 60 = nearest int
+            pomodoroMinutesSpinner.getValueFactory().setValue(workDuration / 60);
+            // Value % 60 = remainder, i.e., seconds after whole minutes calculated
+            pomodoroSecondsSpinner.getValueFactory().setValue(workDuration % 60);
+
+            shortBreakMinutesSpinner.getValueFactory().setValue(shortBreak / 60);
+            shortBreakSecondsSpinner.getValueFactory().setValue(shortBreak % 60);
+
+            longBreakMinutesSpinner.getValueFactory().setValue(longBreak / 60);
+            longBreakSecondsSpinner.getValueFactory().setValue(longBreak % 60);
+
+            longBreakCyclesSpinner.getValueFactory().setValue(longBreakAfter);
+        }
     }
 
     /**
@@ -197,6 +221,22 @@ public class SettingsController extends ControllerSkeleton {
             colourSchemeSelector.setItems(FXCollections.observableArrayList(Theme.values()));
             timerUISelector.setItems(FXCollections.observableArrayList(Timers.values()));
         });
+
+        pomodoroMinutesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,25) );
+        pomodoroSecondsSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,0)  );
+        shortBreakMinutesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,5)  );
+        shortBreakSecondsSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,0)  );
+        longBreakMinutesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,30) );
+        longBreakSecondsSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,0)  );
+        longBreakCyclesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,30,4)
+        );
 
         System.out.println("SettingsController Initialization completed.");
     }
@@ -345,6 +385,8 @@ public class SettingsController extends ControllerSkeleton {
         //TODO: [FrontEnd] Display success message to user
     }
 
+    @FXML private Label settingsSavedLabel;
+
     /**
      * This method is called when the user clicks the "Save" button in the timer settings pop-up.
      * It saves the timer settings for the current user in the database.
@@ -375,6 +417,7 @@ public class SettingsController extends ControllerSkeleton {
 
         // Update the user's timer settings
         timerDAO.updateUserTimers(currentUser, currentUserTimer);
+        settingsSavedLabel.setVisible(true);
     }
 
     /**
