@@ -126,7 +126,7 @@ public class StudyPlannersController extends ControllerSkeleton {
                 });
 
 
-        iniSession();
+        //iniSession();
         //System.out.println("StudyPlannersController" + studyPlans.size() + " StudyPlans: " + studyPlans);
         System.out.println("StudyPlannersController Initialization completed.");
     }

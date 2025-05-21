@@ -25,7 +25,6 @@ public class StudyPlan
         this.studyTasks = new ArrayList<>();
     }
 
-    public StudyPlan(int id, int userId,String title,String description,String status)
     /**
      * Constructor for StudyPlan.
      * Initializes a new instance of the StudyPlan class with the specified parameters.
@@ -35,7 +34,7 @@ public class StudyPlan
      * @param description The description of the study plan.
      * @param status      The status of the study plan (e.g., ACTIVE, INACTIVE).
      */
-    public StudyPlan(int userId,String title,String description,String status)
+    public StudyPlan(int id, int userId,String title,String description,String status)
     {
         this();
         this.id = id;
