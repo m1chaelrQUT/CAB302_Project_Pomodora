@@ -131,6 +131,9 @@ public class StudyPlan
      * @return The list of tasks in the study plan.
      */
     public List<StudyTask> tasks() {
+        if (studyTasks == null || studyTasks.size() == 0) {
+            return null;
+        }
         return studyTasks;
     }
 

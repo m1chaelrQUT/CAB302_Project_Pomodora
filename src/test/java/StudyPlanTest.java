@@ -25,8 +25,8 @@ public class StudyPlanTest{
     
     @BeforeEach
     public void setUp() {
-        studyPlan = new StudyPlan(USER_ID, TITLE, DESCRIPTION, STATUS);
-        studyPlanTwo = new StudyPlan(USER_ID_TWO, TITLE_TWO, DESCRIPTION_TWO, STATUS_TWO);
+        studyPlan = new StudyPlan(0, USER_ID, TITLE, DESCRIPTION, STATUS);
+        studyPlanTwo = new StudyPlan(0, USER_ID_TWO, TITLE_TWO, DESCRIPTION_TWO, STATUS_TWO);
     }
 
     //TODO: Split these up into separate tests that test each setter individually
@@ -48,7 +48,7 @@ public class StudyPlanTest{
 
     @Test
     public void testParameterizedConstructor() {
-        StudyPlan plan = new StudyPlan(7, "Study", "Study description", "PENDING");
+        StudyPlan plan = new StudyPlan(0, 7, "Study", "Study description", "PENDING");
 
         assertEquals(7, plan.getUserId());
         assertEquals("Study", plan.getTitle());
@@ -84,12 +84,12 @@ public class StudyPlanTest{
 
     @Test
     public void testIsActive() {
-        assertTrue(studyPlan.isActive(), "Study plan should be active by default.");
+        assertTrue(studyPlan.planIsActive(), "Study plan should be active by default.");
     }
 
     @Test
     public void testIsNotActive() {
         studyPlan.setStatus("INACTIVE");
-        assertFalse(studyPlan.isActive(), "Study plan should not be active when status is INACTIVE.");
+        assertFalse(studyPlan.planIsActive(), "Study plan should not be active when status is INACTIVE.");
     }
 }
