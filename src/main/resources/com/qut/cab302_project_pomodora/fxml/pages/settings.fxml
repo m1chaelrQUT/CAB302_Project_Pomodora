@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="settings" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SettingsController">
+<StackPane fx:id="settings" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SettingsController">
       <StackPane styleClass="primitives">
          <StackPane styleClass="theme">
             <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
