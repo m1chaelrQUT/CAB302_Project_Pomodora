@@ -134,6 +134,8 @@
                                     <Font size="28.0" />
                                  </font>
                               </Button>
+                        <ProgressIndicator fx:id="progressIndicator" layoutX="401.0" layoutY="726.0" progress="0.0" />
+                        <Label fx:id="statusLabel" layoutX="509.0" layoutY="567.0" text="Label" />
                            </children>
                         </AnchorPane>
                      </children>
@@ -171,8 +173,6 @@
                   </children>
                </AnchorPane>
             </children>
-         </StackPane>
-         </StackPane>
-      </StackPane>
+            </StackPane>
    </StackPane>
 </StackPane>

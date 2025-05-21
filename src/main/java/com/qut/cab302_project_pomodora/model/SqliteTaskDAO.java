@@ -203,7 +203,7 @@ public class SqliteTaskDAO implements ITaskDAO {
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
         String status = resultSet.getString("status");
-        StudyTask studyTask = new StudyTask(studyPlanId, taskNumber, title, description, status);
+        StudyTask studyTask = new StudyTask(id, studyPlanId, taskNumber, title, description, status);
         return studyTask;
     }
 

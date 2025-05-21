@@ -324,8 +324,9 @@ public class StudyPlannersController extends ControllerSkeleton {
             // If the selected study plan is found, display its details
             if (selectedStudyPlan != null) {
                 System.out.println("Selected Study Plan: " + selectedStudyPlan.getTitle());
-                List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedStudyPlanId);
-                displayTasks(tasks);
+                List<StudyTask> studyTasks = taskDAO.getTasksByStudyPlan(selectedStudyPlanId);
+                System.out.println(studyTasks);
+                displayTasks(studyTasks);
                 openPopUp(studyPlanDetailsPopUp);
             }
 
@@ -366,7 +367,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
     // This is the method I'm trying to call    -Sriman
     @FXML
-    private void displayTasks(List<Task> tasks) {
+    private void displayTasks(List<StudyTask> tasks) {
         taskListVBox.getChildren().clear();
 
         // Check if the task list is empty
@@ -376,7 +377,7 @@ public class StudyPlannersController extends ControllerSkeleton {
             taskListVBox.getChildren().add(noTasksLabel);
             return;
         } else {
-            for (Task task : tasks) {
+            for (StudyTask task : tasks) {
                 HBox taskBox = new HBox();
                 taskBox.setSpacing(10);
                 taskBox.setAlignment(Pos.CENTER_LEFT);
@@ -524,7 +525,7 @@ public class StudyPlannersController extends ControllerSkeleton {
                     String taskDescription = entry.getValue().getDescription();
 
                     int studyPlanId = studyPlanDAO.getStudyPlanByTitle(plan.getTitle()).getId();
-                    StudyTask currentTask = new StudyTask(studyPlanId, taskNumber, taskTitle, taskDescription, "ACTIVE");
+                    StudyTask currentTask = new StudyTask(0, studyPlanId, taskNumber, taskTitle, taskDescription, "INCOMPLETE");
                     taskDAO.createTask(currentTask);
                 }
 
