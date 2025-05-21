@@ -93,7 +93,7 @@ public class SqliteTaskDAO implements ITaskDAO {
      */
     public int tasksRemaining(int studyPlanId) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM tasks WHERE studyPlanId = ? AND status != 'COMPLETED'");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM tasks WHERE studyPlanId = ? AND status = 'INCOMPLETE'");
             preparedStatement.setInt(1, studyPlanId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
