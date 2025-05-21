@@ -59,6 +59,9 @@ public class StudyPlannersController extends ControllerSkeleton {
     // Current user object
     private User currentUser;
 
+    // Selected study plan object
+    private StudyPlan selectedStudyPlan;
+
     // Study plans list
     private List<StudyPlan> studyPlans;
 
@@ -308,7 +311,7 @@ public class StudyPlannersController extends ControllerSkeleton {
             int selectedStudyPlanId = Integer.parseInt(String.valueOf(userData));
 
             // Find the selected study plan from the list
-            StudyPlan selectedStudyPlan = studyPlans.stream()
+            selectedStudyPlan = studyPlans.stream()
                     .filter(plan -> plan.getId() == selectedStudyPlanId)
                     .findFirst()
                     .orElse(null);
