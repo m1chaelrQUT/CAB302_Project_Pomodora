@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="profile" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.ProfileController">
+<StackPane fx:id="profile" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.ProfileController">
     <StackPane styleClass="primitives">
         <StackPane styleClass="theme">
             <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
@@ -64,7 +64,7 @@
                                              <Font size="30.0" />
                                           </font>
                                        </Label>
-                                       <TextArea editable="false" focusTraversable="false" layoutX="911.0" layoutY="20.0" prefHeight="350.0" prefWidth="602.0" text="Your productivity has improved by 12% in the last week, with 8 extra tasks completed in the last 3 days." wrapText="true">
+                                       <TextArea editable="false" focusTraversable="false" layoutX="911.0" layoutY="20.0" prefHeight="350.0" prefWidth="602.0" text="Your productivity has improved by 12% in the last week, with 8 extra studyTasks completed in the last 3 days." wrapText="true">
                                           <font>
                                              <Font size="30.0" />
                                           </font>

@@ -25,8 +25,8 @@ public class StudyPlanTest{
     
     @BeforeEach
     public void setUp() {
-        studyPlan = new StudyPlan(USER_ID, TITLE, DESCRIPTION, STATUS);
-        studyPlanTwo = new StudyPlan(USER_ID_TWO, TITLE_TWO, DESCRIPTION_TWO, STATUS_TWO);
+        studyPlan = new StudyPlan(0, USER_ID, TITLE, DESCRIPTION, STATUS);
+        studyPlanTwo = new StudyPlan(0, USER_ID_TWO, TITLE_TWO, DESCRIPTION_TWO, STATUS_TWO);
     }
 
     //TODO: Split these up into separate tests that test each setter individually
@@ -38,19 +38,17 @@ public class StudyPlanTest{
         studyPlanTwo.setTitle("Test Plan");
         studyPlanTwo.setDescription("A plan for testing");
         studyPlanTwo.setStatus("ACTIVE");
-        studyPlanTwo.setParticipantCount(5);
 
         assertEquals(3, studyPlanTwo.getId());
         assertEquals(42, studyPlanTwo.getUserId());
         assertEquals("Test Plan", studyPlanTwo.getTitle());
         assertEquals("A plan for testing", studyPlanTwo.getDescription());
         assertEquals("ACTIVE", studyPlanTwo.getStatus());
-        assertEquals(5, studyPlanTwo.getParticipantCount());
     }
 
     @Test
     public void testParameterizedConstructor() {
-        StudyPlan plan = new StudyPlan(7, "Study", "Study description", "PENDING");
+        StudyPlan plan = new StudyPlan(0, 7, "Study", "Study description", "PENDING");
 
         assertEquals(7, plan.getUserId());
         assertEquals("Study", plan.getTitle());
@@ -65,14 +63,12 @@ public class StudyPlanTest{
         plan.setUserId(20);
         plan.setTitle("ToStringTest");
         plan.setStatus("DONE");
-        plan.setParticipantCount(3);
 
         String result = plan.toString();
         assertTrue(result.contains("id=10"));
         assertTrue(result.contains("userId=20"));
         assertTrue(result.contains("title='ToStringTest'"));
         assertTrue(result.contains("status='DONE'"));
-        assertTrue(result.contains("participantCount=3"));
     }
 
     @Test
@@ -88,12 +84,12 @@ public class StudyPlanTest{
 
     @Test
     public void testIsActive() {
-        assertTrue(studyPlan.isActive(), "Study plan should be active by default.");
+        assertTrue(studyPlan.planIsActive(), "Study plan should be active by default.");
     }
 
     @Test
     public void testIsNotActive() {
         studyPlan.setStatus("INACTIVE");
-        assertFalse(studyPlan.isActive(), "Study plan should not be active when status is INACTIVE.");
+        assertFalse(studyPlan.planIsActive(), "Study plan should not be active when status is INACTIVE.");
     }
 }

@@ -1,5 +1,6 @@
 package com.qut.cab302_project_pomodora.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,15 +14,16 @@ public class StudyPlan
     private String title;
     private String description;
     private String status;
-    private List<Task> tasks;
-    private int participantCount;
+    private List<StudyTask> studyTasks;
 
     /**
      * Default constructor for StudyPlan.
      * Initializes a new instance of the StudyPlan class.
      */
     public  StudyPlan()
-    {}
+    {
+        this.studyTasks = new ArrayList<>();
+    }
 
     /**
      * Constructor for StudyPlan.
@@ -32,8 +34,10 @@ public class StudyPlan
      * @param description The description of the study plan.
      * @param status      The status of the study plan (e.g., ACTIVE, INACTIVE).
      */
-    public StudyPlan(int userId,String title,String description,String status)
+    public StudyPlan(int id, int userId,String title,String description,String status)
     {
+        this();
+        this.id = id;
         this.userId = userId;
         this.title = title;
         this.description = description;
@@ -126,33 +130,21 @@ public class StudyPlan
      * Gets the list of tasks associated with the study plan.
      * @return The list of tasks in the study plan.
      */
-    public List<Task> tasks() {
-        return tasks;
+    public List<StudyTask> tasks() {
+        if (studyTasks == null || studyTasks.size() == 0) {
+            return null;
+        }
+        return studyTasks;
     }
 
     /**
      * Sets the list of tasks associated with the study plan.
-     * @param tasks The list of tasks to set for the study plan.
+     * @param studyTasks The list of tasks to set for the study plan.
      */
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setTasks(List<StudyTask> studyTasks) {
+        this.studyTasks = studyTasks;
     }
 
-    /**
-     * Gets the number of participants in the study plan.
-     * @return The number of participants in the study plan.
-     */
-    public int getParticipantCount() {
-        return participantCount;
-    }
-
-    /**
-     * Sets the number of participants in the study plan.
-     * @param participantCount The number of participants to set for the study plan.
-     */
-    public void setParticipantCount(int participantCount) {
-        this.participantCount = participantCount;
-    }
 
     /**
      * Returns a string representation of the study plan.
@@ -165,7 +157,6 @@ public class StudyPlan
                 ", userId=" + userId +
                 ", title='" + title + '\'' +
                 ", status='" + status + '\'' +
-                ", participantCount=" + participantCount +
                 '}';
     }
 
@@ -173,7 +164,7 @@ public class StudyPlan
      * Checks if the study plan is active.
      * @return true if the study plan is active, false otherwise.
      */
-    public boolean isActive() {
+    public boolean planIsActive() {
         return status.equals("ACTIVE");
     }
 }

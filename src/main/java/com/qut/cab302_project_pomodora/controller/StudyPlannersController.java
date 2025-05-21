@@ -1,7 +1,10 @@
 package com.qut.cab302_project_pomodora.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qut.cab302_project_pomodora.model.*;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -19,8 +22,8 @@ import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -41,15 +44,12 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private StackPane newStudyPlanPopUp;
     @FXML private StackPane studyPlanDetailsPopUp;
 
-    private static final int MAX_COLUMNS = 3;
-    private static final double PREF_VBOX_HEIGHT = 340;
-    private static final double PREF_VBOX_WIDTH = 517;
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private Label statusLabel;
 
-    // Mock Data Structure
-//    private record StudyPlan(String id, String title, boolean isActive, int tasksRemaining) {}
-//
-//    private List<StudyPlan> mockStudyPlans;
-
+    private LLMService llmService;
 
     // DAO interfaces
     private IStudyPlanDAO studyPlanDAO;
@@ -69,10 +69,11 @@ public class StudyPlannersController extends ControllerSkeleton {
         taskDAO = new SqliteTaskDAO();
     }
 
-    /**
-     * Gets the root pane of the study planners view.
-     * @return the root pane of the study planners view.
-     */
+
+    private static final int MAX_COLUMNS = 3;
+    private static final double PREF_VBOX_HEIGHT = 340;
+    private static final double PREF_VBOX_WIDTH = 517;
+
     @Override
     protected StackPane getRootPane() {
         return studyPlanners;
@@ -97,6 +98,8 @@ public class StudyPlannersController extends ControllerSkeleton {
     public void initialize() throws SQLException, IOException {
         super.initialize();
         currentUser = SessionManager.getCurrentUser();
+        this.llmService = new LLMService();
+
 
         if(currentUser == null) {
             throw new IllegalStateException("Current user is null. Cannot load study plans.");
@@ -106,8 +109,16 @@ public class StudyPlannersController extends ControllerSkeleton {
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-//        createMockData();
         studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
+
+//        // Mock Study Plan and Tasks for view details pop up testing
+//        StudyPlan mock = new StudyPlan(currentUser.getId(),"Mock Study Plan", "This is a test plan", "ACTIVE");
+//        List<Task> mockTasks = new ArrayList<>();
+//        mockTasks.add(new Task(101,1,"Mock Task 1", "This is a mock task description", "PENDING"));
+//        mockTasks.add(new Task(101, 2, "Mock Task 2", "This is another mock task description", "IN_PROGRESS"));
+//        mock.setTasks(mockTasks);
+//
+//        studyPlans.add(mock);
 
         //-----------
         populateStudyPlanGrids();
@@ -120,9 +131,12 @@ public class StudyPlannersController extends ControllerSkeleton {
                             event.consume();
                         }
                     });
+                    statusLabel.textProperty().bind(llmService.statusMessageProperty());
                 });
 
 
+        //iniSession();
+        //System.out.println("StudyPlannersController" + studyPlans.size() + " StudyPlans: " + studyPlans);
         System.out.println("StudyPlannersController Initialization completed.");
     }
 
@@ -148,11 +162,11 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Separate plans into active and past (uses list filtering)
         List<StudyPlan> activePlans = studyPlans.stream()
-                .filter(StudyPlan::isActive)
+                .filter(StudyPlan::planIsActive)
                 .collect(Collectors.toList());
 
         List<StudyPlan> pastPlans = studyPlans.stream()
-                .filter(plan -> !plan.isActive())
+                .filter(plan -> !plan.planIsActive())
                 .collect(Collectors.toList());
 
         // Populate the gridpanes
@@ -177,7 +191,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Check if no past plans exist, add filler if so
         if (plans.isEmpty() && !isActiveGrid) {
-            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(currentUser.getId(), "No past plans", "The user does not have any past plans", "INACTIVE"));
+            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(0, currentUser.getId(), "No past plans", "No plans for this user", "INACTIVE"));
             grid.add(noPastPlans, col, row);
         }
 
@@ -247,7 +261,7 @@ public class StudyPlannersController extends ControllerSkeleton {
         countLabel.setFont(new Font(40.0));
 
 
-        if (plan.isActive()) {
+        if (plan.planIsActive()) {
             statusLabel.setText("Tasks Remaining:");
             countLabel.setText(String.valueOf(taskDAO.tasksRemaining(plan.getId())));
         } else {
@@ -293,67 +307,116 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML
     private void goToStudyPlan(MouseEvent event) {
         Object source = event.getSource();
-        String planId = "N/A";
+        String planIdStr = "N/A";
 
+        // Check if the source is a VBox and get the user data
         if (source instanceof Node node) {
+            // Get the user data from the clicked node and parse it to an integer
             Object userData = node.getUserData();
-            if (userData instanceof String) {
-                planId = (String) userData;
+            int selectedStudyPlanId = Integer.parseInt(String.valueOf(userData));
+
+            // Find the selected study plan from the list
+            StudyPlan selectedStudyPlan = studyPlans.stream()
+                    .filter(plan -> plan.getId() == selectedStudyPlanId)
+                    .findFirst()
+                    .orElse(null);
+
+            // If the selected study plan is found, display its details
+            if (selectedStudyPlan != null) {
+                System.out.println("Selected Study Plan: " + selectedStudyPlan.getTitle());
+                List<StudyTask> studyTasks = taskDAO.getTasksByStudyPlan(selectedStudyPlanId);
+                System.out.println(studyTasks);
+                displayTasks(studyTasks);
+                openPopUp(studyPlanDetailsPopUp);
             }
-        }
-        System.out.println("goToStudyPlan triggered for plan ID: " + planId);
-        openPopUp(studyPlanDetailsPopUp);
 
-//        taskDAO.getTasksByStudyPlan(planId);
-        // TODO: loadTasks(*respective user's selected studyplan's task list to go here*);
-
-        // TODO: Create actual page nav method and refactor this to make sense
+            // I started extending bits from here  -Sriman
+//            if (userData instanceof String planIDStr){
+//                if (planIDStr.equals("N/A")){
+//                    System.err.println("Invalid planID format: N/A");
+//                    return;
+//                }
+//                try {
+//                    int planID = Integer.parseInt(planIdStr);
+//
+//                    StudyPlan selectedPlan = studyPlans.stream()
+//                            .filter(plan -> plan.getId() == planID).findFirst().orElse(null);
+//
+//                    if (selectedPlan != null) {
+//                        System.out.println("Selected Study Plan: " + selectedPlan.getTitle());
+//                        List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedPlan.getId());
+//                        displayTasks(tasks);
+//                        openPopUp(studyPlanDetailsPopUp);
+//                    } else {
+//                        System.err.println("No study plan found with id: " + planID);
+//                    }
+//                } catch (NumberFormatException e) {
+//                    System.err.println("PlanID is not a valid number: " + planIDStr);
+//                }
+//            }
+        } else {
+                System.err.println("UserData is not a Studyplan object or is null.");
+            }
     }
+
+
 
     // Box within the studyPlanDetails pop-up that will actually show the tasks
     @FXML private VBox taskListVBox;
 
-    // This has been made with some mock Object types and methods
-    // Will be changed when linking to study plan class
 
-//    @FXML
-//    private void loadTasks(List<Task> tasks) {
-//        taskListVBox.getChildren().clear();
-//
-//        for (Task task : tasks) {
-//            // Create a new box per task
-//            VBox taskBox = new VBox(5);
-//            taskBox.setAlignment(Pos.TOP_LEFT);
-//
-//            // Box for the task title
-//            HBox titleRow = new HBox();
-//            titleRow.setAlignment(Pos.CENTER_LEFT);
-//            titleRow.setSpacing(10);
-//            titleRow.setPadding(new Insets(5,5,5,5));
-//            Label titleLabel = new Label(task.getTitle());
-//
-//            // Box for the task's checkbox
-//            HBox checkboxRow = new HBox();
-//            CheckBox taskCheckBox = new CheckBox();
-//            HBox.setHgrow(checkboxRow, Priority.ALWAYS);
-//
-//            // Puts the task's title and checkbox in the same row
-//            titleRow.getChildren().addAll(titleLabel, checkboxRow,taskCheckBox);
-//
-//            // Box for checkpoints (in bullet format) within task box
-//            VBox checkpointsBox = new VBox(3);
-//            checkpointsBox.setPadding(new Insets(0,0,0,20));
-//
-//            for (String checkpoint : task.getCheckpoints()) {
-//                Label checkpointLabel = new Label("•" + checkpoint);
-//                checkpointsBox.getChildren().add(checkpointLabel);
-//            }
-//
-//            taskBox.getChildren().addAll(titleRow,checkpointsBox);
-//            taskListVBox.getChildren().add(taskBox);
-//
-//        }
-//    }
+    // This is the method I'm trying to call    -Sriman
+    @FXML
+    private void displayTasks(List<StudyTask> tasks) {
+        taskListVBox.getChildren().clear();
+
+        // Check if the task list is empty
+        if (tasks == null || tasks.isEmpty()) {
+            Label noTasksLabel = new Label("No tasks available for this study plan.");
+            noTasksLabel.setStyle("-fx-font-style: italic;");
+            taskListVBox.getChildren().add(noTasksLabel);
+            return;
+        } else {
+            for (StudyTask task : tasks) {
+                HBox taskBox = new HBox();
+                taskBox.setSpacing(10);
+                taskBox.setAlignment(Pos.CENTER_LEFT);
+                taskBox.setPadding(new Insets(10));
+                taskBox.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
+
+                VBox textBox = new VBox();
+                textBox.setAlignment(Pos.TOP_LEFT);
+
+                Label titleLabel = new Label(task.getTitle());
+                titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px;");
+
+                Label descLabel = new Label(task.getDescription());
+                descLabel.setWrapText(true);
+                descLabel.setStyle("-fx-font-size: 28px;");
+
+                textBox.getChildren().addAll(titleLabel, descLabel);
+                HBox.setHgrow(textBox, Priority.ALWAYS);
+
+                CheckBox checkBox = new CheckBox();
+                checkBox.setSelected("COMPLETE".equalsIgnoreCase(task.getStatus()));
+                checkBox.setAlignment(Pos.TOP_RIGHT);
+                checkBox.setStyle("-fx-font-size: 28px; -fx-padding: 10;");
+
+                checkBox.selectedProperty().addListener((observe, wasSelected, isNowSelected) -> {
+                    String newStatus = isNowSelected ? "COMPLETE" : "INCOMPLETE";
+                    task.setStatus(newStatus);
+
+                    boolean updateSuccess = taskDAO.updateTask(task);
+                    if (!updateSuccess){
+                        System.err.println("Failed to update task status for task id: " + task.getId());
+                    }
+                });
+
+                taskBox.getChildren().addAll(textBox, checkBox);
+                taskListVBox.getChildren().add(taskBox);
+            }
+        }
+    }
 
     /**
      * Handles the action when the "Resume Study Plan" button is clicked.
@@ -393,9 +456,14 @@ public class StudyPlannersController extends ControllerSkeleton {
      * This method should send the input data to the API for generating a study plan.
      */
     @FXML
-    private void generateStudyPlan(){
+    private void generateStudyPlan() throws IOException {
         /* TODO: take input from 'promptEntryTextArea' and 'studyHoursEntryTextField
             to send to API */
+        System.out.println("generateStudyPlan button clicked");
+        String prompt = promptEntryTextArea.getText();
+        String totalHours = studyHoursEntryTextField.getText();
+        handleSendPrompt(prompt, totalHours);
+
     }
 
     /**
@@ -406,4 +474,104 @@ public class StudyPlannersController extends ControllerSkeleton {
     private void closeCreateStudyPlanPopUp(){
         closePopUp(newStudyPlanPopUp);
     }
+
+
+    @FXML
+    private void handleSendPrompt(String prompt, String hours) {
+        if (prompt.isEmpty()) {
+            llmService.statusMessageProperty().set("Status: Please enter a prompt.");
+            return;
+        }
+
+        generateStudyPlanButton.setDisable(true);
+        promptEntryTextArea.setDisable(true);
+        studyHoursEntryTextField.setDisable(true);
+        progressIndicator.setVisible(true);
+
+        Task<String> ollamaTask = new Task<>() {
+            @Override
+            protected String call() throws Exception {
+                ObjectMapper objectMapper = new ObjectMapper();
+
+                StudyPlanPartial studyPlanFormat = new StudyPlanPartial("title", "description");
+                String STUDY_PLAN_FORMAT = objectMapper.writeValueAsString(studyPlanFormat);
+                String systemPrompt1 = "Generate one study plan with the following format: " + STUDY_PLAN_FORMAT + ",  based on the following user prompt: " + prompt +". Keep the description concise.";
+
+                String requestFormat = "json";
+                String generatedResponse = llmService.getCompletion(systemPrompt1, requestFormat).join();
+
+                StudyPlanPartial plan = objectMapper.readValue(generatedResponse, StudyPlanPartial.class);
+                String systemPrompt2 = "Generate a list of tasks as so: {task1: (title, description), task2: (title, description), ...} for an appropriate number of tasks, based on this study plan: " + generatedResponse;
+                String generatedTasks = llmService.getCompletion(systemPrompt2, requestFormat).join();
+
+
+                StudyPlan generatedStudyPlan = new StudyPlan(0, currentUser.getId(), plan.getTitle(), plan.getDescription(), "ACTIVE");
+                studyPlanDAO.createStudyPlan(generatedStudyPlan);
+
+                // make map of tasks
+                Map<String, StudyTaskPartial> tasks = objectMapper.readValue(
+                        generatedTasks,
+                        new TypeReference<Map<String, StudyTaskPartial>>() {}
+                );
+
+                // iterate over the map
+                for (Map.Entry<String, StudyTaskPartial> entry : tasks.entrySet()) {
+                    String key = entry.getKey();
+                    String taskNumberString = key.replaceAll("\\D+", "");
+                    int taskNumber = Integer.parseInt(taskNumberString);
+
+                    String taskTitle = entry.getValue().getTitle();
+                    String taskDescription = entry.getValue().getDescription();
+
+                    int studyPlanId = studyPlanDAO.getStudyPlanByTitle(plan.getTitle()).getId();
+                    StudyTask currentTask = new StudyTask(0, studyPlanId, taskNumber, taskTitle, taskDescription, "INCOMPLETE");
+                    taskDAO.createTask(currentTask);
+                }
+
+
+                System.out.println("STUDY PLAN COMPLETED! \n");
+                Platform.runLater(() -> {
+                    try {
+                        navigateTo("studyplanners");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                return "Success"; //
+
+            }
+        };
+
+        ollamaTask.setOnSucceeded(event -> {
+
+            generateStudyPlanButton.setDisable(false);
+            promptEntryTextArea.setDisable(false);
+            studyHoursEntryTextField.setDisable(false);
+            progressIndicator.setVisible(false);
+            // llmService.statusMessageProperty().set("Status: Response received.");
+        });
+
+        //fail
+        ollamaTask.setOnFailed(event -> {
+
+            Throwable exception = ollamaTask.getException();
+            String errorMessage = "Error: " + (exception != null ? exception.getMessage() : "Unknown error");
+
+            Platform.runLater(() -> {
+                llmService.statusMessageProperty().set("Status: " + errorMessage);
+                System.out.println("Error: " + errorMessage);
+                generateStudyPlanButton.setDisable(false);
+                promptEntryTextArea.setDisable(false);
+                studyHoursEntryTextField.setDisable(false);
+                progressIndicator.setVisible(false);
+            });
+            if (exception != null) {
+                exception.printStackTrace();
+            }
+        });
+
+        // Start task on new thread
+        new Thread(ollamaTask).start();
+    }
+
 }
