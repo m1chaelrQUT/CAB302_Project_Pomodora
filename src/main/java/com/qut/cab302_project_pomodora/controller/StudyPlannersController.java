@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -25,6 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * StudyPlannersController is responsible for managing the study planners view in the application.
+ * It handles the display of active and past study plans, as well as the creation of new study plans.
+ */
 public class StudyPlannersController extends ControllerSkeleton {
 
     @FXML private Region navbar;
@@ -54,8 +59,6 @@ public class StudyPlannersController extends ControllerSkeleton {
     // Current user object
     private User currentUser;
 
-    private StudyPlan selectedStudyPlan;
-
     // Study plans list
     private List<StudyPlan> studyPlans;
 
@@ -76,18 +79,27 @@ public class StudyPlannersController extends ControllerSkeleton {
         return studyPlanners;
     }
 
+    /**
+     * Gets the navbar of the study planners view.
+     * @return the navbar of the study planners view.
+     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
-    // Init
+    /**
+     * Initializes the study planners view.
+     * @throws SQLException if there is an error with the database connection.
+     * @throws IOException if there is an error with the FXML file.
+     */
     @Override
     @FXML
     public void initialize() throws SQLException, IOException {
         super.initialize();
         currentUser = SessionManager.getCurrentUser();
         this.llmService = new LLMService();
+
 
         if(currentUser == null) {
             throw new IllegalStateException("Current user is null. Cannot load study plans.");
@@ -96,10 +108,6 @@ public class StudyPlannersController extends ControllerSkeleton {
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         contentPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-
-//        createMockData();
-        // Populate the study plans list
-
 
         studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
 
@@ -117,23 +125,10 @@ public class StudyPlannersController extends ControllerSkeleton {
                     statusLabel.textProperty().bind(llmService.statusMessageProperty());
                 });
 
-        iniSession();
+
+        //iniSession();
         //System.out.println("StudyPlannersController" + studyPlans.size() + " StudyPlans: " + studyPlans);
         System.out.println("StudyPlannersController Initialization completed.");
-    }
-
-    /**
-     * Initializes the session by loading the current user from the session manager.
-     * This method is called during the initialization of the controller.
-     * @throws SQLException if there is an error loading the session from the database
-     * @throws IOException  if there is an error loading the session from the file
-     */
-    public void iniSession() throws SQLException, IOException {
-        // Load the session to check if the user is already logged in
-        SessionManager.loadSession();
-
-        User currentUser = SessionManager.getCurrentUser();
-        System.out.println("Session loaded!");
     }
 
 //    private void createMockData() {
@@ -149,6 +144,10 @@ public class StudyPlannersController extends ControllerSkeleton {
 //        mockStudyPlans.add(new StudyPlan("plan-hist-paper", "History Paper", false, 0)); // Example for wrapping past
 //    }
 
+    /**
+     * Populates the study plan grids with active and past study plans.
+     * This method separates the plans into active and past categories and populates the respective grid panes.
+     */
     private void populateStudyPlanGrids() {
         //TODO: Create database table for studyplans and connect here. We don't need to keep the current data mockup, though it would prob be easiest to
 
@@ -183,7 +182,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         // Check if no past plans exist, add filler if so
         if (plans.isEmpty() && !isActiveGrid) {
-            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(0, currentUser.getId(), "No past plans", "No plans for this user", "ACTIVE"));
+            VBox noPastPlans = createStudyPlanVBox(new StudyPlan(0, currentUser.getId(), "No past plans", "No plans for this user", "INACTIVE"));
             grid.add(noPastPlans, col, row);
         }
 
@@ -267,8 +266,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
         // store the plan ID
-
-        vbox.setUserData(plan.getTitle());
+        vbox.setUserData(plan.getId());
 
         // on mouse clicked
         vbox.setOnMouseClicked(this::goToStudyPlan);
@@ -279,27 +277,143 @@ public class StudyPlannersController extends ControllerSkeleton {
     }
 
 
+    /**
+     * Opens a pop-up window.
+     * @param popUp The StackPane representing the pop-up to be opened.
+     */
     private void openPopUp(StackPane popUp) {popUp.setVisible(true);}
+    /**
+     * Closes a pop-up window.
+     * @param popUp The StackPane representing the pop-up to be closed.
+     */
     private void closePopUp(StackPane popUp) {popUp.setVisible(false);}
 
     @FXML private Button resumeStudyPlanButton;
     @FXML private Button closeStudyPlanDetailsPopUpButton;
 
+    /**
+     * Handles the action when a study plan is clicked.
+     * This method opens the study plan details pop-up and loads the tasks for the selected study plan.
+     * @param event The mouse event that triggered this action.
+     */
+    @FXML
     private void goToStudyPlan(MouseEvent event) {
-        Node source = (Node) event.getSource();
-        String planTitle = (String) source.getUserData();
+        Object source = event.getSource();
+        String planIdStr = "N/A";
 
-        selectedStudyPlan = studyPlans.stream()
-                .filter(plan -> plan.getTitle().equals(planTitle))
-                .findFirst()
-                .orElse(null);
+        // Check if the source is a VBox and get the user data
+        if (source instanceof Node node) {
+            // Get the user data from the clicked node and parse it to an integer
+            Object userData = node.getUserData();
+            int selectedStudyPlanId = Integer.parseInt(String.valueOf(userData));
 
-        if (selectedStudyPlan != null) {
-            System.out.println("Selected plan: " + selectedStudyPlan.getTitle());
-            openPopUp(studyPlanDetailsPopUp);
+            // Find the selected study plan from the list
+            StudyPlan selectedStudyPlan = studyPlans.stream()
+                    .filter(plan -> plan.getId() == selectedStudyPlanId)
+                    .findFirst()
+                    .orElse(null);
+
+            // If the selected study plan is found, display its details
+            if (selectedStudyPlan != null) {
+                System.out.println("Selected Study Plan: " + selectedStudyPlan.getTitle());
+                List<StudyTask> studyTasks = taskDAO.getTasksByStudyPlan(selectedStudyPlanId);
+                System.out.println(studyTasks);
+                displayTasks(studyTasks);
+                openPopUp(studyPlanDetailsPopUp);
+            }
+
+            // I started extending bits from here  -Sriman
+//            if (userData instanceof String planIDStr){
+//                if (planIDStr.equals("N/A")){
+//                    System.err.println("Invalid planID format: N/A");
+//                    return;
+//                }
+//                try {
+//                    int planID = Integer.parseInt(planIdStr);
+//
+//                    StudyPlan selectedPlan = studyPlans.stream()
+//                            .filter(plan -> plan.getId() == planID).findFirst().orElse(null);
+//
+//                    if (selectedPlan != null) {
+//                        System.out.println("Selected Study Plan: " + selectedPlan.getTitle());
+//                        List<Task> tasks = taskDAO.getTasksByStudyPlan(selectedPlan.getId());
+//                        displayTasks(tasks);
+//                        openPopUp(studyPlanDetailsPopUp);
+//                    } else {
+//                        System.err.println("No study plan found with id: " + planID);
+//                    }
+//                } catch (NumberFormatException e) {
+//                    System.err.println("PlanID is not a valid number: " + planIDStr);
+//                }
+//            }
+        } else {
+                System.err.println("UserData is not a Studyplan object or is null.");
+            }
+    }
+
+
+
+    // Box within the studyPlanDetails pop-up that will actually show the tasks
+    @FXML private VBox taskListVBox;
+
+
+    // This is the method I'm trying to call    -Sriman
+    @FXML
+    private void displayTasks(List<StudyTask> tasks) {
+        taskListVBox.getChildren().clear();
+
+        // Check if the task list is empty
+        if (tasks == null || tasks.isEmpty()) {
+            Label noTasksLabel = new Label("No tasks available for this study plan.");
+            noTasksLabel.setStyle("-fx-font-style: italic;");
+            taskListVBox.getChildren().add(noTasksLabel);
+            return;
+        } else {
+            for (StudyTask task : tasks) {
+                HBox taskBox = new HBox();
+                taskBox.setSpacing(10);
+                taskBox.setAlignment(Pos.CENTER_LEFT);
+                taskBox.setPadding(new Insets(10));
+                taskBox.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
+
+                VBox textBox = new VBox();
+                textBox.setAlignment(Pos.TOP_LEFT);
+
+                Label titleLabel = new Label(task.getTitle());
+                titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px;");
+
+                Label descLabel = new Label(task.getDescription());
+                descLabel.setWrapText(true);
+                descLabel.setStyle("-fx-font-size: 28px;");
+
+                textBox.getChildren().addAll(titleLabel, descLabel);
+                HBox.setHgrow(textBox, Priority.ALWAYS);
+
+                CheckBox checkBox = new CheckBox();
+                checkBox.setSelected("COMPLETE".equalsIgnoreCase(task.getStatus()));
+                checkBox.setAlignment(Pos.TOP_RIGHT);
+                checkBox.setStyle("-fx-font-size: 28px; -fx-padding: 10;");
+
+                checkBox.selectedProperty().addListener((observe, wasSelected, isNowSelected) -> {
+                    String newStatus = isNowSelected ? "COMPLETE" : "INCOMPLETE";
+                    task.setStatus(newStatus);
+
+                    boolean updateSuccess = taskDAO.updateTask(task);
+                    if (!updateSuccess){
+                        System.err.println("Failed to update task status for task id: " + task.getId());
+                    }
+                });
+
+                taskBox.getChildren().addAll(textBox, checkBox);
+                taskListVBox.getChildren().add(taskBox);
+            }
         }
     }
 
+    /**
+     * Handles the action when the "Resume Study Plan" button is clicked.
+     * This method should navigate to the specific study plan's timer page.
+     */
     @FXML
     private void resumeStudyPlan() {
         if (selectedStudyPlan == null) {
@@ -325,6 +439,9 @@ public class StudyPlannersController extends ControllerSkeleton {
     }
 
 
+    /**
+     * Closes the study plan details pop-up.
+     */
     @FXML
     private void closeStudyPlanDetailsPopUp(){
         closePopUp(studyPlanDetailsPopUp);
@@ -335,12 +452,21 @@ public class StudyPlannersController extends ControllerSkeleton {
     @FXML private Button generateStudyPlanButton;
     @FXML private Button closeCreateStudyPlanPopUpButton;
 
+    /**
+     * Handles the action when the "Create New Study Plan" button is clicked.
+     * This method opens the pop-up for creating a new study plan.
+     * @param event The action event that triggered this method.
+     */
     @FXML
     private void createNewStudyPlan(ActionEvent event) {
         System.out.println("createNewStudyPlan button clicked");
         openPopUp(newStudyPlanPopUp);
     }
 
+    /**
+     * Handles the action when the "Generate Study Plan" button is clicked.
+     * This method should send the input data to the API for generating a study plan.
+     */
     @FXML
     private void generateStudyPlan() throws IOException {
         /* TODO: take input from 'promptEntryTextArea' and 'studyHoursEntryTextField
@@ -352,6 +478,10 @@ public class StudyPlannersController extends ControllerSkeleton {
 
     }
 
+    /**
+     * Handles the action when the "Close" button is clicked in the create study plan pop-up.
+     * This method closes the pop-up and resets the input fields.
+     */
     @FXML
     private void closeCreateStudyPlanPopUp(){
         closePopUp(newStudyPlanPopUp);
@@ -406,7 +536,7 @@ public class StudyPlannersController extends ControllerSkeleton {
                     String taskDescription = entry.getValue().getDescription();
 
                     int studyPlanId = studyPlanDAO.getStudyPlanByTitle(plan.getTitle()).getId();
-                    StudyTask currentTask = new StudyTask(studyPlanId, taskNumber, taskTitle, taskDescription, "ACTIVE");
+                    StudyTask currentTask = new StudyTask(0, studyPlanId, taskNumber, taskTitle, taskDescription, "INCOMPLETE");
                     taskDAO.createTask(currentTask);
                 }
 
