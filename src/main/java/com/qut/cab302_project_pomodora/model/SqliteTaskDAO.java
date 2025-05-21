@@ -49,7 +49,7 @@ public class SqliteTaskDAO implements ITaskDAO {
     // SQL Queries
     private static final String SELECT_BY_STUDY_PLAN = "SELECT * FROM tasks WHERE studyPlanId = ?";
     private static final String INSERT = "INSERT INTO tasks(studyPlanId, taskNumber, title, description, status) VALUES(?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?";
+    private static final String UPDATE = "UPDATE tasks SET status = ? WHERE Id = ?";
     private static final String DELETE = "DELETE FROM tasks WHERE id = ?";
     private static final String SELECT_STATUS_BY_TASK = "SELECT status FROM tasks WHERE id = ?";
 
@@ -142,15 +142,20 @@ public class SqliteTaskDAO implements ITaskDAO {
      * @param task The Task object with updated information.
      * @return true if the task was updated successfully, false otherwise.
      */
+    @Override
     public boolean updateTask(Task task) {
         try {
+            System.out.println("Updating task: " + task.getId());
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-            preparedStatement.setString(1, task.getTitle());
-            preparedStatement.setString(2, task.getDescription());
-            preparedStatement.setString(3, task.getStatus());
-            preparedStatement.setInt(4, task.getId());
+            preparedStatement.setString(1, task.getStatus());
+            preparedStatement.setInt(2, task.getId());
 
             int affectedRows = preparedStatement.executeUpdate();
+            // Check if the update was successful
+            if (affectedRows == 0) {
+                System.out.println("No task found with ID: " + task.getId());
+                return false;
+            }
             if (affectedRows > 0) {
                 System.out.println("Task updated successfully: " + task.getId());
                 return true;
@@ -189,13 +194,13 @@ public class SqliteTaskDAO implements ITaskDAO {
      * @throws SQLException If an SQL error occurs while processing the ResultSet.
      */
     private Task mapResultSetToTask(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("id");
+        int id = resultSet.getInt("Id");
         int studyPlanId = resultSet.getInt("studyPlanId");
         int taskNumber = resultSet.getInt("taskNumber");
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
         String status = resultSet.getString("status");
-        Task task = new Task(studyPlanId, taskNumber, title, description, status);
+        Task task = new Task(id, studyPlanId, taskNumber, title, description, status);
         return task;
     }
 

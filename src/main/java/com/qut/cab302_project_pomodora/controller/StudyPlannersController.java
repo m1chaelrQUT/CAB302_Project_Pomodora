@@ -399,6 +399,7 @@ public class StudyPlannersController extends ControllerSkeleton {
                 checkBox.selectedProperty().addListener((observe, wasSelected, isNowSelected) -> {
                     String newStatus = isNowSelected ? "COMPLETE" : "INCOMPLETE";
                     task.setStatus(newStatus);
+                    System.out.println("Task details updated: "  + task.toString());
 
                     boolean updateSuccess = taskDAO.updateTask(task);
                     if (!updateSuccess){
