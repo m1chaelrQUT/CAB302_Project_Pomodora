@@ -40,7 +40,14 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.15.2</version>
     </dependency>
-<dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <version>3.11.2</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
@@ -61,6 +68,7 @@
 
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -68,6 +76,16 @@
         <configuration>
           <source>21</source>
           <target>21</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.0</version>
+        <configuration>
+          <destDir>javadoc</destDir>
+          <reportOutputDirectory>${project.build.directory}/docs</reportOutputDirectory>
         </configuration>
       </plugin>
 
@@ -97,6 +115,7 @@
           </execution>
         </executions>
       </plugin>
+
     </plugins>
   </build>
 </project>

@@ -14,8 +14,8 @@ public class StudyPlanTest{
     private static final String TITLE_TWO = "Networks and Security Exam Preparation";
     private static final String DESCRIPTION = "I want to prepare for my Advanced Calculus problem solving task. I will study the content and then attempt the practice questions. Then I will do the problem solving task";
     private static final String DESCRIPTION_TWO = "I want to study for my Networks and Security exam. I need to study 4 chapters of content for the exam: Routing, Switching, Network Security and Network Protocols. I will study each chapter and then do the practice exam.";
-    private static final String STATUS = "IN PROGRESS";
-    private static final String STATUS_TWO = "NOT STARTED";
+    private static final String STATUS = "ACTIVE";
+    private static final String STATUS_TWO = "ACTIVE";
     private static final int PARTICIPANT_COUNT = 5;
     private static final int PARTICIPANT_COUNT_TWO = 10;
 
@@ -80,5 +80,16 @@ public class StudyPlanTest{
     @Test
     public void testUpdateStudyPlan() {
         
+    }
+
+    @Test
+    public void testIsActive() {
+        assertTrue(studyPlan.isActive(), "Study plan should be active by default.");
+    }
+
+    @Test
+    public void testIsNotActive() {
+        studyPlan.setStatus("INACTIVE");
+        assertFalse(studyPlan.isActive(), "Study plan should not be active when status is INACTIVE.");
     }
 }

@@ -2,6 +2,10 @@ package com.qut.cab302_project_pomodora.model;
 
 import java.util.List;
 
+/**
+ * Interface for Task Data Access Object (DAO).
+ * This interface defines the methods for interacting with the task data in the database.
+ */
 public interface ITaskDAO {
     /**
      * Creates a new task in the database.
