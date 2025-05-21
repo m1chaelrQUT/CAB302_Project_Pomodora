@@ -51,6 +51,7 @@ public class SqliteTaskDAO implements ITaskDAO {
     private static final String INSERT = "INSERT INTO tasks(studyPlanId, taskNumber, title, description, status) VALUES(?,?,?,?,?)";
     private static final String UPDATE = "UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM tasks WHERE id = ?";
+    private static final String SELECT_STATUS_BY_TASK = "SELECT status FROM tasks WHERE id = ?";
 
     /**
      * Retrieves all tasks for a given study plan.
@@ -196,6 +197,22 @@ public class SqliteTaskDAO implements ITaskDAO {
         String status = resultSet.getString("status");
         Task task = new Task(studyPlanId, taskNumber, title, description, status);
         return task;
+    }
+
+    public boolean isTaskComplete(int id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_STATUS_BY_TASK);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String status = resultSet.getString("status");
+                return "COMPLETE".equalsIgnoreCase(status);
+            }
+        } catch (SQLException e) {
+            handleSQLException("Error checking task status for task ID: " + id, e);
+        }
+        return false;
     }
 
     /**

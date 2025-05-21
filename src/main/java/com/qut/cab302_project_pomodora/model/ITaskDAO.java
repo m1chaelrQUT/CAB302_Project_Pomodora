@@ -41,4 +41,6 @@ public interface ITaskDAO {
      * @return true if the task was deleted successfully, false otherwise.
      */
     boolean deleteTask(int id);
+
+    boolean isTaskComplete(int id);
 }

@@ -374,7 +374,7 @@ public class StudyPlannersController extends ControllerSkeleton {
             for (Task task : tasks) {
                 HBox taskBox = new HBox();
                 taskBox.setSpacing(10);
-                taskBox.setAlignment(Pos.TOP_LEFT);
+                taskBox.setAlignment(Pos.CENTER_LEFT);
                 taskBox.setPadding(new Insets(10));
                 taskBox.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
 
@@ -382,16 +382,29 @@ public class StudyPlannersController extends ControllerSkeleton {
                 textBox.setAlignment(Pos.TOP_LEFT);
 
                 Label titleLabel = new Label(task.getTitle());
-                titleLabel.setStyle("-fx-font-weight: bold;");
+                titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 32px;");
 
                 Label descLabel = new Label(task.getDescription());
                 descLabel.setWrapText(true);
+                descLabel.setStyle("-fx-font-size: 28px;");
 
                 textBox.getChildren().addAll(titleLabel, descLabel);
                 HBox.setHgrow(textBox, Priority.ALWAYS);
 
                 CheckBox checkBox = new CheckBox();
+                checkBox.setSelected("COMPLETE".equalsIgnoreCase(task.getStatus()));
                 checkBox.setAlignment(Pos.TOP_RIGHT);
+                checkBox.setStyle("-fx-font-size: 28px; -fx-padding: 10;");
+
+                checkBox.selectedProperty().addListener((observe, wasSelected, isNowSelected) -> {
+                    String newStatus = isNowSelected ? "COMPLETE" : "INCOMPLETE";
+                    task.setStatus(newStatus);
+
+                    boolean updateSuccess = taskDAO.updateTask(task);
+                    if (!updateSuccess){
+                        System.err.println("Failed to update task status for task id: " + task.getId());
+                    }
+                });
 
                 taskBox.getChildren().addAll(textBox, checkBox);
                 taskListVBox.getChildren().add(taskBox);

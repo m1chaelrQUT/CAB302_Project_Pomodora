@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="settings" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SettingsController">
+<StackPane fx:id="settings" stylesheets="@../../css/common/base.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.qut.cab302_project_pomodora.controller.SettingsController">
       <StackPane styleClass="primitives">
          <StackPane styleClass="theme">
             <StackPane fx:id="contentPane" prefHeight="1080.0" prefWidth="1920.0" styleClass="window-background">
@@ -31,7 +31,7 @@
                                  <Font size="50.0" />
                               </font>
                            </Label>
-                           <Button fx:id="themeSettingsButton" alignment="CENTER" layoutX="307.0" layoutY="180.0" mnemonicParsing="false" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" onAction="#openThemeSettings" text="Theme &amp; Appearance ">
+                           <Button fx:id="themeSettingsButton" alignment="CENTER" layoutX="307.0" layoutY="180.0" mnemonicParsing="false" onAction="#openThemeSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Theme &amp; Appearance ">
                               <font>
                                  <Font size="37.0" />
                               </font>
@@ -100,7 +100,7 @@
                                           <Font size="38.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="themeSettingsSaveButton" layoutX="325.0" layoutY="572.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" onAction="#saveThemeSettings" text="Save">
+                                    <Button fx:id="themeSettingsSaveButton" layoutX="325.0" layoutY="572.0" mnemonicParsing="false" onAction="#saveThemeSettings" prefHeight="60.0" prefWidth="100.0" text="Save">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
@@ -147,13 +147,13 @@
                                  <Font size="28.0" />
                               </font>
                            </Label>
-                           <Spinner fx:id="pomodoroMinutesSpinner" layoutX="383.0" layoutY="202.0" max="1000" min="1" prefHeight="60.0" prefWidth="100.0" />
-                           <Spinner fx:id="pomodoroSecondsSpinner" layoutX="625.0" layoutY="204.0" max="1000" min="1" prefHeight="60.0" prefWidth="100.0" />
+                           <Spinner fx:id="pomodoroMinutesSpinner" layoutX="383.0" layoutY="202.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;" />
                            <Label fx:id="pomodoroMinutesLabel" layoutX="500.0" layoutY="216.0" text="Minutes">
                               <font>
                                  <Font size="24.0" />
                               </font>
                            </Label>
+                           <Spinner fx:id="pomodoroSecondsSpinner" layoutX="625.0" layoutY="204.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;" />
                            <Label fx:id="pomodoroSecondsLabel" layoutX="741.0" layoutY="217.0" text="Seconds">
                               <font>
                                  <Font size="24.0" />
@@ -164,13 +164,13 @@
                                  <Font size="28.0" />
                               </font>
                            </Label>
-                           <Spinner fx:id="shortBreakMinutesSpinner" layoutX="383.0" layoutY="342.0" max="1000" min="1" prefHeight="60.0" prefWidth="100.0" />
+                           <Spinner fx:id="shortBreakMinutesSpinner" layoutX="383.0" layoutY="342.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;" />
                            <Label fx:id="shortBreakMinutesLabel" layoutX="502.0" layoutY="354.0" text="Minutes">
                               <font>
                                  <Font size="24.0" />
                               </font>
                            </Label>
-                           <Spinner fx:id="shortBreakSecondsSpinner" layoutX="625.0" layoutY="343.0" max="1000" min="1" prefHeight="60.0" prefWidth="100.0" />
+                           <Spinner fx:id="shortBreakSecondsSpinner" layoutX="625.0" layoutY="343.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;"/>
                            <Label fx:id="shortBreakSecondsLabel" layoutX="741.0" layoutY="356.0" text="Seconds">
                               <font>
                                  <Font size="24.0" />
@@ -181,13 +181,13 @@
                                  <Font size="28.0" />
                               </font>
                            </Label>
-                           <Spinner fx:id="longBreakMinutesSpinner" layoutX="383.0" layoutY="484.0" max="1000" min="1" prefHeight="60.0" prefWidth="100.0" />
+                           <Spinner fx:id="longBreakMinutesSpinner" layoutX="383.0" layoutY="484.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;" />
                            <Label fx:id="longBreakMinutesLabel" layoutX="504.0" layoutY="497.0" text="Minutes">
                               <font>
                                  <Font size="24.0" />
                               </font>
                            </Label>
-                           <Spinner fx:id="longBreakSecondsSpinner" layoutX="625.0" layoutY="484.0" max="1000" min="1" prefHeight="60.0" prefWidth="100.0" />
+                           <Spinner fx:id="longBreakSecondsSpinner" layoutX="625.0" layoutY="484.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;"/>
                            <Label fx:id="longBreakSecondsLabel" layoutX="741.0" layoutY="497.0" text="Seconds">
                               <font>
                                  <Font size="24.0" />
@@ -203,17 +203,22 @@
                                  <Font size="24.0" />
                               </font>
                            </Label>
-                           <Spinner fx:id="longBreakCyclesSpinner" layoutX="625.0" layoutY="624.0" max="1000" min="1" prefHeight="60.0" prefWidth="100.0" />
+                           <Spinner fx:id="longBreakCyclesSpinner" layoutX="625.0" layoutY="624.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;"/>
                            <Label fx:id="longBreakCyclesLabel" layoutX="741.0" layoutY="637.0" prefHeight="35.0" prefWidth="102.0" text="Cycles">
                               <font>
                                  <Font size="24.0" />
                               </font>
                            </Label>
-                           <Button fx:id="timerSettingsSaveButton" layoutX="412.0" layoutY="779.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" text="Save" onAction="#saveTimerSettings">
+                           <Button fx:id="timerSettingsSaveButton" layoutX="412.0" layoutY="779.0" mnemonicParsing="false" onAction="#saveTimerSettings" prefHeight="60.0" prefWidth="100.0" text="Save">
                               <font>
                                  <Font size="24.0" />
                               </font>
                            </Button>
+                        <Label fx:id="settingsSavedLabel" layoutX="382.0" layoutY="727.0" prefHeight="35.0" prefWidth="166.0" text="Settings Saved!" textAlignment="CENTER" visible="false">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
                         </children>
                      </AnchorPane>
                   </AnchorPane>
@@ -293,7 +298,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="confirmPasswordChangeButton" layoutX="335.0" layoutY="784.0" prefHeight="65.0" prefWidth="241.0" styleClass="button-secondary" text="Confirm" textFill="WHITE" onAction="#confirmAccountUpdate">
+                              <Button fx:id="confirmPasswordChangeButton" layoutX="335.0" layoutY="784.0" onAction="#confirmAccountUpdate" prefHeight="65.0" prefWidth="241.0" styleClass="button-secondary" text="Confirm" textFill="WHITE">
                               <font>
                                  <Font size="30.0" />
                               </font></Button>
