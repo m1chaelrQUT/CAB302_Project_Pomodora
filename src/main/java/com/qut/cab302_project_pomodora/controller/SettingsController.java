@@ -440,4 +440,3 @@ public class SettingsController extends ControllerSkeleton {
 
     }
 }
-

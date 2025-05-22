@@ -521,6 +521,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
                 StudyPlan generatedStudyPlan = new StudyPlan(0, currentUser.getId(), plan.getTitle(), plan.getDescription(), "ACTIVE");
+                System.out.println("Generating study plan: " + generatedStudyPlan);
                 studyPlanDAO.createStudyPlan(generatedStudyPlan);
 
                 // make map of tasks

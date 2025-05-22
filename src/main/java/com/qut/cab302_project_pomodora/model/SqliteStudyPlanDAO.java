@@ -36,8 +36,8 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
                     + "userId INTEGER NOT NULL,"
                     + "title VARCHAR NOT NULL,"
                     + "description VARCHAR NOT NULL,"
-                    + "status VARCHAR NOT NULL,"
-                    + "FOREIGN KEY(userId) REFERENCES Users(Id)"
+                    + "status VARCHAR NOT NULL"
+//                    + "FOREIGN KEY(userId) REFERENCES Users(Id)"
                     + ")";
             statement.execute(query);
         } catch (Exception e) {
@@ -166,6 +166,8 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
             preparedStatement.setString(4, studyPlan.getStatus());
 
             int affectedRows = preparedStatement.executeUpdate();
+            // Check if the study plan was added successfully
+            System.out.println("Study plan added successfully: " + studyPlan.getTitle());
             if (affectedRows > 0) {
                 try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                     if (resultSet.next()) {
