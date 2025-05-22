@@ -59,6 +59,9 @@ public class StudyPlannersController extends ControllerSkeleton {
     // Current user object
     private User currentUser;
 
+    // Selected study plan object
+    private StudyPlan selectedStudyPlan;
+
     // Study plans list
     private List<StudyPlan> studyPlans;
 
@@ -110,15 +113,6 @@ public class StudyPlannersController extends ControllerSkeleton {
         contentPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
         studyPlans = studyPlanDAO.getAllStudyPlans(currentUser.getId());
-
-//        // Mock Study Plan and Tasks for view details pop up testing
-//        StudyPlan mock = new StudyPlan(currentUser.getId(),"Mock Study Plan", "This is a test plan", "ACTIVE");
-//        List<Task> mockTasks = new ArrayList<>();
-//        mockTasks.add(new Task(101,1,"Mock Task 1", "This is a mock task description", "PENDING"));
-//        mockTasks.add(new Task(101, 2, "Mock Task 2", "This is another mock task description", "IN_PROGRESS"));
-//        mock.setTasks(mockTasks);
-//
-//        studyPlans.add(mock);
 
         //-----------
         populateStudyPlanGrids();
@@ -263,6 +257,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
         if (plan.planIsActive()) {
             statusLabel.setText("Tasks Remaining:");
+//            countLabel.setText(String.valueOf(plan.tasksRemaining()));
             countLabel.setText(String.valueOf(taskDAO.tasksRemaining(plan.getId())));
         } else {
             statusLabel.setText("Tasks Complete!");
@@ -316,7 +311,7 @@ public class StudyPlannersController extends ControllerSkeleton {
             int selectedStudyPlanId = Integer.parseInt(String.valueOf(userData));
 
             // Find the selected study plan from the list
-            StudyPlan selectedStudyPlan = studyPlans.stream()
+            selectedStudyPlan = studyPlans.stream()
                     .filter(plan -> plan.getId() == selectedStudyPlanId)
                     .findFirst()
                     .orElse(null);
@@ -424,8 +419,28 @@ public class StudyPlannersController extends ControllerSkeleton {
      */
     @FXML
     private void resumeStudyPlan() {
-        // TODO: Go to specific study plan's timer page
+        if (selectedStudyPlan == null) {
+            System.out.println("No study plan selected.");
+            return;
+        }
+
+        SqliteStudyPlanDAO studyPlanDAO = new SqliteStudyPlanDAO();
+        boolean success = studyPlanDAO.resumeStudyPlan(currentUser.getId(), selectedStudyPlan.getId());
+
+        if (success) {
+            System.out.println("Resumed plan: " + selectedStudyPlan.getTitle());
+
+            // Navigate to timer page
+            try {
+                navigateTo("studyplantimer");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Failed to resume plan.");
+        }
     }
+
 
     /**
      * Closes the study plan details pop-up.
@@ -506,6 +521,7 @@ public class StudyPlannersController extends ControllerSkeleton {
 
 
                 StudyPlan generatedStudyPlan = new StudyPlan(0, currentUser.getId(), plan.getTitle(), plan.getDescription(), "ACTIVE");
+                System.out.println("Generating study plan: " + generatedStudyPlan);
                 studyPlanDAO.createStudyPlan(generatedStudyPlan);
 
                 // make map of tasks

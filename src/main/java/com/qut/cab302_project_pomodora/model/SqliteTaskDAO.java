@@ -83,7 +83,6 @@ public class SqliteTaskDAO implements ITaskDAO {
             handleSQLException("Error fetching tasks by study plan: " + studyPlanId, e);
         }
         return null;
-        // TODO: Handle the case where no tasks are found
     }
 
     /**

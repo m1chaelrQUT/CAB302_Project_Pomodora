@@ -116,9 +116,9 @@ public class SqliteTimerDAO  implements ITimerDAO {
                         "(userId, workDuration, shortBreakDuration, longBreakDuration, longBreakAfter) " +
                         "VALUES (?, ?, ?, ?, ?)");
                 statement.setInt(1, user.getId());
-                statement.setInt(2, DEFAULT_WORK_DURATION);
-                statement.setInt(3, DEFAULT_SHORT_BREAK_DURATION);
-                statement.setInt(4, DEFAULT_LONG_BREAK_DURATION);
+                statement.setInt(2, DEFAULT_WORK_DURATION * 60); // Convert to seconds
+                statement.setInt(3, DEFAULT_SHORT_BREAK_DURATION * 60); // Convert to seconds
+                statement.setInt(4, DEFAULT_LONG_BREAK_DURATION * 60); // Convert to seconds
                 statement.setInt(5, DEFAULT_LONG_BREAK_AFTER);
                 // Execute Insert Query
                 int rowsAffected = statement.executeUpdate();

@@ -117,7 +117,7 @@ public class SessionManager {
         if (currentUser == null) {
             System.out.println("No user is currently logged in.");
             return null;
-        // If the user is logged in, return the current user
+            // If the user is logged in, return the current user
         } else {
             System.out.println("Returning current user: " + currentUser.getUserName());
             return currentUser;
