@@ -66,6 +66,7 @@ public class DefaultTimerController extends ControllerSkeleton {
     private boolean isRunning = false;
 
     // Timer settings
+    private int longBreakAfter;
     private int pomodoroCount;
     private boolean isWorkSession;
     private int WORK_DURATION;
@@ -108,7 +109,8 @@ public class DefaultTimerController extends ControllerSkeleton {
         Timer userTimer = timerDAO.getUserTimer(currentUser);
 
         // Set the user timer values
-        pomodoroCount = userTimer.getLongBreakAfter();
+        pomodoroCount = 0;
+        longBreakAfter = userTimer.getLongBreakAfter();
         WORK_DURATION = userTimer.getWorkDuration();
         SHORT_BREAK = userTimer.getShortBreakDuration();
         LONG_BREAK = userTimer.getLongBreakDuration();
@@ -231,13 +233,13 @@ public class DefaultTimerController extends ControllerSkeleton {
         if (isWorkSession) {
             pomodoroCount++;
 
-            if (pomodoroCount % 4 == 0) {
+            if (pomodoroCount % longBreakAfter == 0) {
                 minutes = LONG_BREAK / 60;
             } else {
                 minutes = SHORT_BREAK / 60;
             }
         } else {
-            if (pomodoroCount % 4 == 0) {
+            if (pomodoroCount % longBreakAfter == 0) {
                 showCompletionMessage();
                 pomodoroCount = 0;
                 isWorkSession = true;
@@ -312,7 +314,7 @@ public class DefaultTimerController extends ControllerSkeleton {
     private void handleTimerEnd() {
         if (isWorkSession) {
             pomodoroCount++;
-            if (pomodoroCount % 4 == 0) {
+            if (pomodoroCount % longBreakAfter == 0) {
                 minutes = LONG_BREAK / 60;
             } else {
                 minutes = SHORT_BREAK / 60;
@@ -336,7 +338,7 @@ public class DefaultTimerController extends ControllerSkeleton {
         if (timerCircle != null) {
             if (isWorkSession) {
                 timerCircle.setFill(Color.web("#ff9a8b")); // Light red/orange for work
-            } else if (pomodoroCount % 4 == 0) {
+            } else if (pomodoroCount % longBreakAfter == 0) {
                 timerCircle.setFill(Color.web("#8bbaff")); // Blue for long break
             } else {
                 timerCircle.setFill(Color.web("#91d18b")); // Green for short break

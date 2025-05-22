@@ -43,22 +43,32 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     @FXML private StackPane selectPlanModal;
     @FXML private AnchorPane taskSideBar;
 
-    private SqliteStudyPlanDAO studyPlanDAO = new SqliteStudyPlanDAO();
-    private SqliteTaskDAO taskDAO = new SqliteTaskDAO();
+    private ITimerDAO timerDAO;
+    private IUserDAO userDAO;
+    private IStudyPlanDAO studyPlanDAO;
+    private ITaskDAO taskDAO;
 
     private StudyPlan activeStudyPlan;
     private List<StudyTask> activeTasks;
 
+    public StudyPlanTimerController() {
+        this.timerDAO = new SqliteTimerDAO();
+        this.userDAO = new SqliteUserDAO();
+        this.studyPlanDAO = new SqliteStudyPlanDAO();
+        this.taskDAO = new SqliteTaskDAO();
+    }
+
     private Timeline timeline;
-    private int minutes = 25;  // Default work duration (Pomodoro technique)
-    private int seconds = 0;
+    private int minutes;
+    private int seconds;
     private boolean isRunning = false;
 
-    private int pomodoroCount = 0;
-    private int WORK_DURATION = 25;
-    private int SHORT_BREAK = 5;
-    private int LONG_BREAK = 15; // You can make this customizable
-    private boolean isWorkSession = true;
+    private int longBreakAfter;
+    private int pomodoroCount;
+    private int WORK_DURATION;
+    private int SHORT_BREAK;
+    private int LONG_BREAK; // You can make this customizable
+    private boolean isWorkSession;
 
     private User currentUser;
 
@@ -104,6 +114,21 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         if(currentUser == null) {
             throw new IllegalStateException("Current user is null. Cannot load study plans.");
         }
+
+        // Initialize the timer values for the current user
+        Timer userTimer = timerDAO.getUserTimer(currentUser);
+
+        // Set the user timer values
+        pomodoroCount = 0;
+        longBreakAfter = userTimer.getLongBreakAfter();
+        WORK_DURATION = userTimer.getWorkDuration();
+        SHORT_BREAK = userTimer.getShortBreakDuration();
+        LONG_BREAK = userTimer.getLongBreakDuration();
+        isWorkSession = true;
+
+        // Set the initial timer values
+        minutes = WORK_DURATION / 60;
+        seconds = WORK_DURATION % 60;
 
         checkActiveStudyPlan();
 
@@ -170,18 +195,18 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         if (isWorkSession) {
             pomodoroCount++;
 
-            if (pomodoroCount % 4 == 0) {
-                minutes = LONG_BREAK;
+            if (pomodoroCount % longBreakAfter == 0) {
+                minutes = LONG_BREAK / 60;
             } else {
-                minutes = SHORT_BREAK;
+                minutes = SHORT_BREAK / 60;
             }
         } else {
-            if (pomodoroCount % 4 == 0) {
+            if (pomodoroCount % longBreakAfter == 0) {
                 showCompletionMessage();
-                pomodoroCount = 0;
+                pomodoroCount = 1;
                 isWorkSession = true;
-                minutes = WORK_DURATION;
-                seconds = 0;
+                minutes = WORK_DURATION / 60;
+                seconds = 0 % 60;
                 isRunning = false;
 
                 if (timeline != null) timeline.stop();
@@ -190,10 +215,10 @@ public class StudyPlanTimerController extends ControllerSkeleton {
                 updateTimerDisplay();
                 return;
             }
-            minutes = WORK_DURATION;
+            minutes = WORK_DURATION / 60;
         }
 
-        seconds = 0;
+        seconds = WORK_DURATION % 60;
         isWorkSession = !isWorkSession;
         updateSessionStyle();
         updateTimerDisplay();
@@ -204,10 +229,10 @@ public class StudyPlanTimerController extends ControllerSkeleton {
             timeline.stop();
         }
         isRunning = false;
-        pomodoroCount = 0;
+        pomodoroCount = 1;
         isWorkSession = true;
-        minutes = WORK_DURATION;
-        seconds = 0;
+        minutes = WORK_DURATION / 60;
+        seconds = WORK_DURATION % 60;
 
         startPauseButton.setText("▶");
         updateSessionStyle();
@@ -236,15 +261,15 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private void handleTimerEnd() {
         if (isWorkSession) {
             pomodoroCount++;
-            if (pomodoroCount % 4 == 0) {
-                minutes = LONG_BREAK;
+            if (pomodoroCount % longBreakAfter == 0) {
+                minutes = LONG_BREAK / 60;
             } else {
-                minutes = SHORT_BREAK;
+                minutes = SHORT_BREAK / 60;
             }
         } else {
-            minutes = WORK_DURATION;
+            minutes = WORK_DURATION / 60;
         }
-        seconds = 0;
+        seconds = WORK_DURATION % 60;
         isWorkSession = !isWorkSession;
 
         updateSessionStyle(); // 🔥 Add this
@@ -256,7 +281,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         if (timerCircle != null) {
             if (isWorkSession) {
                 timerCircle.setFill(Color.web("#ff9a8b")); // Light red/orange for work
-            } else if (pomodoroCount % 4 == 0) {
+            } else if (pomodoroCount % longBreakAfter == 0) {
                 timerCircle.setFill(Color.web("#8bbaff")); // Blue for long break
             } else {
                 timerCircle.setFill(Color.web("#91d18b")); // Green for short break
