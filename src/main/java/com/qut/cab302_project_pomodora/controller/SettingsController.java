@@ -29,8 +29,9 @@ public class SettingsController extends ControllerSkeleton {
     private StackPane accountSettingsPopUp;
     @FXML
     private StackPane themeSettingsPopUp;
-    @FXML
-    private StackPane notificationSettingsPopUp;
+    // Notification Settings was decided to be dropped towards the end due to lack of time
+    //@FXML
+    //private StackPane notificationSettingsPopUp;
 
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
@@ -131,8 +132,8 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private void openThemeSettings() {themeSettingsPopUp.setVisible(true); }
 
-    @FXML
-    private void openNotificationSettings() {notificationSettingsPopUp.setVisible(true); }
+    //@FXML
+    //private void openNotificationSettings() {notificationSettingsPopUp.setVisible(true); }
 
 
     /**
@@ -170,12 +171,9 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private void closeThemeSettings() { closePopUp(themeSettingsPopUp); }
 
-    /**
-     * Closes the notification settings pop-up.
-     * This method is called when the user clicks the "Close" button in the notification settings
-     */
-    @FXML
-    private void closeNotificationSettings() { closePopUp(notificationSettingsPopUp); }
+
+    //@FXML
+    //private void closeNotificationSettings() { closePopUp(notificationSettingsPopUp); }
 
 
     /**
