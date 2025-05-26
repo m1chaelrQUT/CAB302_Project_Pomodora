@@ -6,7 +6,7 @@ import com.qut.cab302_project_pomodora.util.ThemeManager;
 import com.qut.cab302_project_pomodora.config.Theme;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.concurrent.Task;
+//import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -401,7 +401,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         taskListContainer.getChildren().clear();
 
         for (int i = 0; i < activeTasks.size(); i++) {
-            Task task = activeTasks.get(i);
+            StudyTask task = activeTasks.get(i);
             HBox taskBox = new HBox();
             taskBox.setSpacing(10);
             taskBox.setAlignment(Pos.CENTER_LEFT);

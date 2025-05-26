@@ -12,7 +12,7 @@ public class StudyTask {
     private String description;
     private String status;
 
-    public StudyTask(int studyPlanId, int taskNumber, String title, String description, String status) {
+    public StudyTask(int id, int studyPlanId, int taskNumber, String title, String description, String status) {
     /**
      * Constructor for Task with ID.
      * Initializes a new instance of the Task class with an ID.
@@ -23,7 +23,7 @@ public class StudyTask {
      * @param description The description of the task.
      * @param status The status of the task.
      */
-    public StudyTask(int id, int studyPlanId, int taskNumber, String title, String description, String status) {
+
         this.id = id;
         this.studyPlanId = studyPlanId;
         this.title = title;
