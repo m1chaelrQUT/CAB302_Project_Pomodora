@@ -9,10 +9,10 @@ import java.util.List;
 public interface ITaskDAO {
     /**
      * Creates a new task in the database.
-     * @param task The task to create.
+     * @param studyTask The task to create.
      * @return true if the task was created successfully, false otherwise.
      */
-    boolean createTask(Task task);
+    boolean createTask(StudyTask studyTask);
 
     /**
      * Retrieves the remaining number of tasks in a study plan.
@@ -26,14 +26,14 @@ public interface ITaskDAO {
      * @param studyPlanId The ID of the study plan.
      * @return A list of tasks associated with the specified study plan.
      */
-    List<Task> getTasksByStudyPlan(int studyPlanId);
+    List<StudyTask> getTasksByStudyPlan(int studyPlanId);
 
     /**
      * Updates an existing task in the database.
-     * @param task The task to update.
+     * @param studyTask The task to update.
      * @return true if the task was updated successfully, false otherwise.
      */
-    boolean updateTask(Task task);
+    boolean updateTask(StudyTask studyTask);
 
     /**
      * Deletes a task from the database by its ID.
@@ -41,4 +41,6 @@ public interface ITaskDAO {
      * @return true if the task was deleted successfully, false otherwise.
      */
     boolean deleteTask(int id);
+
+    boolean isTaskComplete(int id);
 }

@@ -36,8 +36,8 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
                     + "userId INTEGER NOT NULL,"
                     + "title VARCHAR NOT NULL,"
                     + "description VARCHAR NOT NULL,"
-                    + "status VARCHAR NOT NULL,"
-                    + "participantCount INTEGER NOT NULL"
+                    + "status VARCHAR NOT NULL"
+//                    + "FOREIGN KEY(userId) REFERENCES Users(Id)"
                     + ")";
             statement.execute(query);
         } catch (Exception e) {
@@ -49,9 +49,10 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
     // SQL Queries
     private static final String SELECT_ALL = "SELECT * FROM studyPlans where userId = ?";
     private static final String SELECT_BY_ID = "SELECT * FROM studyPlans WHERE userId = ? AND id = ? ";
+    private static final String SELECT_BY_TITLE = "SELECT * FROM studyPlans WHERE userId = ? AND title = ? ";
     private static final String SELECT_BY_STATUS = "SELECT * FROM studyPlans WHERE userId = ? AND status = ?";
-    private static final String INSERT = "INSERT INTO studyPlans(user_id, title, description, status, participant_count) VALUES(?,?,?,?,?)";
-    private static final String UPDATE = "UPDATE studyPlans SET title = ?, description = ?, status = ?, participant_count = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+    private static final String INSERT = "INSERT INTO studyPlans(userId, title, description, status) VALUES(?,?,?,?)";
+    private static final String UPDATE = "UPDATE studyPlans SET title = ?, description = ?, status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
     private static final String DELETE = "DELETE FROM studyPlans WHERE id = ?";
 
 
@@ -104,6 +105,27 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
     }
 
     /**
+     * Retrieves a study plan by its title.
+     * @param title The Title of the study plan to retrieve.
+     * @return The StudyPlan object if found, null otherwise.
+     */
+    public StudyPlan getStudyPlanByTitle(String title) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_TITLE);
+            preparedStatement.setInt(1, currentUser.getId());
+            preparedStatement.setString(2, title);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            System.out.println(title);
+            if (resultSet.next()) {
+                return mapResultSetToStudyPlan(resultSet);
+            }
+        } catch (SQLException e) {
+            handleSQLException("Error retrieving study plan by title: " + title, e);
+        }
+        return null;
+    }
+
+    /**
      * Retrieves study plans by their status.
      * @param userId The ID of the user.
      * @param status The status of the study plans to retrieve.
@@ -142,9 +164,10 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
             preparedStatement.setString(2, studyPlan.getTitle());
             preparedStatement.setString(3, studyPlan.getDescription());
             preparedStatement.setString(4, studyPlan.getStatus());
-            preparedStatement.setInt(5, studyPlan.getParticipantCount());
 
             int affectedRows = preparedStatement.executeUpdate();
+            // Check if the study plan was added successfully
+            System.out.println("Study plan added successfully: " + studyPlan.getTitle());
             if (affectedRows > 0) {
                 try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                     if (resultSet.next()) {
@@ -171,7 +194,6 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
             preparedStatement.setString(1, studyPlan.getTitle());
             preparedStatement.setString(2, studyPlan.getDescription());
             preparedStatement.setString(3, studyPlan.getStatus());
-            preparedStatement.setInt(4, studyPlan.getParticipantCount());
             preparedStatement.setInt(5, studyPlan.getId());
 
             int affectedRows = preparedStatement.executeUpdate();
@@ -219,9 +241,11 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
         String status = resultSet.getString("status");
-        int participantCount = resultSet.getInt("participantCount");
-        StudyPlan studyPlan = new StudyPlan(userId, title, description, status);
-        studyPlan.setId(id);
+        StudyPlan studyPlan = new StudyPlan(id, userId, title, description, status);
+
+        ITaskDAO taskDAO = new SqliteTaskDAO();
+        List<StudyTask> tasksThisPlan = taskDAO.getTasksByStudyPlan(studyPlan.getId());
+        studyPlan.setTasks(tasksThisPlan);
         return studyPlan;
     }
 
@@ -237,4 +261,49 @@ public class SqliteStudyPlanDAO implements IStudyPlanDAO {
         System.err.println(message + ": " + e.getMessage());
         e.printStackTrace();
     }
+
+    public boolean resumeStudyPlan(int userId, int studyPlanId) {
+        try {
+            connection.setAutoCommit(false);
+
+            // 1. Set all user's plans back to ACTIVE if they are RESUME
+            PreparedStatement resetStatus = connection.prepareStatement(
+                    "UPDATE studyPlans SET status = 'ACTIVE' WHERE userId = ? AND status = 'RESUME'"
+            );
+            resetStatus.setInt(1, userId);
+            resetStatus.executeUpdate();
+
+            // 2. Set selected plan to RESUME
+            PreparedStatement setResume = connection.prepareStatement(
+                    "UPDATE studyPlans SET status = 'RESUME' WHERE userId = ? AND id = ?"
+            );
+            setResume.setInt(1, userId);
+            setResume.setInt(2, studyPlanId);
+            setResume.executeUpdate();
+
+            // 3. Update user's studyPlanId
+            SqliteUserDAO userDAO = new SqliteUserDAO();
+            boolean userUpdated = userDAO.updateUserStudyPlan(userId, studyPlanId);
+
+            connection.commit();
+            return userUpdated;
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

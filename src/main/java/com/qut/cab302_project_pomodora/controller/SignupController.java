@@ -13,7 +13,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
@@ -207,7 +206,7 @@ public class SignupController extends ControllerSkeleton {
     @FXML
     private void getSupport() {
         try {
-            Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=xvFZjo5PgG0"));
+            //Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=xvFZjo5PgG0"));
         } catch (Exception e) {
             e.printStackTrace();
         }
