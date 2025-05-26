@@ -11,14 +11,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.scene.shape.Circle;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
+
+import java.beans.beancontext.BeanContextServiceRevokedEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -40,13 +42,16 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     @FXML private Button plusButton;
     @FXML private Label studyPlanTitleLabel;
     @FXML private StackPane selectPlanModal;
-    @FXML private AnchorPane taskSideBar;
+    @FXML private VBox taskSideBar;
+    @FXML private VBox taskListContainer;
 
     private SqliteStudyPlanDAO studyPlanDAO = new SqliteStudyPlanDAO();
     private SqliteTaskDAO taskDAO = new SqliteTaskDAO();
+    private Timeline pomodoroTimeline;
 
     private StudyPlan activeStudyPlan;
     private List<Task> activeTasks;
+    private int currentTaskIndex = 0;
 
     private Timeline timeline;
     private int minutes = 25;  // Default work duration (Pomodoro technique)
@@ -90,7 +95,16 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     @Override
     public void initialize() throws SQLException, IOException {
         super.initialize();
-        checkActiveStudyPlan();
+
+        try {
+            checkActiveStudyPlan();
+            //loadFirstStudyPlanFromDatabase();
+            System.out.println("Checked active study plan.");
+        } catch (Exception e) {
+            e.printStackTrace(); // catch and log initialization exceptions
+        }
+
+        System.out.println("Initializing StudyPlanTimerController...");
 
         contentPane.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
@@ -115,6 +129,14 @@ public class StudyPlanTimerController extends ControllerSkeleton {
             pauseTimer();
         } else {
             startTimer();
+        }
+
+        if (pomodoroTimeline == null || pomodoroTimeline.getStatus() == Timeline.Status.STOPPED) {
+            pomodoroTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateTimer()));
+            pomodoroTimeline.setCycleCount(Timeline.INDEFINITE);
+            pomodoroTimeline.play();
+        } else {
+            pomodoroTimeline.stop();
         }
     }
 
@@ -182,6 +204,8 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         isWorkSession = !isWorkSession;
         updateSessionStyle();
         updateTimerDisplay();
+        updateTaskVisuals();
+        currentTaskIndex++;
     }
 
     private void resetTimer() {
@@ -232,7 +256,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         seconds = 0;
         isWorkSession = !isWorkSession;
 
-        updateSessionStyle(); // 🔥 Add this
+        updateSessionStyle();
         updateTimerDisplay();
         startTimer();
     }
@@ -275,6 +299,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
             activeStudyPlan = plans.get(0); // assume only one ACTIVE plan
             activeTasks = taskDAO.getTasksByStudyPlan(activeStudyPlan.getId());
             showTimerUI();
+            renderTasks();
         }
     }
 
@@ -322,4 +347,82 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         studyPlanTitleLabel.setVisible(true);
         taskSideBar.setVisible(true);
     }
+
+    private void renderTasks() {
+        // Look up taskListContainer dynamically from the taskSideBar
+        VBox taskListContainer = (VBox) taskSideBar.lookup("#taskListContainer");
+
+        if (taskListContainer == null) {
+            System.out.println("❌ taskListContainer not found inside taskSideBar!");
+            return;
+        }
+
+        if (activeTasks == null) {
+            System.out.println("❌ activeTasks is null.");
+            return;
+        }
+
+        taskListContainer.getChildren().clear();
+
+        for (int i = 0; i < activeTasks.size(); i++) {
+            Task task = activeTasks.get(i);
+            HBox taskBox = new HBox();
+            taskBox.setSpacing(10);
+            taskBox.setAlignment(Pos.CENTER_LEFT);
+            taskBox.setPadding(new Insets(10));
+            taskBox.setStyle("-fx-border-color: #ccc; -fx-border-width: 0 0 1 0;");
+
+            VBox textBox = new VBox();
+            textBox.setAlignment(Pos.TOP_LEFT);
+
+            Label titleLabel = new Label(task.getTitle());
+            titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+
+            Label descLabel = new Label(task.getDescription());
+            descLabel.setWrapText(true);
+            descLabel.setStyle("-fx-font-size: 14px;");
+
+            textBox.getChildren().addAll(titleLabel, descLabel);
+            HBox.setHgrow(textBox, Priority.ALWAYS);
+
+            Circle statusCircle = new Circle(6);
+            statusCircle.setFill(i < currentTaskIndex ? Color.GREEN :
+                    (i == currentTaskIndex ? Color.GOLD : Color.RED));
+
+            taskBox.getChildren().addAll(statusCircle, textBox);
+            taskListContainer.getChildren().add(taskBox);
+        }
+    }
+
+
+
+
+    private void updateTaskVisuals() {
+        renderTasks();
+    }
+
+    private void loadFirstStudyPlanFromDatabase() {
+        try {
+            User user = SessionManager.getCurrentUser(); // simulate login
+            List<StudyPlan> plans = studyPlanDAO.getStudyPlansByStatus(user.getId(), "ACTIVE");
+
+            if (plans == null || plans.isEmpty()) {
+                System.out.println("⚠ No active study plans found.");
+                return;
+            }
+
+            activeStudyPlan = plans.get(0);
+            activeTasks = taskDAO.getTasksByStudyPlan(activeStudyPlan.getId());
+
+            showTimerUI();
+            renderTasks();
+
+            System.out.println("✅ Loaded Study Plan: " + activeStudyPlan.getTitle());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
