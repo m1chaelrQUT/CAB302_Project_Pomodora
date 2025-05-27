@@ -24,12 +24,7 @@
                 </right>
                 <center>
                     <AnchorPane BorderPane.alignment="CENTER">
-                        <Button fx:id="plusButton"
-                                layoutX="540.0"
-                                layoutY="559.0"
-                                onAction="#handlePlusButtonClicked"
-                                text="+"
-                                styleClass="plus-button" visible="true" />
+                        <Button fx:id="plusButton" layoutX="540.0" layoutY="559.0" onAction="#handlePlusButtonClicked" styleClass="plus-button" text="+" visible="true" />
 
                         <Label fx:id="studyPlanTitleLabel" layoutX="380.0" layoutY="80.0" style="-fx-font-size: 28px; -fx-text-fill: #333333;" visible="false" />
                         <!-- Circle Timer Area -->
@@ -53,6 +48,11 @@
 
                         <!-- Next Button -->
                         <Button fx:id="nextButton" layoutX="750.0" layoutY="650.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #b2a2af; -fx-background-radius: 50%; -fx-font-size: 24px;" text="⏭" textFill="white" />
+                  <Label fx:id="motivationalText" alignment="CENTER" contentDisplay="CENTER" layoutX="137.0" layoutY="824.0" prefHeight="70.0" prefWidth="935.0" text="Are you motivated yet?">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
                     </AnchorPane>
                 </center>
             </BorderPane>

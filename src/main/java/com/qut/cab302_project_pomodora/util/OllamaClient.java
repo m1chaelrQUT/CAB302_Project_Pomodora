@@ -73,7 +73,7 @@ public class OllamaClient {
             this.model = model;
             this.prompt = prompt;
             this.stream = stream;
-            this.format = format;
+            if (format.equals("json")) {this.format = format;}
         }
     }
 
