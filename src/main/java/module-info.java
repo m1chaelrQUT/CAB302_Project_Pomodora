@@ -5,6 +5,7 @@ module com.example.cab302_project_pomodora {
     requires java.net.http;
     requires java.sql;
     requires org.json;
+    requires java.desktop;
 
 
     opens com.qut.cab302_project_pomodora to javafx.fxml;

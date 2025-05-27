@@ -165,6 +165,7 @@ public class StudyPlan
      * @return true if the study plan is active, false otherwise.
      */
     public boolean planIsActive() {
-        return status.equals("ACTIVE");
+        // Check if the status is "ACTIVE" or "RESUME"
+        return "ACTIVE".equals(status) || "RESUME".equals(status);
     }
 }
