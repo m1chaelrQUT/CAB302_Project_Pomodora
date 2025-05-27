@@ -18,7 +18,7 @@
                 </left>
                 <right>
                     <VBox alignment="TOP_CENTER" prefWidth="296" spacing="10" style="-fx-padding: 10;" BorderPane.alignment="CENTER_RIGHT">
-                        <fx:include source="../components/user-profile-w-level.fxml" />
+                        <fx:include source="../components/user-profile-nobar.fxml" />
                         <fx:include fx:id="taskSideBar" source="../components/task-sidebar.fxml" />
                     </VBox>
                 </right>

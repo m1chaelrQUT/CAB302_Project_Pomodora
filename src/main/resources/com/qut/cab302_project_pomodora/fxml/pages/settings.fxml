@@ -31,26 +31,27 @@
                               <Font size="50.0" />
                            </font>
                         </Label>
-                        <Button fx:id="themeSettingsButton" alignment="CENTER" layoutX="307.0" layoutY="180.0" mnemonicParsing="false" onAction="#openThemeSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Theme &amp; Appearance ">
+                        <Button fx:id="themeSettingsButton" alignment="CENTER" layoutX="307.0" layoutY="220.0" mnemonicParsing="false" onAction="#openThemeSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Theme &amp; Appearance ">
                            <font>
                               <Font size="37.0" />
                            </font>
                         </Button>
-                        <Button fx:id="timerSettingsButton" layoutX="307.0" layoutY="390.0" mnemonicParsing="false" onAction="#openTimerSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Timer Settings">
+                        <Button fx:id="timerSettingsButton" layoutX="307.0" layoutY="480.0" mnemonicParsing="false" onAction="#openTimerSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Timer Settings">
                            <font>
                               <Font size="37.0" />
                            </font>
                         </Button>
-                        <ImageView fitHeight="57.0" fitWidth="57.0" layoutX="1332.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="57.0" fitWidth="57.0" layoutX="1332.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/theme_icon.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="71.0" fitWidth="60.0" layoutX="1333.0" layoutY="405.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="71.0" fitWidth="60.0" layoutX="1333.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/Clock.png" />
                            </image>
                         </ImageView>
+                        <!--
                         <Button fx:id="notificationSettingsButton" layoutX="312.0" layoutY="591.0" mnemonicParsing="false" onAction="#openNotificationSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Notification">
                            <font>
                               <Font size="37.0" />
@@ -61,18 +62,19 @@
                               <Image url="@../../images/Bell.png" />
                            </image>
                         </ImageView>
-                        <Button fx:id="accountSettingsButton" layoutX="312.0" layoutY="788.0" mnemonicParsing="false" onAction="#openAccountSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Account">
+                        -->
+                        <Button fx:id="accountSettingsButton" layoutX="312.0" layoutY="748.0" mnemonicParsing="false" onAction="#openAccountSettings" prefHeight="102.0" prefWidth="1102.0" styleClass="button-primary" text="Account ">
                            <font>
                               <Font size="37.0" />
                            </font>
                         </Button>
-                        <ImageView fitHeight="73.0" fitWidth="107.0" layoutX="1318.0" layoutY="807.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="73.0" fitWidth="107.0" layoutX="1318.0" layoutY="767.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/User-indicator.png" />
                            </image>
                         </ImageView>
                         <Pane layoutX="1324.0" prefWidth="295.0" AnchorPane.rightAnchor="0.0">
-                           <fx:include source="../components/user-profile-w-level.fxml" />
+                           <fx:include source="../components/user-profile-nobar.fxml" />
                         </Pane>
                      </children>
                   </AnchorPane>
@@ -100,7 +102,7 @@
                                     <Font size="38.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="themeSettingsSaveButton" layoutX="325.0" layoutY="572.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="100.0" onAction="#saveThemeSettings" text="Save">
+                              <Button fx:id="themeSettingsSaveButton" layoutX="325.0" layoutY="572.0" mnemonicParsing="false" onAction="#saveThemeSettings" prefHeight="60.0" prefWidth="100.0" text="Save">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -170,7 +172,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Spinner fx:id="shortBreakSecondsSpinner" layoutX="625.0" layoutY="343.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;"/>
+                        <Spinner fx:id="shortBreakSecondsSpinner" layoutX="625.0" layoutY="343.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;" />
                         <Label fx:id="shortBreakSecondsLabel" layoutX="741.0" layoutY="356.0" text="Seconds">
                            <font>
                               <Font size="24.0" />
@@ -187,7 +189,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Spinner fx:id="longBreakSecondsSpinner" layoutX="625.0" layoutY="484.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;"/>
+                        <Spinner fx:id="longBreakSecondsSpinner" layoutX="625.0" layoutY="484.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;" />
                         <Label fx:id="longBreakSecondsLabel" layoutX="741.0" layoutY="497.0" text="Seconds">
                            <font>
                               <Font size="24.0" />
@@ -203,7 +205,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Spinner fx:id="longBreakCyclesSpinner" layoutX="625.0" layoutY="624.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;"/>
+                        <Spinner fx:id="longBreakCyclesSpinner" layoutX="625.0" layoutY="624.0" prefHeight="60.0" prefWidth="100.0" style="-fx-font-size: 17.5pt;" />
                         <Label fx:id="longBreakCyclesLabel" layoutX="741.0" layoutY="637.0" prefHeight="35.0" prefWidth="102.0" text="Cycles">
                            <font>
                               <Font size="24.0" />
@@ -223,6 +225,7 @@
                   </AnchorPane>
                </AnchorPane>
             </StackPane>
+            <!--
             <StackPane fx:id="notificationSettingsPopUp" prefHeight="900.0" prefWidth="900.0" visible="false">
                <children>
                   <StackPane styleClass="overlay-shadow" />
@@ -253,6 +256,7 @@
                   </AnchorPane>
                </children>
             </StackPane>
+            -->
             <StackPane fx:id="accountSettingsPopUp" prefHeight="900.0" prefWidth="900.0" visible="false">
                <children>
                   <StackPane styleClass="overlay-shadow" />

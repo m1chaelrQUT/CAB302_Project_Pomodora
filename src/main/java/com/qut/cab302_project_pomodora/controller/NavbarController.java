@@ -2,12 +2,15 @@ package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.Main;
 import com.qut.cab302_project_pomodora.model.SessionManager;
+import com.qut.cab302_project_pomodora.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
@@ -24,10 +27,11 @@ import java.util.Objects;
  */
 public class NavbarController {
 
-    // FXML elements
+    // FXML elements for side-navbar
     @FXML private AnchorPane navBarPane;
     @FXML private Button studyButton;
     @FXML private VBox navButtonList;
+
 
     /**
      * Toggles the visibility of the navbar.
@@ -101,4 +105,10 @@ public class NavbarController {
             }
         }
     }
+
+
+
+
+
+
 }
