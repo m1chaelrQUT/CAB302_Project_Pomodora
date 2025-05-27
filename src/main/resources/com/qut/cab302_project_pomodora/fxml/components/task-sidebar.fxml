@@ -2,13 +2,18 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane visible="false" prefHeight="970.0" prefWidth="296.0" style="-fx-background-color: #B2AFAF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="taskSideBar"
+      visible="false"
+      prefHeight="970.0"
+      prefWidth="296.0"
+      style="-fx-background-color: #B2AFAF;"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1">
 
     <!-- Title -->
     <Label layoutX="20.0" layoutY="10.0" text="Current task" textFill="WHITE">
@@ -17,65 +22,25 @@
         </font>
     </Label>
 
-    <!-- Task Container -->
-    <AnchorPane layoutX="20.0" layoutY="45.0" prefHeight="250.0" prefWidth="250.0" style="-fx-background-color: #625E5E; -fx-background-radius: 10;">
+    <!-- Task Sidebar Container Changed to VBox -->
+    <VBox layoutX="20.0" layoutY="45.0" prefHeight="250.0" prefWidth="250.0"
+          style="-fx-background-color: #625E5E; -fx-background-radius: 10;">
+
         <!-- Task Title with Status Dot -->
-        <Label layoutX="10.0" layoutY="5.0" style="-fx-font-size: 16px;" text="Task 3" textFill="WHITE" />
-        <Circle fill="ORANGE" layoutX="236.0" layoutY="14.0" radius="6.0" />
+        <HBox spacing="10.0" alignment="CENTER_LEFT" style="-fx-padding: 5 5 5 5;">
+            <Label style="-fx-font-size: 16px;" text="Task 3" textFill="WHITE" />
+            <Circle fill="ORANGE" radius="6.0" />
+        </HBox>
 
-        <!-- Task Steps List -->
-        <VBox layoutX="10.0" layoutY="30.0" prefHeight="200.0" prefWidth="230.0" spacing="10.0" style="-fx-background-radius: 6; -fx-background-color:#D9D9D9">
-            <!-- Step 1 -->
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <Circle fill="green" radius="5.0" />
-                <Label text="1. Read Chapter 5" textFill="BLACK">
-                    <font><Font size="16.0"/></font>
-                </Label>
-            </HBox>
-
-            <!-- Step 1 Break -->
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <Circle fill="green" radius="5.0" />
-                <Label text="Break" textFill="BLACK">
-                    <font><Font size="16.0"/></font>
-                </Label>
-            </HBox>
-
-            <!-- Step 2 -->
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <Circle fill="green" radius="5.0" />
-                <Label text="2. Read Chapter 6" textFill="BLACK">
-                    <font><Font size="16.0"/></font>
-                </Label>
-            </HBox>
-
-            <!-- Step 2 Break -->
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <Circle fill="green" radius="5.0" />
-                <Label text="Break" textFill="BLACK">
-                    <font><Font size="16.0"/></font>
-                </Label>
-            </HBox>
-
-            <!-- Step 3 -->
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <Circle fill="orange" radius="5.0" />
-                <Label text="3. Read Chapter 7" textFill="BLACK">
-                    <font><Font size="16.0"/></font>
-                </Label>
-            </HBox>
-
-            <!-- Step 3 Break -->
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
-                <Circle fill="red" radius="5.0" />
-                <Label text="Break" textFill="BLACK">
-                    <font><Font size="16.0"/></font>
-                </Label>
-            </HBox>
-
+        <!-- Task Steps List (Populated Dynamically) -->
+        <VBox fx:id="taskListContainer"
+              prefHeight="200.0"
+              prefWidth="230.0"
+              spacing="10.0"
+              style="-fx-background-radius: 6; -fx-background-color:#D9D9D9">
             <padding>
                 <Insets left="10.0" />
             </padding>
         </VBox>
-    </AnchorPane>
-</AnchorPane>
+    </VBox>
+</VBox>
