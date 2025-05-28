@@ -45,6 +45,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     @FXML private StackPane selectPlanModal;
     @FXML private VBox taskSideBar;
     @FXML private VBox taskListContainer;
+    @FXML private Label motivationalText;
 
     private ITimerDAO timerDAO;
     private IUserDAO userDAO;
@@ -56,6 +57,8 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private StudyPlan activeStudyPlan;
     private int currentTaskIndex = 0;
     private List<StudyTask> activeTasks;
+
+    private LLMService llmService;
 
     public StudyPlanTimerController() {
         this.timerDAO = new SqliteTimerDAO();
@@ -120,6 +123,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         if(currentUser == null) {
             throw new IllegalStateException("Current user is null. Cannot load study plans.");
         }
+        this.llmService = new LLMService();
 
         // Initialize the timer values for the current user
         Timer userTimer = timerDAO.getUserTimer(currentUser);
@@ -154,6 +158,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
 
 
         updateTimerDisplay();
+        updateMotivation();
 
     }
     private void handleStartPause() {
@@ -267,6 +272,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
             } else {
                 minutes--;
                 seconds = 59;
+                updateMotivation();
             }
         } else {
             seconds--;
@@ -457,6 +463,15 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateMotivation() {
+        String motivationalMessage;
+        String prompt;
+        prompt = "Respond with a new motivational message based on this study plan: " + activeStudyPlan.getTitle() + ", and this was the previous motivational message: " + motivationalText.getText() + ". --- Five words maximum for entire response. Only five words. Do not say absolutely. Do not say 'Here is a new motivational message based on the study plan:'";
+        motivationalMessage = llmService.getCompletion(prompt, "Null").join();
+        System.out.println("Motivational Message: " + motivationalMessage);
+        motivationalText.setText(motivationalMessage);
     }
 
 
