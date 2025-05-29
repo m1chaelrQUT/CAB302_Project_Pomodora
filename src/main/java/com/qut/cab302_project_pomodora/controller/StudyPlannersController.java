@@ -531,10 +531,13 @@ public class StudyPlannersController extends ControllerSkeleton {
                 );
 
                 // iterate over the map
+                int taskNumberIndex = 1; // Start task numbering from 1
+
                 for (Map.Entry<String, StudyTaskPartial> entry : tasks.entrySet()) {
                     String key = entry.getKey();
-                    String taskNumberString = key.replaceAll("\\D+", "");
-                    int taskNumber = Integer.parseInt(taskNumberString);
+//                    String taskNumberString = key.replaceAll("\\D+", "");
+                    int taskNumber = taskNumberIndex;
+                    System.out.println("Task Number: " + taskNumber);
 
                     String taskTitle = entry.getValue().getTitle();
                     String taskDescription = entry.getValue().getDescription();
@@ -542,6 +545,7 @@ public class StudyPlannersController extends ControllerSkeleton {
                     int studyPlanId = studyPlanDAO.getStudyPlanByTitle(plan.getTitle()).getId();
                     StudyTask currentTask = new StudyTask(0, studyPlanId, taskNumber, taskTitle, taskDescription, "INCOMPLETE");
                     taskDAO.createTask(currentTask);
+                    taskNumberIndex++; // Increment task number for the next task
                 }
 
 

@@ -55,7 +55,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private Timeline pomodoroTimeline;
 
     private StudyPlan activeStudyPlan;
-    private int currentTaskIndex = 0;
+    private int currentTaskIndex;
     private List<StudyTask> activeTasks;
 
     private LLMService llmService;
@@ -242,7 +242,14 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         updateSessionStyle();
         updateTimerDisplay();
         updateTaskVisuals();
+        // Update the current indexed task to complete in database
+        if (currentTaskIndex < activeTasks.size()) {
+            StudyTask currentTask = activeTasks.get(currentTaskIndex);
+            currentTask.setStatus("COMPLETE");
+            taskDAO.updateTask(currentTask);
+        }
         currentTaskIndex++;
+
     }
 
     private void resetTimer() {
@@ -314,7 +321,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setTitle("Pomodoro Complete!");
         alert.setHeaderText(null);
-        alert.setContentText("🎉 You've completed a full Pomodoro cycle! Take a well-deserved break.");
+        alert.setContentText("You've completed a full Pomodoro cycle! Take a well-deserved break.");
         alert.showAndWait();
     }
 
@@ -395,12 +402,12 @@ public class StudyPlanTimerController extends ControllerSkeleton {
         VBox taskListContainer = (VBox) taskSideBar.lookup("#taskListContainer");
 
         if (taskListContainer == null) {
-            System.out.println("❌ taskListContainer not found inside taskSideBar!");
+            System.out.println("taskListContainer not found inside taskSideBar");
             return;
         }
 
         if (activeTasks == null) {
-            System.out.println("❌ activeTasks is null.");
+            System.out.println("activeTasks is null.");
             return;
         }
 
@@ -428,6 +435,8 @@ public class StudyPlanTimerController extends ControllerSkeleton {
             HBox.setHgrow(textBox, Priority.ALWAYS);
 
             Circle statusCircle = new Circle(6);
+            currentTaskIndex = task.getCurrentTaskIndex(activeTasks);
+            System.out.println("Rendering Task. Current Task Index: " + currentTaskIndex);
             statusCircle.setFill(i < currentTaskIndex ? Color.GREEN :
                     (i == currentTaskIndex ? Color.GOLD : Color.RED));
 
@@ -440,6 +449,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
 
 
     private void updateTaskVisuals() {
+
         renderTasks();
     }
 
@@ -449,7 +459,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
             List<StudyPlan> plans = studyPlanDAO.getStudyPlansByStatus(user.getId(), "ACTIVE");
 
             if (plans == null || plans.isEmpty()) {
-                System.out.println("⚠ No active study plans found.");
+                System.out.println("No active study plans found.");
                 return;
             }
 
@@ -459,7 +469,7 @@ public class StudyPlanTimerController extends ControllerSkeleton {
             showTimerUI();
             renderTasks();
 
-            System.out.println("✅ Loaded Study Plan: " + activeStudyPlan.getTitle());
+            System.out.println("Loaded Study Plan: " + activeStudyPlan.getTitle());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -468,6 +478,10 @@ public class StudyPlanTimerController extends ControllerSkeleton {
     private void updateMotivation() {
         String motivationalMessage;
         String prompt;
+        if (activeStudyPlan == null) {
+            System.out.println("No active study plan found. Cannot update motivation.");
+            return;
+        }
         prompt = "Respond with a new motivational message based on this study plan: " + activeStudyPlan.getTitle() + ", and this was the previous motivational message: " + motivationalText.getText() + ". --- Five words maximum for entire response. Only five words. Do not say absolutely. Do not say 'Here is a new motivational message based on the study plan:'";
         motivationalMessage = llmService.getCompletion(prompt, "Null").join();
         System.out.println("Motivational Message: " + motivationalMessage);
