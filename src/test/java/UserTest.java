@@ -10,6 +10,7 @@ public class UserTest {
     private static final int userLevel = 1;
     private static final int userLevelExp = 1;
     private static final String userEmail = "johndoe@email.com";
+    private static final String sessionToken = "f";
 
     private User user1;
 
@@ -48,5 +49,9 @@ public class UserTest {
         assertEquals(2,user1.getPlayerLevel());
     }
 
-
+    @Test
+    public void testSetAndGetSessionToken() {
+        user1.setSessionToken(sessionToken);
+        assertEquals(sessionToken, user1.getSessionToken());
+    }
 }
