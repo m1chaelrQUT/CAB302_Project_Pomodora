@@ -18,7 +18,7 @@ public class TaskTest {
     public void testConstructorAndGetters() {
         assertEquals(1, task.getId());
         assertEquals(STUDY_PLAN_ID_FOR_USER, task.getStudyPlanId());
-        assertEquals(0, task.getTaskNumber());
+        assertEquals(1, task.getTaskNumber());
         assertEqualsIgnoreSpaces("Read Chapter 1", task.getTitle());
         assertEqualsIgnoreSpaces("Read and summarise chapter 1", task.getDescription());
         assertEqualsIgnoreSpaces("Pending", task.getStatus());
