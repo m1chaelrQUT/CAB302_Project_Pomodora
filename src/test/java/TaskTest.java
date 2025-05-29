@@ -1,33 +1,80 @@
+import com.qut.cab302_project_pomodora.model.StudyTask;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTest {
-    //TODO: ADD tasks to test.
+    private static final int FIXED_USER_ID = 1;
+    private static final int STUDY_PLAN_ID_FOR_USER = 101;
+    private StudyTask task;
 
     @BeforeEach
     public void setUp() {
-        //TODO: Add tasks to test.
+        task = new StudyTask(1, STUDY_PLAN_ID_FOR_USER, 1, "Read Chapter 1", "Read and summarise chapter 1", "Pending");
     }
 
-    //TODO: Split these up into separate tests that test each setter individually
     @Test
-    public void testSetters() {
-        //TODO: Add setters to test.
+    public void testConstructorAndGetters() {
+        assertEquals(1, task.getId());
+        assertEquals(STUDY_PLAN_ID_FOR_USER, task.getStudyPlanId());
+        assertEquals(0, task.getTaskNumber());
+        assertEqualsIgnoreSpaces("Read Chapter 1", task.getTitle());
+        assertEqualsIgnoreSpaces("Read and summarise chapter 1", task.getDescription());
+        assertEqualsIgnoreSpaces("Pending", task.getStatus());
     }
 
-//    @Test
-//    public void testSetAndGetTasks() {
-//        Task task1 = new Task(); // Assuming Task has a no-arg constructor
-//        Task task2 = new Task();
-//        List<Task> taskList = List.of(task1, task2);
-//
-//        StudyPlan plan = new StudyPlan();
-//        plan.setTasks(taskList);
-//
-//        assertEquals(2, plan.tasks().size());
-//        assertSame(task1, plan.tasks().get(0));
-//    }
+    @Test
+    public void testSetId() {
+        task.setId(2);
+        assertEquals(2, task.getId());
+    }
+
+    @Test
+    public void testSetTaskNumber() {
+        task.setTaskNumber(2);
+        assertEquals(2, task.getTaskNumber());
+    }
+
+    @Test
+    public void testSetTitle() {
+        task.setTitle("Review Chapter 1");
+        assertEqualsIgnoreSpaces("Review Chapter 1", task.getTitle());
+    }
+
+    @Test
+    public void testSetDescription() {
+        task.setDescription("Summarise key points of chapter 1");
+        assertEqualsIgnoreSpaces("Summarise key points of chapter 1", task.getDescription());
+    }
+
+    @Test
+    public void testSetStatusInProgress() {
+        task.setStatus("In Progress");
+        assertEqualsIgnoreSpaces("In Progress", task.getStatus());
+    }
+
+    @Test
+    public void testSetStatusIncomplete() {
+        task.setStatus("INCOMPLETE");
+        assertEqualsIgnoreSpaces("INCOMPLETE", task.getStatus());
+    }
+
+
+
+    @Test
+    public void testToString() {
+        String expected = "Task{id=1, studyPlanId=" + STUDY_PLAN_ID_FOR_USER + ", title='Read Chapter 1', status='Pending}";
+        assertEqualsIgnoreSpaces(expected, task.toString());
+    }
+
+
+    private void assertEqualsIgnoreSpaces(String expected, String actual) {
+        String cleanedExpected = expected.replaceAll("\\s+", "");
+        String cleanedActual = actual.replaceAll("\\s+", "");
+        assertEquals(cleanedExpected, cleanedActual);
+    }
+
+
 }
+
