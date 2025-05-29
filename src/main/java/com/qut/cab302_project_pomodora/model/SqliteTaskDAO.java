@@ -231,4 +231,5 @@ public class SqliteTaskDAO implements ITaskDAO {
         System.err.println(message + ": " + e.getMessage());
         e.printStackTrace();
     }
+
 }

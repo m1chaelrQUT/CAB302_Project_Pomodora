@@ -43,4 +43,5 @@ public interface ITaskDAO {
     boolean deleteTask(int id);
 
     boolean isTaskComplete(int id);
+
 }
