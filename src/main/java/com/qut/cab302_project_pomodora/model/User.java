@@ -203,5 +203,8 @@ public class User {
                 '}';
     }
 
+    public boolean login(String emailInput, String passwordInput) {
+        return this.email.equals(emailInput) && this.password.equals(passwordInput);
+    }
 }
 
