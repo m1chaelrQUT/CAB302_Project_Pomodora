@@ -49,6 +49,7 @@ public class SessionManager {
      * @throws SQLException // SQL exception if there is an error with the database
      * @throws IOException // IO exception if there is an error with the file system
      */
+    //TODO : I dont think this is actually returning or setting anything, so maybe have this return the user
     public static void loadSession() throws SQLException, IOException{
         // Check if the session file exists
         System.out.println("Checking if session file exists...");
@@ -108,21 +109,25 @@ public class SessionManager {
     }
 
     /**
-     * Getters & Setters
+     * Gets the current user.
+     * @return The current user, or null if no user is logged in.
      */
-
     public static User getCurrentUser() {
         // Check if the current user is not null and return null, returning currentUser = null causes an error in the controller
         if (currentUser == null) {
             System.out.println("No user is currently logged in.");
             return null;
-        // If the user is logged in, return the current user
+            // If the user is logged in, return the current user
         } else {
             System.out.println("Returning current user: " + currentUser.getUserName());
             return currentUser;
         }
     }
 
+    /**
+     * Sets the current user.
+     * @param user The user to set as the current user.
+     */
     public static void setCurrentUser(User user) {
         currentUser = user;
     }

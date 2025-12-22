@@ -205,4 +205,24 @@
     -fx-padding: 10px 20px;
 }
 
+.bar-chart .chart-content .chart-plot-background {
+    -fx-background-color: transparent;
+}
 
+.chart-bar {
+    -fx-bar-fill: -fx-surface-invert;
+}
+
+.text-area .content {
+    -fx-background-color: -fx-surface-primary;
+}
+
+.plus-button {
+    -fx-background-radius: 50%;
+    -fx-font-size: 36px;
+    -fx-pref-width: 80px;
+    -fx-pref-height: 80px;
+    -fx-background-color: -fx-surface-clock;
+    -fx-text-fill: -fx-text-invert;
+    -fx-cursor: hand;
+}

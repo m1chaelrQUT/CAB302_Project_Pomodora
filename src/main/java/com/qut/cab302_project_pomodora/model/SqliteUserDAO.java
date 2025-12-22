@@ -1,14 +1,19 @@
 package com.qut.cab302_project_pomodora.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDateTime;
 
+/**
+ * SqliteUserDAO is a Data Access Object (DAO) for managing user data in a SQLite database.
+ * It provides methods to add, update, and retrieve user information.
+ */
 public class SqliteUserDAO implements IUserDAO {
     private Connection connection;
 
+    /**
+     * Constructor for SqliteUserDAO.
+     * Initializes the connection to the database and creates the users table if it doesn't exist.
+     */
     public SqliteUserDAO() {
         connection = SqliteConnection.getInstance();
 
@@ -16,6 +21,9 @@ public class SqliteUserDAO implements IUserDAO {
         createTable();
     }
 
+    /**
+     * Creates the users table if it doesn't exist.
+     */
     private void createTable() {
         try {
             Statement statement = connection.createStatement();
@@ -36,6 +44,10 @@ public class SqliteUserDAO implements IUserDAO {
         }
     }
 
+    /**
+     * Method for adding a new user to the database
+     * @param user - the user to be added
+     */
     @Override
     public void addUser(User user) {
         try {
@@ -90,7 +102,7 @@ public class SqliteUserDAO implements IUserDAO {
 
     /**
      * Method for getting users info using username
-     * @param - the userName of the user
+     * @param userName - the userName of the user
      * @return the user's username, level, exp
      */
     @Override
@@ -143,5 +155,17 @@ public class SqliteUserDAO implements IUserDAO {
         }
         return null;
 
+    }
+
+    public boolean updateUserStudyPlan(int userId, int studyPlanId) {
+        String sql = "UPDATE users SET studyPlanId = ? WHERE id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, studyPlanId);
+            stmt.setInt(2, userId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

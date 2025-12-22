@@ -46,8 +46,8 @@ public class SqliteTimerDAO  implements ITimerDAO {
 
     /**
      * Updates the user timers with the given values.
-     * @param user
-     * @param timer
+     * @param user The user to update the timer for.
+     * @param timer The timer object containing the new values.
      */
     @Override
     public void updateUserTimers(User user, Timer timer) {
@@ -116,9 +116,9 @@ public class SqliteTimerDAO  implements ITimerDAO {
                         "(userId, workDuration, shortBreakDuration, longBreakDuration, longBreakAfter) " +
                         "VALUES (?, ?, ?, ?, ?)");
                 statement.setInt(1, user.getId());
-                statement.setInt(2, DEFAULT_WORK_DURATION);
-                statement.setInt(3, DEFAULT_SHORT_BREAK_DURATION);
-                statement.setInt(4, DEFAULT_LONG_BREAK_DURATION);
+                statement.setInt(2, DEFAULT_WORK_DURATION * 60); // Convert to seconds
+                statement.setInt(3, DEFAULT_SHORT_BREAK_DURATION * 60); // Convert to seconds
+                statement.setInt(4, DEFAULT_LONG_BREAK_DURATION * 60); // Convert to seconds
                 statement.setInt(5, DEFAULT_LONG_BREAK_AFTER);
                 // Execute Insert Query
                 int rowsAffected = statement.executeUpdate();

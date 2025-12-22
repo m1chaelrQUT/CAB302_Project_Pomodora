@@ -1,13 +1,12 @@
 package com.qut.cab302_project_pomodora.controller;
 
 import com.qut.cab302_project_pomodora.model.*;
+import com.qut.cab302_project_pomodora.config.Theme;
+import com.qut.cab302_project_pomodora.util.ThemeManager;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -15,6 +14,10 @@ import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * SettingsController is responsible for managing the settings view in the application.
+ * It handles the display and modification of user settings, including timer settings, account settings, and theme settings.
+ */
 public class SettingsController extends ControllerSkeleton {
     @FXML
     private StackPane settings;
@@ -24,6 +27,11 @@ public class SettingsController extends ControllerSkeleton {
     private StackPane timerSettingsPopUp;
     @FXML
     private StackPane accountSettingsPopUp;
+    @FXML
+    private StackPane themeSettingsPopUp;
+    // Notification Settings was decided to be dropped towards the end due to lack of time
+    //@FXML
+    //private StackPane notificationSettingsPopUp;
 
     @FXML private Region navbar;
     @FXML private NavbarController navbarController;
@@ -51,6 +59,14 @@ public class SettingsController extends ControllerSkeleton {
     @FXML
     private PasswordField confirmNewPasswordEntryField;
 
+    @FXML private ChoiceBox<Theme> colourSchemeSelector;
+
+    enum Timers {
+        BAR, ANALOG, DIGITAL
+    }
+
+    @FXML private ChoiceBox<Timers> timerUISelector;
+
     // DAO interfaces
     private IUserDAO userDAO;
     private ITimerDAO timerDAO;
@@ -58,48 +74,135 @@ public class SettingsController extends ControllerSkeleton {
     // Current user object
     private User currentUser;
 
+    /**
+     * Constructor for SettingsController.
+     * Initializes the userDAO and timerDAO objects.
+     */
     public SettingsController() {
         userDAO = new SqliteUserDAO();
         timerDAO = new SqliteTimerDAO();
     }
 
-    // Open/Show function for the pop-ups/overlays (Stackpanes)
+    /**
+     * Opens the timer settings pop-up.
+     * This method is called when the user clicks the "Timer Settings" button.
+     */
     @FXML
     private void openTimerSettings() {
         timerSettingsPopUp.setVisible(true);
+        settingsSavedLabel.setVisible(false);
+
+        // Load current timer settings
+        Timer currentTimerSettings = timerDAO.getUserTimer(currentUser);
+        if (currentTimerSettings != null) {
+            int workDuration = currentTimerSettings.getWorkDuration();
+            int shortBreak = currentTimerSettings.getShortBreakDuration();
+            int longBreak = currentTimerSettings.getLongBreakDuration();
+            int longBreakAfter = currentTimerSettings.getLongBreakAfter();
+
+            // Set values into spinners
+            // Total time stored in seconds, so value / 60 = nearest int
+            pomodoroMinutesSpinner.getValueFactory().setValue(workDuration / 60);
+            // Value % 60 = remainder, i.e., seconds after whole minutes calculated
+            pomodoroSecondsSpinner.getValueFactory().setValue(workDuration % 60);
+
+            shortBreakMinutesSpinner.getValueFactory().setValue(shortBreak / 60);
+            shortBreakSecondsSpinner.getValueFactory().setValue(shortBreak % 60);
+
+            longBreakMinutesSpinner.getValueFactory().setValue(longBreak / 60);
+            longBreakSecondsSpinner.getValueFactory().setValue(longBreak % 60);
+
+            longBreakCyclesSpinner.getValueFactory().setValue(longBreakAfter);
+        }
     }
 
+    /**
+     * Opens the account settings pop-up.
+     * This method is called when the user clicks the "Account Settings" button.
+     */
     @FXML
     private void openAccountSettings() {
         accountSettingsPopUp.setVisible(true);
     }
 
-    // Close function for the pop-ups/overlays (Stackpanes)
+    /**
+     * Opens the theme settings pop-up.
+     * This method is called when the user clicks the "Theme Settings" button.
+     */
+    @FXML
+    private void openThemeSettings() {themeSettingsPopUp.setVisible(true); }
+
+    //@FXML
+    //private void openNotificationSettings() {notificationSettingsPopUp.setVisible(true); }
+
+
+    /**
+     * Closes the specified pop-up.
+     * This method is called when the user clicks the "Close" button in the pop-up.
+     *
+     * @param popUp The pop-up to be closed.
+     */
     private void closePopUp(StackPane popUp) {
         popUp.setVisible(false);
     }
 
+    /**
+     * Closes the timer settings pop-up.
+     * This method is called when the user clicks the "Close" button in the timer settings pop-up.
+     */
     @FXML
     private void closeTimerSettings() {
         closePopUp(timerSettingsPopUp);
     }
 
+    /**
+     * Closes the account settings pop-up.
+     * This method is called when the user clicks the "Close" button in the account settings pop-up.
+     */
     @FXML
     private void closeAccountSettings() {
         closePopUp(accountSettingsPopUp);
     }
 
+    /**
+     * Closes the theme settings pop-up.
+     * This method is called when the user clicks the "Close" button in the theme settings pop-up.
+     */
+    @FXML
+    private void closeThemeSettings() { closePopUp(themeSettingsPopUp); }
 
+
+    //@FXML
+    //private void closeNotificationSettings() { closePopUp(notificationSettingsPopUp); }
+
+
+    /**
+     * Gets the root pane of the settings view.
+     *
+     * @return the root pane of the settings view.
+     */
     @Override
     protected StackPane getRootPane() {
         return settings;
     }
 
+    /**
+     * Gets the content pane of the settings view.
+     *
+     * @return the content pane of the settings view.
+     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
+    /**
+     * Initializes the settings view.
+     * This method is called when the controller is loaded.
+     *
+     * @throws SQLException if there is an error with the database connection.
+     * @throws IOException  if there is an error with the FXML file.
+     */
     @Override
     @FXML
     public void initialize() throws SQLException, IOException {
@@ -113,12 +216,29 @@ public class SettingsController extends ControllerSkeleton {
 
         Platform.runLater(() -> {
             navbarController.setNavButtonStyles(settings.getScene());
+            colourSchemeSelector.setItems(FXCollections.observableArrayList(Theme.values()));
+            timerUISelector.setItems(FXCollections.observableArrayList(Timers.values()));
         });
+
+        pomodoroMinutesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,25) );
+        pomodoroSecondsSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,0)  );
+        shortBreakMinutesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,5)  );
+        shortBreakSecondsSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,0)  );
+        longBreakMinutesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,30) );
+        longBreakSecondsSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,59,0)  );
+        longBreakCyclesSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0,30,4)
+        );
 
         System.out.println("SettingsController Initialization completed.");
     }
 
-    // TODO: Add the iniSession() method to load the session and get the user
     /**
      * Initializes the session by loading the current user from the session manager.
      * This method is called during the initialization of the controller.
@@ -134,18 +254,10 @@ public class SettingsController extends ControllerSkeleton {
         System.out.println("Session loaded!");
     }
 
-    /* Account Settings Pop Up Methods*/
-    //@FXML
-//    private PasswordField newPasswordEntryField;
-
     @FXML
     private TextField newPasswordTextField;
 
     @FXML Button showNewPasswordButton;
-
-
-//    @FXML
-//    private PasswordField confirmNewPasswordEntryField;
 
     @FXML
     private TextField confirmNewPasswordTextField;
@@ -157,6 +269,10 @@ public class SettingsController extends ControllerSkeleton {
     private boolean isSetPasswordVisible = false;
     private boolean isConfirmPasswordVisible = false;
 
+    /**
+     * Toggles the visibility of the password field in the account settings pop-up.
+     * This method is called when the user clicks the "Show/Hide" button next to the password field.
+     */
     @FXML
     private void toggleSetPasswordVisibility() {
         // Flip the bool value
@@ -181,6 +297,10 @@ public class SettingsController extends ControllerSkeleton {
         }
     }
 
+    /**
+     * Toggles the visibility of the confirm password field in the account settings pop-up.
+     * This method is called when the user clicks the "Show/Hide" button next to the confirm password field.
+     */
     @FXML
     private void toggleConfirmNewPasswordVisibility() {
         isConfirmPasswordVisible = !isConfirmPasswordVisible;
@@ -204,10 +324,22 @@ public class SettingsController extends ControllerSkeleton {
         }
     }
 
+    /**
+     * Gets the password entered in the password field.
+     * This method is used to retrieve the password when the user clicks the "Confirm" button.
+     *
+     * @return the password entered in the password field.
+     */
     public String getSetPassword() {
         return isSetPasswordVisible ? newPasswordTextField.getText() : newPasswordEntryField.getText();
     }
 
+    /**
+     * Gets the password entered in the confirm password field.
+     * This method is used to retrieve the password when the user clicks the "Confirm" button.
+     *
+     * @return the password entered in the confirm password field.
+     */
     public String getConfirmPassword() {
         return isConfirmPasswordVisible ? confirmNewPasswordTextField.getText() : confirmNewPasswordEntryField.getText();
     }
@@ -251,6 +383,12 @@ public class SettingsController extends ControllerSkeleton {
         //TODO: [FrontEnd] Display success message to user
     }
 
+    @FXML private Label settingsSavedLabel;
+
+    /**
+     * This method is called when the user clicks the "Save" button in the timer settings pop-up.
+     * It saves the timer settings for the current user in the database.
+     */
     @FXML
     private void saveTimerSettings() {
 
@@ -277,6 +415,26 @@ public class SettingsController extends ControllerSkeleton {
 
         // Update the user's timer settings
         timerDAO.updateUserTimers(currentUser, currentUserTimer);
+        settingsSavedLabel.setVisible(true);
+    }
+
+    /**
+     * This method is called when the user clicks the "Save" button in the theme settings pop-up.
+     * It saves the selected theme and timer UI settings for the current user.
+     */
+    @FXML
+    private void saveThemeSettings() {
+        if (colourSchemeSelector.getValue() != null) {
+            ThemeManager.getInstance().applyTheme(getRootPane().getScene(), colourSchemeSelector.getValue());
+            System.out.println("Theme: " + colourSchemeSelector.getValue() + " was applied");
+        } else {
+            System.out.println("Theme not selected");
+        }
+        if (timerUISelector.getValue() != null) {
+            System.out.print("TimerUI Selection: " + timerUISelector.getValue() + ".");
+        } else {
+            System.out.println("TimerUI not selected");
+        }
+
     }
 }
-

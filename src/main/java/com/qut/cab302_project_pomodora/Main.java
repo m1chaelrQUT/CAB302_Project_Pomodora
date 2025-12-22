@@ -13,6 +13,10 @@ import com.qut.cab302_project_pomodora.util.ThemeManager;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Main class for the CAB302 Project Pomodora application.
+ * This class initializes the JavaFX application and sets up the main window.
+ */
 public class Main extends Application {
 
     @Override
@@ -58,6 +62,10 @@ public class Main extends Application {
 
     }
 
+    /**
+     * The main method to launch the JavaFX application.
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         launch();
     }

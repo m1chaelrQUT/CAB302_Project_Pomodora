@@ -16,12 +16,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
 
-// Extend the abstract skeleton
+/**
+ * SigninController is responsible for managing the sign-in view in the application.
+ * It handles user authentication and navigation to other views.
+ */
 public class SigninController extends ControllerSkeleton {
 
     // FXML ids specific to the Signin Controller
@@ -51,22 +53,38 @@ public class SigninController extends ControllerSkeleton {
 
     private Theme currentTheme = ThemeManager.getInstance().getCurrentTheme();
 
+    /**
+     * Constructor for SigninController.
+     * Initializes the userDAO to interact with the database.
+     */
     public SigninController() {
         userDAO = new SqliteUserDAO();
     }
 
-    // Implement the abstract methods to provide the required containers : This is for common scaling
+    /**
+     * Gets the root pane of the sign-in view.
+     * @return the root pane of the sign-in view.
+     */
     @Override
     protected StackPane getRootPane() {
         return signIn;
     }
 
+    /**
+     * Gets the content pane of the sign-in view.
+     * @return the content pane of the sign-in view.
+     */
     @Override
     protected Region getContentPane() {
         return contentPane;
     }
 
-    // Init
+    /**
+     * Initializes the sign-in view.
+     * Sets the preferred size and visibility of various elements.
+     * @throws SQLException throws SQLException if there is an error with the database connection.
+     * @throws IOException throws IOException if there is an error with the FXML file.
+     */
     @Override
     @FXML
     public void initialize() throws SQLException, IOException {
@@ -80,7 +98,12 @@ public class SigninController extends ControllerSkeleton {
         System.out.println("SigninController Initialization completed.");
     }
 
-    // Sign-In
+    /**
+     * Handles the sign-in process when the sign-in button is clicked.
+     * Validates the user credentials and starts a session if successful.
+     * @throws IOException throws IOException if there is an error with the FXML file.
+     * @throws SQLException throws SQLException if there is an error with the database connection.
+     */
     @FXML
     private void handleSignIn() throws IOException, SQLException {
         // Get sign in inputs
@@ -118,22 +141,38 @@ public class SigninController extends ControllerSkeleton {
         }
     }
 
+    /**
+     * Shows the reset password dialog when the "Forgot Password" button is clicked.
+     */
     @FXML
     private void showResetDialog() {
         System.out.println("SigninController showResetDialog");
         resetPane.setVisible(true);
     }
+
+    /**
+     * Shows the success dialog when the password reset is successful.
+     * This method is called after a successful password reset.
+     */
     private void showSuccessfulResetDialog() {
         System.out.println("SigninController showResetDialog");
         resetSuccessPane.setVisible(true);
     }
 
+    /**
+     * Go toes to the sign-up page when the "Sign Up" button is clicked.
+     * @throws IOException throws IOException if there is an error with the FXML file.
+     */
     @FXML
     private void goToSignUp() throws IOException {
         System.out.println("SigninController gotoSignUp");
         navigateTo("signup");
     }
 
+    /**
+     * Handles the reset password process when the "Reset Password" button is clicked.
+     * Validates the email address and shows a success dialog if valid.
+     */
     @FXML
     private void handleResetPassword() {
         String enteredEmail = usernameFieldReset.getText();
@@ -150,6 +189,10 @@ public class SigninController extends ControllerSkeleton {
         }
     }
 
+    /**
+     * Closes the reset password dialog when the "Close" button is clicked.
+     * Resets the email field and hides the error message.
+     */
     @FXML
     private void closeForgotPasswordDialog() {
         System.out.println("SigninController closeForgotPasswordDialog");
@@ -160,16 +203,24 @@ public class SigninController extends ControllerSkeleton {
 
     }
 
+    /**
+     * Closes the success dialog when the "Close" button is clicked.
+     * Hides the success pane.
+     */
     @FXML
     private void closeSuccessDialog() {
         System.out.println("SigninController closeSuccessDialog");
         resetSuccessPane.setVisible(false);
     }
 
+    /**
+     * Opens the support page when the "Get Support" button is clicked.
+     * This method opens a web browser to the specified URL.
+     */
     @FXML
     private void getSupport() {
         try {
-            Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=xvFZjo5PgG0"));
+            //Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=xvFZjo5PgG0"));
         } catch (Exception e) {
             e.printStackTrace();
         }

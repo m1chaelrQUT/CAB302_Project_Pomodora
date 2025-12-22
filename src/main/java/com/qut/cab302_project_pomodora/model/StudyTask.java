@@ -1,0 +1,169 @@
+package com.qut.cab302_project_pomodora.model;
+
+import java.util.List;
+
+/**
+ * Represents a task in the study plan.
+ * A task contains information about the study plan ID, task number, title, description, and status.
+ */
+public class StudyTask {
+    private int id;
+    private int studyPlanId;
+    private int taskNumber;
+    public String title;
+    private String description;
+    private String status;
+
+    public StudyTask(int id, int studyPlanId, int taskNumber, String title, String description, String status) {
+    /**
+     * Constructor for Task with ID.
+     * Initializes a new instance of the Task class with an ID.
+     * @param id The ID of the task.
+     * @param studyPlanId The ID of the study plan associated with the task.
+     * @param taskNumber The task number.
+     * @param title The title of the task.
+     * @param description The description of the task.
+     * @param status The status of the task.
+     */
+
+        this.id = id;
+        this.studyPlanId = studyPlanId;
+        this.taskNumber = taskNumber;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+    }
+
+    /**
+     * Get the ID of the task.
+     * @return The ID of the task.
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Set the ID of the task.
+     * @param id The ID to set for the task.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * Get the study plan ID associated with the task.
+     * @return The study plan ID.
+     */
+    public int getStudyPlanId() {
+        return studyPlanId;
+    }
+
+    public void setStudyPlanId(int studyPlanId) {
+        this.studyPlanId = studyPlanId;
+    }
+
+    /**
+     * Get the task number.
+     * @return The task number.
+     */
+    public int getTaskNumber() {
+        return taskNumber;
+    }
+
+    /**
+     * Set the task number.
+     * @param taskNumber The task number to set.
+     */
+    public void setTaskNumber(int taskNumber) {
+        this.taskNumber = taskNumber;
+    }
+
+    /**
+     * Get the title of the task.
+     * @return The title of the task.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Set the title of the task.
+     * @param title The title to set for the task.
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * Get the description of the task.
+     * @return The description of the task.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the description of the task.
+     * @param description The description to set for the task.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Get the status of the task.
+     * @return The status of the task.
+     */
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * Set the status of the task.
+     * @param status The status to set for the task.
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+    /**
+     * Get the string representation of the task.
+     * @return A string representation of the task.
+     */
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", studyPlanId=" + studyPlanId +
+                ", title='" + title + '\'' +
+                ", status='" + status +
+                '}';
+    }
+
+    /**
+     * Gets the index of the current task in the list of active tasks.
+     * This method iterates through the list of active tasks and returns the index of the first incomplete task.
+     * If all tasks are complete, it returns -1.
+     *
+     * @param activeTasks The list of active tasks.
+     * @return The index of the current task, or -1 if no incomplete tasks are found.
+     */
+    public int getCurrentTaskIndex(List<StudyTask> activeTasks) {
+        // Update the currentTaskIndex to the index of the first incomplete task in activeTasks
+        System.out.println("Active tasks: " + activeTasks);
+        if (activeTasks != null && !activeTasks.isEmpty()) {
+            for (int i = 0; i < activeTasks.size(); i++) {
+                if (activeTasks.get(i).getStatus().equals("INCOMPLETE")) {
+                    System.out.println("Current task index: "+ i);
+                    return i;
+                }
+            }
+        }
+        return -1; // If all tasks are complete, return -1
+    }
+}
+
+
+
+
